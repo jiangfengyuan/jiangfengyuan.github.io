@@ -10,7 +10,7 @@
     --accent-glow: rgba(99, 102, 241, 0.3);
     --border: rgba(255, 255, 255, 0.08);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -204,7 +204,7 @@ ul {
     font-size: 0.85rem;
     color: var(--accent-light);
     margin-bottom: 2rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
 }
 
 .tag-dot {
@@ -353,7 +353,7 @@ ul {
 
 .section-tag {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 0.85rem;
     color: var(--accent);
     margin-bottom: 0.8rem;
@@ -413,6 +413,7 @@ ul {
     color: var(--text-secondary);
     margin-top: 0.3rem;
     display: block;
+    font-family: var(--font-sans);
 }
 
 /* 代码窗口 */
@@ -518,7 +519,7 @@ ul {
     color: var(--accent-light);
     font-size: 0.8rem;
     border-radius: 6px;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
 }
 
 /* ==================== 联系区域 ==================== */
@@ -761,7 +762,7 @@ ul {
     background: rgba(99, 102, 241, 0.15);
     color: var(--accent-light);
     border-radius: 4px;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     margin-bottom: 0.4rem;
 }
 
