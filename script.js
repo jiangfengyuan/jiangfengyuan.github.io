@@ -215,12 +215,37 @@ animateParticles();
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
+function closeMobileMenu() {
+    menuToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
 if (menuToggle) {
     menuToggle.addEventListener('click', () => {
         menuToggle.classList.toggle('active');
-        // 如果需要移动端菜单展开，可以在这里添加逻辑
+        navLinks.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
     });
 }
+
+// 点击导航链接后关闭菜单
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (navLinks.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+});
+
+// 点击页面其他区域关闭菜单
+document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('active') && 
+        !navLinks.contains(e.target) && 
+        !menuToggle.contains(e.target)) {
+        closeMobileMenu();
+    }
+});
 
 // ==================== 平滑滚动与导航高亮 ====================
 const sections = document.querySelectorAll('section[id]');
