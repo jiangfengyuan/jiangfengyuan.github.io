@@ -96,7 +96,7 @@ function animateNumber(element, target, duration = 2000) {
     const timer = setInterval(() => {
         current += increment;
         if (current >= target) {
-            element.textContent = target + (target === 100 ? '+' : '+');
+            element.textContent = target + '+';
             clearInterval(timer);
         } else {
             element.textContent = Math.floor(current);
@@ -124,92 +124,109 @@ if (statsContainer) {
 
 // ==================== 粒子背景 ====================
 const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
+if (!canvas) {
+    console.warn('Canvas element #particle-canvas not found, skipping particle animation.');
+}
+const ctx = canvas ? canvas.getContext('2d') : null;
 
 let particles = [];
 let animationId;
 
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.5 + 0.1;
-    }
-
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-    }
-
-    draw() {
-        ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
+if (canvas) {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 }
 
-function initParticles() {
-    particles = [];
-    const particleCount = Math.min(Math.floor(window.innerWidth / 15), 100);
-    
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
-}
+if (canvas && ctx) {
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.speedY = (Math.random() - 0.5) * 0.5;
+            this.opacity = Math.random() * 0.5 + 0.1;
+        }
 
-function connectParticles() {
-    const maxDistance = 150;
-    
-    for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < maxDistance) {
-                const opacity = (1 - distance / maxDistance) * 0.15;
-                ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+
+        draw() {
+            ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        const particleCount = Math.min(Math.floor(window.innerWidth / 15), 100);
+        
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function connectParticles() {
+        const maxDistance = 150;
+        
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < maxDistance) {
+                    const opacity = (1 - distance / maxDistance) * 0.15;
+                    ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
             }
         }
     }
-}
 
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    particles.forEach(particle => {
-        particle.update();
-        particle.draw();
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        
+        connectParticles();
+        animationId = requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    // ==================== 性能优化：页面不可见时暂停粒子动画 ====================
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(animationId);
+        } else {
+            animateParticles();
+        }
     });
-    
-    connectParticles();
-    animationId = requestAnimationFrame(animateParticles);
 }
-
-initParticles();
-animateParticles();
 
 // ==================== 移动端菜单 ====================
 const menuToggle = document.querySelector('.menu-toggle');
@@ -270,13 +287,14 @@ function highlightNav() {
     });
 }
 
-window.addEventListener('scroll', highlightNav);
-
-// ==================== 性能优化：页面不可见时暂停粒子动画 ====================
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        cancelAnimationFrame(animationId);
-    } else {
-        animateParticles();
+let highlightNavTicking = false;
+window.addEventListener('scroll', () => {
+    if (!highlightNavTicking) {
+        window.requestAnimationFrame(() => {
+            highlightNav();
+            highlightNavTicking = false;
+        });
+        highlightNavTicking = true;
     }
 });
+
