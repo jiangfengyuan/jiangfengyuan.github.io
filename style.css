@@ -617,7 +617,7 @@ ul {
 }
 
 /* ==================== 项目展示 ==================== */
-.projects {
+.flash {
     background: var(--bg-primary);
 }
 
@@ -988,7 +988,7 @@ ul {
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
+        height: 100vh;
         background: rgba(10, 10, 15, 0.97);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -996,11 +996,13 @@ ul {
         justify-content: center;
         align-items: center;
         gap: 2rem;
+        margin: 0;
+        padding: 0;
         opacity: 0;
         pointer-events: none;
         transform: translateY(-10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 999;
+        z-index: 1001;
     }
     
     .nav-links.active {
@@ -1015,7 +1017,7 @@ ul {
     
     .menu-toggle {
         display: flex;
-        z-index: 1001;
+        z-index: 1002;
     }
     
     .project-showcase {
