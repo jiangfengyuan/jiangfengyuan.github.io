@@ -126,6 +126,8 @@ ul {
 .nav-links {
     display: flex;
     gap: 2.5rem;
+    margin-left: auto;
+    margin-right: 2rem;
 }
 
 .nav-link {
@@ -1059,6 +1061,7 @@ ul {
         left: 0;
         right: 0;
         bottom: 0;
+        margin: 0;
         background: rgba(10, 10, 15, 0.97);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -1202,8 +1205,6 @@ ul {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    margin-left: auto;
-    margin-right: 2rem;
 }
 
 .control-btn {
@@ -1841,4 +1842,55 @@ ul {
     :root[data-theme="light"] .nav-link {
         color: var(--text-primary);
     }
+}
+
+/* ==================== Global Smooth Theme Transition ==================== */
+
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.skill-card,
+.code-window,
+.social-link,
+.btn,
+.btn-outline,
+.feature-card-apple,
+.phone-frame-apple,
+.note-card-apple,
+.platform-badge-apple,
+.control-btn,
+.navbar-bg,
+.about-code,
+.flash-section,
+.flash-features,
+.flash-platforms-apple,
+.footer-apple,
+.project-links,
+.project-status-badge,
+.flash-hero,
+.flash-statement,
+.flash-audience,
+.flash-cta,
+.phone-mockup-apple,
+.project-visual,
+.note-card,
+.fab-btn,
+.fab-btn-apple,
+.hero,
+.about,
+.skills,
+.contact,
+.footer {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Light mode skill card shadow fix */
+:root[data-theme="light"] .skill-card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .skill-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 113, 227, 0.25);
 }
