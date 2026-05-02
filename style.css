@@ -1894,3 +1894,57 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 113, 227, 0.25);
 }
+
+/* ==================== Danmaku Stage ==================== */
+
+.danmaku-stage {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    height: 340px;
+    margin: 4rem auto 0;
+    overflow: hidden;
+    border-radius: 28px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.danmaku-track {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+    will-change: transform;
+    animation: danmakuFloat linear infinite;
+    user-select: none;
+    pointer-events: none;
+}
+
+.page-flash .danmaku-track {
+    color: var(--apple-text-secondary);
+}
+
+@keyframes danmakuFloat {
+    0% { transform: translateX(110%); }
+    100% { transform: translateX(-110%); }
+}
+
+@media (max-width: 900px) {
+    .danmaku-stage {
+        height: 300px;
+        margin-top: 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .danmaku-stage {
+        height: 260px;
+        margin-top: 2rem;
+        border-radius: 20px;
+    }
+    .danmaku-track {
+        font-size: 0.9rem;
+    }
+}

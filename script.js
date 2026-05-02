@@ -355,8 +355,9 @@ window.addEventListener('scroll', () => {
         htmlEl.lang = lang === 'zh' ? 'zh-CN' : 'en';
         localStorage.setItem('site-lang', lang);
 
-        // Re-init typewriter for new language
+        // Re-init typewriter and danmaku for new language
         initTypewriter();
+        if (typeof initDanmaku === 'function') initDanmaku();
     }
 
     updateLanguage(currentLang);
@@ -368,3 +369,109 @@ window.addEventListener('scroll', () => {
         });
     }
 })();
+
+
+// ==================== Danmaku ====================
+const danmakuData = {
+    zh: [
+        "凌晨三点的灵感 ✨",
+        "这个 API 设计得真优雅",
+        "明天要交作业了怎么办",
+        "如果能自动整理笔记就好了",
+        "突然想到一个产品点子",
+        "这段代码可以重构一下",
+        "咖啡续命中 ☕",
+        "这个配色太舒服了",
+        "记得回那封邮件",
+        "一闪而过的旋律 🎵",
+        "为什么 bug 总是深夜出现",
+        "这个动画效果很丝滑",
+        "想做一个语音日记应用",
+        "用户需求到底是什么",
+        "这行注释写得太好了",
+        "记得备份数据库",
+        "灵光乍现 💡",
+        "如果加上 AI 会更有趣",
+        "这个函数命名好难",
+        "明天一定要早起",
+        "记录一个闪念...",
+        "长按录音，5 秒后保存",
+        "走廊里闪过竞赛思路",
+        "睡前轻声复盘",
+        "三句话记录今日"
+    ],
+    en: [
+        "3 AM inspiration ✨",
+        "This API design is elegant",
+        "The deadline is tomorrow...",
+        "What if notes auto-organized?",
+        "Sudden product idea struck",
+        "This code could be refactored",
+        "Coffee is fuel ☕",
+        "This palette feels right",
+        "Don't forget that email",
+        "A melody flashed by 🎵",
+        "Why do bugs appear at midnight",
+        "This animation is so smooth",
+        "Build a voice diary app",
+        "What do users really need",
+        "This comment is well written",
+        "Remember to backup DB",
+        "Lightbulb moment 💡",
+        "Adding AI would be cool",
+        "Naming functions is hard",
+        "Must wake up early tomorrow",
+        "Record a fleeting thought...",
+        "Long press to record, save in 5s",
+        "A contest idea in the hallway",
+        "Bedtime whisper review",
+        "Three sentences for today"
+    ]
+};
+
+function initDanmaku() {
+    const layer = document.getElementById('danmaku-layer');
+    if (!layer) return;
+
+    const lang = document.documentElement.lang === 'zh-CN' ? 'zh' : 'en';
+    const pool = danmakuData[lang];
+
+    // 随机打乱并选取
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 18);
+
+    layer.innerHTML = '';
+
+    const trackCount = 5;
+
+    selected.forEach((text, idx) => {
+        const el = document.createElement('div');
+        el.className = 'danmaku-track';
+        el.textContent = text;
+
+        const trackIdx = idx % trackCount;
+        const topBase = (trackIdx / trackCount) * 100;
+        const topOffset = Math.random() * 12 - 6;
+        const top = Math.max(10, Math.min(90, topBase + topOffset));
+
+        const duration = 14 + Math.random() * 14;
+        const delay = -(Math.random() * duration);
+
+        el.style.top = `${top}%`;
+        el.style.animationDuration = `${duration}s`;
+        el.style.animationDelay = `${delay}s`;
+        el.style.fontSize = `${0.95 + Math.random() * 0.4}rem`;
+        el.style.opacity = `${0.45 + Math.random() * 0.4}`;
+
+        // 高亮部分弹幕
+        if (Math.random() < 0.2) {
+            el.style.color = 'var(--accent)';
+            el.style.fontWeight = '600';
+            el.style.opacity = '0.95';
+        }
+
+        layer.appendChild(el);
+    });
+}
+
+initDanmaku();
