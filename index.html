@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html data-theme="dark" lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,12 +21,19 @@
                 <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
             </a>
             <ul class="nav-links">
-                <li><a href="#home" class="nav-link active">首页</a></li>
-                <li><a href="#about" class="nav-link">关于</a></li>
-                <li><a href="#skills" class="nav-link">技能</a></li>
-                <li><a href="flash.html" class="nav-link">一闪</a></li>
-                <li><a href="#contact" class="nav-link">联系</a></li>
+                <li><a href="#home" class="nav-link active"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
+                <li><a href="#about" class="nav-link"><span class="lang-text" data-en="About" data-zh="关于">关于</span></a></li>
+                <li><a href="#skills" class="nav-link"><span class="lang-text" data-en="Skills" data-zh="技能">技能</span></a></li>
+                <li><a href="flash.html" class="nav-link">Flash</a></li>
+                <li><a href="#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
             </ul>
+            <div class="nav-controls">
+                <button id="lang-toggle" class="control-btn" aria-label="切换语言">EN</button>
+                <button id="theme-toggle" class="control-btn" aria-label="切换主题">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
             <button class="menu-toggle" aria-label="菜单">
                 <span></span>
                 <span></span>
@@ -40,24 +47,26 @@
         <div class="hero-content">
             <div class="hero-tag">
                 <span class="tag-dot"></span>
-                <span class="tag-text">Developer & Creator</span>
+                <span class="lang-text tag-text" data-en="Developer & Creator" data-zh="Developer & Creator">Developer & Creator</span>
             </div>
             <h1 class="hero-title">
-                <span class="typing-text" data-text="Hello!"></span>
+                <span class="typing-text" data-text="Hello!" data-text-en="Hello!" data-text-zh="你好！"></span>
                 <span class="cursor">|</span>
             </h1>
             <p class="hero-subtitle">Here is Hayden.</p>
-            <p class="hero-desc">我热爱用代码构建优雅、高效的数字体验。</p>
+            <p class="hero-desc">
+                <span class="lang-text" data-en="I love building elegant, efficient digital experiences with code." data-zh="我热爱用代码构建优雅、高效的数字体验。">我热爱用代码构建优雅、高效的数字体验。</span>
+            </p>
             <div class="hero-buttons">
-                <a href="#about" class="btn btn-primary">了解更多</a>
-                <a href="#contact" class="btn btn-outline">联系我</a>
+                <a href="#about" class="btn btn-primary"><span class="lang-text" data-en="Learn More" data-zh="了解更多">了解更多</span></a>
+                <a href="#contact" class="btn btn-outline"><span class="lang-text" data-en="Contact Me" data-zh="联系我">联系我</span></a>
             </div>
         </div>
         <div class="scroll-indicator">
             <div class="mouse">
                 <div class="wheel"></div>
             </div>
-            <span>向下滚动</span>
+            <span class="lang-text" data-en="Scroll Down" data-zh="向下滚动">向下滚动</span>
         </div>
     </section>
 
@@ -65,36 +74,32 @@
     <section id="about" class="about section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">01. 关于我</span>
-                <h2 class="section-title">我是谁</h2>
+                <span class="section-tag">01. <span class="lang-text" data-en="About Me" data-zh="关于我">关于我</span></span>
+                <h2 class="section-title"><span class="lang-text" data-en="Who I Am" data-zh="我是谁">我是谁</span></h2>
             </div>
             <div class="about-content">
                 <div class="about-text">
                     <p class="fade-up">
-                        你好！我是 <span class="highlight">Hayden</span>，一名热爱技术的高中生。
-                        我相信好的代码不仅要能运行，更要优雅、可维护。
+                        <span class="lang-text" data-en="Hello! I am " data-zh="你好！我是 ">你好！我是 </span><span class="highlight">Hayden</span><span class="lang-text" data-en=", a high school student passionate about technology. I believe good code should not only work, but also be elegant and maintainable." data-zh="，一名热爱技术的高中生。我相信好的代码不仅要能运行，更要优雅、可维护。">，一名热爱技术的高中生。我相信好的代码不仅要能运行，更要优雅、可维护。</span>
                     </p>
                     <p class="fade-up">
-                        作为一名独立开发者，我热衷于在课余时间把想法变成现实。
-                        从 Web 应用到移动端工具，我喜欢探索新技术、动手做项目。
-                        每一次开发都是学习的机会，也是我向世界展示创意的方式。
+                        <span class="lang-text" data-en="As an indie developer, I am passionate about turning ideas into reality in my spare time. From web apps to mobile tools, I love exploring new technologies and building projects. Every development is a learning opportunity and a way to showcase creativity to the world." data-zh="作为一名独立开发者，我热衷于在课余时间把想法变成现实。从 Web 应用到移动端工具，我喜欢探索新技术、动手做项目。每一次开发都是学习的机会，也是我向世界展示创意的方式。">作为一名独立开发者，我热衷于在课余时间把想法变成现实。从 Web 应用到移动端工具，我喜欢探索新技术、动手做项目。每一次开发都是学习的机会，也是我向世界展示创意的方式。</span>
                     </p>
                     <p class="fade-up">
-                        当我不写代码时，你可能在发现我在追新的技术趋势，
-                        或者在为下一个灵感画原型图。期待未来能做出真正有价值的产品！
+                        <span class="lang-text" data-en="When I'm not coding, you might find me chasing new tech trends or sketching prototypes for the next inspiration. Looking forward to building something truly valuable in the future!" data-zh="当我不写代码时，你可能在发现我在追新的技术趋势，或者在为下一个灵感画原型图。期待未来能做出真正有价值的产品！">当我不写代码时，你可能在发现我在追新的技术趋势，或者在为下一个灵感画原型图。期待未来能做出真正有价值的产品！</span>
                     </p>
                     <div class="about-stats">
                         <div class="stat-item fade-up">
                             <span class="stat-number" data-target="5">0</span>
-                            <span class="stat-label">年码龄</span>
+                            <span class="stat-label"><span class="lang-text" data-en="Years Coding" data-zh="年码龄">年码龄</span></span>
                         </div>
                         <div class="stat-item fade-up">
                             <span class="stat-number" data-target="2">0</span>
-                            <span class="stat-label">个作品</span>
+                            <span class="stat-label"><span class="lang-text" data-en="Projects" data-zh="个作品">个作品</span></span>
                         </div>
                         <div class="stat-item fade-up">
                             <span class="stat-number" data-target="150">0</span>
-                            <span class="stat-label">杯☕咖啡</span>
+                            <span class="stat-label"><span class="lang-text" data-en="Cups of ☕" data-zh="杯☕咖啡">杯☕咖啡</span></span>
                         </div>
                     </div>
                 </div>
@@ -127,8 +132,8 @@ developer.<span class="code-method">sayHi</span>();</code></pre>
     <section id="skills" class="skills section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">02. 技能栈</span>
-                <h2 class="section-title">我的工具箱</h2>
+                <span class="section-tag">02. <span class="lang-text" data-en="Skill Stack" data-zh="技能栈">技能栈</span></span>
+                <h2 class="section-title"><span class="lang-text" data-en="My Toolbox" data-zh="我的工具箱">我的工具箱</span></h2>
             </div>
             <div class="skills-grid">
                 <div class="skill-card fade-up">
@@ -139,7 +144,7 @@ developer.<span class="code-method">sayHi</span>();</code></pre>
                             <path d="M2 12l10 5 10-5"></path>
                         </svg>
                     </div>
-                    <h3>前端开发</h3>
+                    <h3><span class="lang-text" data-en="Frontend Dev" data-zh="前端开发">前端开发</span></h3>
                     <p>HTML5, JavaScript</p>
                     <div class="skill-tags">
                         <span class="skill-tag">HTML5</span>
@@ -155,7 +160,7 @@ developer.<span class="code-method">sayHi</span>();</code></pre>
                             <line x1="6" y1="18" x2="6.01" y2="18"></line>
                         </svg>
                     </div>
-                    <h3>后端开发</h3>
+                    <h3><span class="lang-text" data-en="Backend Dev" data-zh="后端开发">后端开发</span></h3>
                     <p>Node.js, Python</p>
                     <div class="skill-tags">
                         <span class="skill-tag">Node.js</span>
@@ -171,8 +176,8 @@ developer.<span class="code-method">sayHi</span>();</code></pre>
                             <circle cx="11" cy="11" r="2"></circle>
                         </svg>
                     </div>
-                    <h3>设计与创意</h3>
-                    <p>Figma, Photoshop, Lightroom, Premiere, DaVinci Resolve, Final Cut Pro, Logic Pro, After Effects, Procreate</p>
+                    <h3><span class="lang-text" data-en="Design & Creative" data-zh="设计与创意">设计与创意</span></h3>
+                    <p><span class="lang-text" data-en="Figma, Photoshop, Lightroom, Premiere, DaVinci Resolve, Final Cut Pro, Logic Pro, After Effects, Procreate" data-zh="Figma, Photoshop, Lightroom, Premiere, DaVinci Resolve, Final Cut Pro, Logic Pro, After Effects, Procreate">Figma, Photoshop, Lightroom, Premiere, DaVinci Resolve, Final Cut Pro, Logic Pro, After Effects, Procreate</span></p>
                     <div class="skill-tags">
                         <span class="skill-tag">Figma</span>
                         <span class="skill-tag">Pr / FCP</span>
@@ -187,15 +192,17 @@ developer.<span class="code-method">sayHi</span>();</code></pre>
     <section id="contact" class="contact section">
         <div class="container">
             <div class="contact-content">
-                <span class="section-tag">03. 联系我</span>
-                <h2 class="contact-title fade-up">想要合作或交流？</h2>
-                <p class="contact-desc fade-up">无论是项目合作、技术讨论，还是单纯想打个招呼，我都随时欢迎。</p>
-                <a href="mailto:hayden@example.com" class="btn btn-primary btn-large fade-up">发送邮件</a>
+                <span class="section-tag">03. <span class="lang-text" data-en="Contact" data-zh="联系我">联系我</span></span>
+                <h2 class="contact-title fade-up"><span class="lang-text" data-en="Want to collaborate or chat?" data-zh="想要合作或交流？">想要合作或交流？</span></h2>
+                <p class="contact-desc fade-up">
+                    <span class="lang-text" data-en="Whether it's project collaboration, tech discussions, or just saying hi, you're always welcome." data-zh="无论是项目合作、技术讨论，还是单纯想打个招呼，我都随时欢迎。">无论是项目合作、技术讨论，还是单纯想打个招呼，我都随时欢迎。</span>
+                </p>
+                <a href="mailto:hayden@example.com" class="btn btn-primary btn-large fade-up"><span class="lang-text" data-en="Send Email" data-zh="发送邮件">发送邮件</span></a>
                 <div class="social-links fade-up">
                     <a href="https://github.com/jiangfengyuan" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     </a>
-                    <a href="mailto:2934785965@qq.com" class="social-link" aria-label="QQ邮箱">
+                    <a href="mailto:2934785965@qq.com" class="social-link" aria-label="QQ Mail">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                     </a>
                     <a href="https://space.bilibili.com/510753881" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Bilibili">

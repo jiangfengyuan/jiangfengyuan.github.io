@@ -20,6 +20,10 @@ class TypeWriter {
         this.type();
     }
 
+    stop() {
+        if (this.timer) clearTimeout(this.timer);
+    }
+
     type() {
         const current = this.text;
         
@@ -29,7 +33,7 @@ class TypeWriter {
             
             if (this.index === current.length) {
                 // 完成打字，停止光标闪烁一段时间后可能重播
-                setTimeout(() => {
+                this.timer = setTimeout(() => {
                     this.isDeleting = true;
                     this.type();
                 }, 2500);
@@ -45,19 +49,27 @@ class TypeWriter {
         }
         
         const speed = this.isDeleting ? 80 : this.speed;
-        setTimeout(() => this.type(), speed);
+        this.timer = setTimeout(() => this.type(), speed);
     }
 }
 
 // 启动打字机
-const typingElement = document.querySelector('.typing-text');
-if (typingElement) {
-    const text = typingElement.getAttribute('data-text');
+let currentTypewriter = null;
+
+function initTypewriter() {
+    const typingElement = document.querySelector('.typing-text');
+    if (!typingElement) return;
+
+    const lang = document.documentElement.lang === 'zh-CN' ? 'zh' : 'en';
+    const text = typingElement.getAttribute(`data-text-${lang}`) || typingElement.getAttribute('data-text');
+    if (!text) return;
+
+    if (currentTypewriter) currentTypewriter.stop();
     typingElement.textContent = '';
-    setTimeout(() => {
-        new TypeWriter(typingElement, text, 150);
-    }, 500);
+    currentTypewriter = new TypeWriter(typingElement, text, 150);
 }
+
+initTypewriter();
 
 // ==================== 滚动淡入动画 ====================
 const observerOptions = {
@@ -299,31 +311,36 @@ window.addEventListener('scroll', () => {
 });
 
 
-// ==================== Flash Page — Theme & Language Toggle ====================
+// ==================== Global Theme & Language Toggle ====================
 (function() {
+    const htmlEl = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const langToggle = document.getElementById('lang-toggle');
     const pageFlash = document.querySelector('.page-flash');
-    if (!pageFlash) return;
 
     // --- Theme Toggle ---
-    const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('flash-theme') || 'dark';
-
-    pageFlash.classList.remove('theme-dark', 'theme-light');
-    pageFlash.classList.add(`theme-${savedTheme}`);
+    const savedTheme = localStorage.getItem('site-theme') || 'dark';
+    htmlEl.dataset.theme = savedTheme;
+    if (pageFlash) {
+        pageFlash.classList.remove('theme-dark', 'theme-light');
+        pageFlash.classList.add(`theme-${savedTheme}`);
+    }
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
-            const isDark = pageFlash.classList.contains('theme-dark');
+            const isDark = htmlEl.dataset.theme === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
-            pageFlash.classList.remove('theme-dark', 'theme-light');
-            pageFlash.classList.add(`theme-${newTheme}`);
-            localStorage.setItem('flash-theme', newTheme);
+            htmlEl.dataset.theme = newTheme;
+            if (pageFlash) {
+                pageFlash.classList.remove('theme-dark', 'theme-light');
+                pageFlash.classList.add(`theme-${newTheme}`);
+            }
+            localStorage.setItem('site-theme', newTheme);
         });
     }
 
     // --- Language Toggle ---
-    const langToggle = document.getElementById('lang-toggle');
-    let currentLang = localStorage.getItem('flash-lang') || 'zh';
+    let currentLang = localStorage.getItem('site-lang') || 'zh';
 
     function updateLanguage(lang) {
         document.querySelectorAll('.lang-text').forEach(el => {
@@ -335,8 +352,11 @@ window.addEventListener('scroll', () => {
             langToggle.textContent = lang === 'zh' ? 'EN' : '中文';
         }
 
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-        localStorage.setItem('flash-lang', lang);
+        htmlEl.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        localStorage.setItem('site-lang', lang);
+
+        // Re-init typewriter for new language
+        initTypewriter();
     }
 
     updateLanguage(currentLang);
