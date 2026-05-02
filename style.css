@@ -1898,23 +1898,15 @@ body {
 /* ==================== Danmaku Stage ==================== */
 
 .danmaku-stage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%),
-                        linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%),
-                linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-}
-
-.flash-hero .container {
     position: relative;
-    z-index: 1;
+    width: 100%;
+    max-width: 960px;
+    height: 360px;
+    margin: 3rem auto 0;
+    overflow: hidden;
+    border-radius: 28px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 .danmaku-track {

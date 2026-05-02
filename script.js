@@ -440,7 +440,7 @@ function initDanmaku() {
 
     // 随机打乱并选取
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 10);
+    const selected = shuffled.slice(0, 20);
 
     layer.innerHTML = '';
 
@@ -456,7 +456,7 @@ function initDanmaku() {
         const topOffset = Math.random() * 12 - 6;
         const top = Math.max(10, Math.min(90, topBase + topOffset));
 
-        const duration = 18 + Math.random() * 16;
+        const duration = 12 + Math.random() * 10;
         const delay = -(Math.random() * duration);
 
         el.style.top = `${top}%`;
