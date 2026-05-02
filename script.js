@@ -298,3 +298,53 @@ window.addEventListener('scroll', () => {
     }
 });
 
+
+// ==================== Flash Page — Theme & Language Toggle ====================
+(function() {
+    const pageFlash = document.querySelector('.page-flash');
+    if (!pageFlash) return;
+
+    // --- Theme Toggle ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('flash-theme') || 'dark';
+
+    pageFlash.classList.remove('theme-dark', 'theme-light');
+    pageFlash.classList.add(`theme-${savedTheme}`);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = pageFlash.classList.contains('theme-dark');
+            const newTheme = isDark ? 'light' : 'dark';
+            pageFlash.classList.remove('theme-dark', 'theme-light');
+            pageFlash.classList.add(`theme-${newTheme}`);
+            localStorage.setItem('flash-theme', newTheme);
+        });
+    }
+
+    // --- Language Toggle ---
+    const langToggle = document.getElementById('lang-toggle');
+    let currentLang = localStorage.getItem('flash-lang') || 'zh';
+
+    function updateLanguage(lang) {
+        document.querySelectorAll('.lang-text').forEach(el => {
+            const text = el.getAttribute(`data-${lang}`);
+            if (text) el.textContent = text;
+        });
+
+        if (langToggle) {
+            langToggle.textContent = lang === 'zh' ? 'EN' : '中文';
+        }
+
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        localStorage.setItem('flash-lang', lang);
+    }
+
+    updateLanguage(currentLang);
+
+    if (langToggle) {
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            updateLanguage(currentLang);
+        });
+    }
+})();
