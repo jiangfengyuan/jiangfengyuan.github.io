@@ -341,6 +341,7 @@ window.addEventListener('scroll', () => {
 
     // --- Language Toggle ---
     let currentLang = localStorage.getItem('site-lang') || 'zh';
+    if (!['zh', 'en'].includes(currentLang)) currentLang = 'zh';
 
     function updateLanguage(lang) {
         document.querySelectorAll('.lang-text').forEach(el => {
@@ -356,8 +357,8 @@ window.addEventListener('scroll', () => {
         localStorage.setItem('site-lang', lang);
 
         // Re-init typewriter and danmaku for new language
-        initTypewriter();
-        if (typeof initDanmaku === 'function') initDanmaku();
+        try { initTypewriter(); } catch (e) { /* ignore */ }
+        try { if (typeof initDanmaku === 'function') initDanmaku(); } catch (e) { /* ignore */ }
     }
 
     updateLanguage(currentLang);
@@ -435,6 +436,7 @@ function initDanmaku() {
 
     const lang = document.documentElement.lang === 'zh-CN' ? 'zh' : 'en';
     const pool = danmakuData[lang];
+    if (!pool || !pool.length) return;
 
     // 随机打乱并选取
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
