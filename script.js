@@ -146,20 +146,28 @@ let animationId;
 
 function resizeCanvas() {
     if (!canvas) return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.scale(dpr, dpr);
+}
+
+let resizeTimeout;
+function debouncedResizeCanvas() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resizeCanvas, 150);
 }
 
 if (canvas) {
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', debouncedResizeCanvas);
 }
 
 if (canvas && ctx) {
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * (canvas.width / (window.devicePixelRatio || 1));
+            this.y = Math.random() * (canvas.height / (window.devicePixelRatio || 1));
             this.size = Math.random() * 2 + 0.5;
             this.speedX = (Math.random() - 0.5) * 0.5;
             this.speedY = (Math.random() - 0.5) * 0.5;
@@ -167,13 +175,15 @@ if (canvas && ctx) {
         }
 
         update() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
             this.x += this.speedX;
             this.y += this.speedY;
 
-            if (this.x > canvas.width) this.x = 0;
-            if (this.x < 0) this.x = canvas.width;
-            if (this.y > canvas.height) this.y = 0;
-            if (this.y < 0) this.y = canvas.height;
+            if (this.x > w) this.x = 0;
+            if (this.x < 0) this.x = w;
+            if (this.y > h) this.y = 0;
+            if (this.y < 0) this.y = h;
         }
 
         draw() {
@@ -195,14 +205,16 @@ if (canvas && ctx) {
 
     function connectParticles() {
         const maxDistance = 150;
+        const maxDistSq = maxDistance * maxDistance;
         
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const distSq = dx * dx + dy * dy;
                 
-                if (distance < maxDistance) {
+                if (distSq < maxDistSq) {
+                    const distance = Math.sqrt(distSq);
                     const opacity = (1 - distance / maxDistance) * 0.15;
                     ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
                     ctx.lineWidth = 1;
@@ -216,7 +228,9 @@ if (canvas && ctx) {
     }
 
     function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const w = canvas.width / (window.devicePixelRatio || 1);
+        const h = canvas.height / (window.devicePixelRatio || 1);
+        ctx.clearRect(0, 0, w, h);
         
         particles.forEach(particle => {
             particle.update();
