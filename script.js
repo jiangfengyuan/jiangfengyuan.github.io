@@ -1,11 +1,18 @@
 // ==================== 导航栏滚动效果 ====================
 const navbar = document.querySelector('.navbar');
 
+let navbarTicking = false;
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
+    if (!navbarTicking) {
+        requestAnimationFrame(() => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            navbarTicking = false;
+        });
+        navbarTicking = true;
     }
 });
 
@@ -94,26 +101,39 @@ const fadeObserver = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-document.querySelectorAll('.fade-up').forEach((el, index) => {
-    el.dataset.delay = index * 100; // 每个元素间隔 100ms
-    fadeObserver.observe(el);
+const fadeUpGroups = new Map();
+document.querySelectorAll('.fade-up').forEach(el => {
+    const section = el.closest('section') || el.parentElement;
+    if (!fadeUpGroups.has(section)) fadeUpGroups.set(section, []);
+    fadeUpGroups.get(section).push(el);
+});
+
+fadeUpGroups.forEach((group) => {
+    group.forEach((el, index) => {
+        el.dataset.delay = Math.min(index * 100, 400); // 同组最大延迟 400ms
+        fadeObserver.observe(el);
+    });
 });
 
 // ==================== 数字滚动动画 ====================
 function animateNumber(element, target, duration = 2000) {
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = start;
+    const startTime = performance.now();
     
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target + '+';
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutQuart 缓动，收尾更自然
+        const ease = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(ease * target);
+        
+        element.textContent = progress < 1 ? current : target + '+';
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
         }
-    }, 16);
+    }
+    
+    requestAnimationFrame(update);
 }
 
 const statObserver = new IntersectionObserver((entries) => {
@@ -146,20 +166,28 @@ let animationId;
 
 function resizeCanvas() {
     if (!canvas) return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.scale(dpr, dpr);
+}
+
+let resizeTimeout;
+function debouncedResizeCanvas() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resizeCanvas, 150);
 }
 
 if (canvas) {
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', debouncedResizeCanvas);
 }
 
 if (canvas && ctx) {
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * (canvas.width / (window.devicePixelRatio || 1));
+            this.y = Math.random() * (canvas.height / (window.devicePixelRatio || 1));
             this.size = Math.random() * 2 + 0.5;
             this.speedX = (Math.random() - 0.5) * 0.5;
             this.speedY = (Math.random() - 0.5) * 0.5;
@@ -167,17 +195,20 @@ if (canvas && ctx) {
         }
 
         update() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
             this.x += this.speedX;
             this.y += this.speedY;
 
-            if (this.x > canvas.width) this.x = 0;
-            if (this.x < 0) this.x = canvas.width;
-            if (this.y > canvas.height) this.y = 0;
-            if (this.y < 0) this.y = canvas.height;
+            if (this.x > w) this.x = 0;
+            if (this.x < 0) this.x = w;
+            if (this.y > h) this.y = 0;
+            if (this.y < 0) this.y = h;
         }
 
         draw() {
-            ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
+            const rgb = getParticleRgb();
+            ctx.fillStyle = `rgba(${rgb}, ${this.opacity})`;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -193,18 +224,30 @@ if (canvas && ctx) {
         }
     }
 
+    function getParticleRgb() {
+        return document.documentElement.dataset.theme === 'light' ? '0, 113, 227' : '99, 102, 241';
+    }
+
     function connectParticles() {
         const maxDistance = 150;
+        const maxDistSq = maxDistance * maxDistance;
+        const maxConnections = 3;
+        const rgb = getParticleRgb();
         
         for (let i = 0; i < particles.length; i++) {
+            let connections = 0;
             for (let j = i + 1; j < particles.length; j++) {
+                if (connections >= maxConnections) break;
+                
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const distSq = dx * dx + dy * dy;
                 
-                if (distance < maxDistance) {
+                if (distSq < maxDistSq) {
+                    connections++;
+                    const distance = Math.sqrt(distSq);
                     const opacity = (1 - distance / maxDistance) * 0.15;
-                    ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+                    ctx.strokeStyle = `rgba(${rgb}, ${opacity})`;
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
@@ -216,7 +259,9 @@ if (canvas && ctx) {
     }
 
     function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const w = canvas.width / (window.devicePixelRatio || 1);
+        const h = canvas.height / (window.devicePixelRatio || 1);
+        ctx.clearRect(0, 0, w, h);
         
         particles.forEach(particle => {
             particle.update();
@@ -234,7 +279,8 @@ if (canvas && ctx) {
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             cancelAnimationFrame(animationId);
-        } else {
+            animationId = null;
+        } else if (!animationId) {
             animateParticles();
         }
     });
@@ -276,11 +322,20 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// ESC 键关闭菜单
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+        closeMobileMenu();
+    }
+});
+
 // ==================== 平滑滚动与导航高亮 ====================
 const sections = document.querySelectorAll('section[id]');
 const navLinksAll = document.querySelectorAll('.nav-link');
 
 function highlightNav() {
+    if (!sections.length) return;
+    
     const scrollPos = window.scrollY + 150;
     
     sections.forEach(section => {
