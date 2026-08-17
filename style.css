@@ -8,6 +8,9 @@
     --accent: #6366f1;
     --accent-light: #818cf8;
     --accent-glow: rgba(99, 102, 241, 0.3);
+    --accent-glow-strong: rgba(99, 102, 241, 0.4);
+    --accent-bg: rgba(99, 102, 241, 0.1);
+    --accent-border: rgba(99, 102, 241, 0.25);
     --border: rgba(255, 255, 255, 0.08);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -23,6 +26,9 @@
     --accent: #0071e3;
     --accent-light: #0077ed;
     --accent-glow: rgba(0, 113, 227, 0.2);
+    --accent-glow-strong: rgba(0, 113, 227, 0.3);
+    --accent-bg: rgba(0, 113, 227, 0.08);
+    --accent-border: rgba(0, 113, 227, 0.25);
     --border: rgba(0, 0, 0, 0.08);
 }
 
@@ -212,8 +218,8 @@ ul {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
     border-radius: 100px;
     font-size: 0.85rem;
     color: var(--accent-light);
@@ -291,12 +297,12 @@ ul {
 .btn-primary {
     background: var(--accent);
     color: white;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 20px var(--accent-glow);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 30px var(--accent-glow-strong);
 }
 
 .btn-outline {
@@ -497,7 +503,7 @@ ul {
 
 .skill-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(99, 102, 241, 0.3);
+    border-color: var(--accent-border);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -529,11 +535,98 @@ ul {
 
 .skill-tag {
     padding: 0.35rem 0.8rem;
-    background: rgba(99, 102, 241, 0.1);
+    background: var(--accent-bg);
     color: var(--accent-light);
     font-size: 0.8rem;
     border-radius: 6px;
     font-family: var(--font-sans);
+}
+
+/* ==================== 作品区域 ==================== */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card-featured {
+    border-color: var(--accent-border);
+    box-shadow: 0 12px 40px var(--accent-glow);
+}
+
+.project-card-featured:hover {
+    box-shadow: 0 20px 50px var(--accent-glow-strong);
+}
+
+.project-badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    background: var(--accent-bg);
+    color: var(--accent-light);
+    border: 1px solid var(--accent-border);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 100px;
+    margin-bottom: 1.2rem;
+}
+
+.project-badge-plain {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
+.project-card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+}
+
+.project-card-title-cn {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-left: 0.3rem;
+}
+
+.project-card-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    flex: 1;
+}
+
+.project-card .skill-tags {
+    margin-bottom: 1.5rem;
+}
+
+.project-card-links {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.project-card-links .btn {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.9rem;
 }
 
 /* ==================== 联系区域 ==================== */
@@ -773,7 +866,7 @@ ul {
     display: inline-block;
     font-size: 0.65rem;
     padding: 0.15rem 0.5rem;
-    background: rgba(99, 102, 241, 0.15);
+    background: var(--accent-bg);
     color: var(--accent-light);
     border-radius: 4px;
     font-family: var(--font-sans);
@@ -833,7 +926,7 @@ ul {
     color: white;
     font-size: 1.5rem;
     font-weight: 300;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 15px var(--accent-glow-strong);
     cursor: pointer;
     transition: var(--transition);
 }
@@ -849,7 +942,7 @@ ul {
     transform: translateX(-50%);
     width: 80%;
     height: 30px;
-    background: radial-gradient(ellipse, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
     filter: blur(10px);
     z-index: -1;
 }
@@ -1052,6 +1145,10 @@ ul {
     }
     
     .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-grid {
         grid-template-columns: 1fr;
     }
     
@@ -1850,6 +1947,7 @@ body {
 }
 
 .skill-card,
+.project-card,
 .social-link,
 .btn,
 .btn-outline,
@@ -1883,6 +1981,21 @@ body {
 :root[data-theme="light"] .skill-card:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 113, 227, 0.25);
+}
+
+/* Light mode project card shadow fix */
+:root[data-theme="light"] .project-card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .project-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="light"] .project-card-featured,
+:root[data-theme="light"] .project-card-featured:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 12px 40px var(--accent-glow);
 }
 
 /* ==================== Focus Visible ==================== */
