@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DHGT 汽车运动社 — We race as one。赛车模拟器、赛事观赛与汽车文化传播。">
+    <meta name="author" content="Hayden">
+    <title>DHGT — Hayden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-dhgt">
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- 导航 -->
+    <nav class="navbar navbar-dhgt">
+        <div class="navbar-bg"></div>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
+                <li><a href="flash.html" class="nav-link"><span class="lang-text" data-en="Flash" data-zh="Flash">Flash</span></a></li>
+                <li><a href="dhgt.html" class="nav-link active">DHGT</a></li>
+                <li><a href="index.html#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
+            </ul>
+            <div class="nav-controls">
+                <button id="lang-toggle" class="control-btn" aria-label="切换语言">EN</button>
+                <button id="theme-toggle" class="control-btn" aria-label="切换主题">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+            <button class="menu-toggle" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+    <!-- Hero -->
+    <section class="dhgt-hero">
+        <div class="dhgt-hero-bg"></div>
+        <div class="dhgt-hero-overlay"></div>
+        <div class="container dhgt-hero-content">
+            <img src="assets/dhgt/logo-wht.png" alt="DHGT Logo" class="dhgt-hero-logo fade-up">
+            <h1 class="dhgt-hero-title fade-up">
+                <span class="lang-text" data-en="DHGT Motorsport Club" data-zh="DHGT 汽车运动社">DHGT 汽车运动社</span>
+            </h1>
+            <p class="dhgt-hero-tagline fade-up">We race as one</p>
+            <div class="hero-cta fade-up">
+                <a href="#about" class="btn btn-primary btn-dhgt"><span class="lang-text" data-en="Explore" data-zh="了解更多">了解更多</span></a>
+                <a href="index.html#contact" class="btn btn-outline btn-dhgt-outline"><span class="lang-text" data-en="Contact" data-zh="联系我们">联系我们</span></a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"><div class="wheel"></div></div>
+            <span class="lang-text" data-en="Scroll Down" data-zh="向下滚动">向下滚动</span>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="dhgt-section dhgt-about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">01. <span class="lang-text" data-en="About" data-zh="关于">关于</span></span>
+                <h2 class="section-title"><span class="lang-text" data-en="Who We Are" data-zh="我们是谁">我们是谁</span></h2>
+            </div>
+            <div class="dhgt-about-content">
+                <div class="dhgt-about-text fade-up">
+                    <p>
+                        <span class="lang-text" data-en="DHGT is a student motorsport community built around a shared passion for racing. From F1 to sim racing, from track days to car culture, we believe the spirit of racing belongs to everyone who loves speed and precision." data-zh="DHGT 是一群热爱赛车文化的同学组成的汽车运动社团。从 F1 到模拟赛车，从赛道日到汽车生活，我们相信赛车精神属于每一位热爱速度与 precision 的人。">DHGT 是一群热爱赛车文化的同学组成的汽车运动社团。从 F1 到模拟赛车，从赛道日到汽车生活，我们相信赛车精神属于每一位热爱速度与 precision 的人。</span>
+                    </p>
+                    <p>
+                        <span class="lang-text" data-en="Our slogan is simple: We race as one. Whether you are a seasoned sim racer or just starting to follow Formula 1, there is a seat for you here." data-zh="我们的口号很简单：We race as one。无论你是资深模拟器玩家，还是刚入坑 F1 的新粉丝，这里都有你的位置。">我们的口号很简单：We race as one。无论你是资深模拟器玩家，还是刚入坑 F1 的新粉丝，这里都有你的位置。</span>
+                    </p>
+                </div>
+                <div class="dhgt-about-visual fade-up">
+                    <img src="assets/dhgt/race.png" alt="DHGT Race">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activities -->
+    <section class="dhgt-section dhgt-activities">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">02. <span class="lang-text" data-en="Activities" data-zh="活动">活动</span></span>
+                <h2 class="section-title"><span class="lang-text" data-en="What We Do" data-zh="我们在做什么">我们在做什么</span></h2>
+            </div>
+            <div class="dhgt-activities-grid">
+                <article class="dhgt-activity-card fade-up">
+                    <div class="dhgt-activity-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <h3><span class="lang-text" data-en="Sim Racing" data-zh="赛车模拟器">赛车模拟器</span></h3>
+                    <p><span class="lang-text" data-en="Hands-on sim racing sessions with steering wheel and pedal setups. Practice, compete and improve your lap times together." data-zh="方向盘、踏板一应俱全的模拟器体验。练习、切磋、刷圈，一起提升成绩。">方向盘、踏板一应俱全的模拟器体验。练习、切磋、刷圈，一起提升成绩。</span></p>
+                </article>
+                <article class="dhgt-activity-card fade-up">
+                    <div class="dhgt-activity-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 6l-9.5 9.5-5-5L1 18"></path><path d="M17 6h6v6"></path></svg>
+                    </div>
+                    <h3><span class="lang-text" data-en="Race Watching" data-zh="赛事观赛">赛事观赛</span></h3>
+                    <p><span class="lang-text" data-en="Group screenings of F1, WEC and other major races. Cheer for your favorite team and debate strategy with fellow fans." data-zh="F1、WEC 等大赛集体观赛。为喜欢的车队加油，和同伴一起吐槽策略。">F1、WEC 等大赛集体观赛。为喜欢的车队加油，和同伴一起吐槽策略。</span></p>
+                </article>
+                <article class="dhgt-activity-card fade-up">
+                    <div class="dhgt-activity-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    </div>
+                    <h3><span class="lang-text" data-en="Car Culture" data-zh="汽车文化">汽车文化</span></h3>
+                    <p><span class="lang-text" data-en="Share knowledge about car history, engineering and design. Host talks, exhibitions and themed gatherings on campus." data-zh="分享汽车历史、工程与设计知识。校内讲座、展览与主题活动，传播赛车文化。">分享汽车历史、工程与设计知识。校内讲座、展览与主题活动，传播赛车文化。</span></p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="dhgt-section dhgt-gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">03. <span class="lang-text" data-en="Gallery" data-zh="图集">图集</span></span>
+                <h2 class="section-title"><span class="lang-text" data-en="Moments" data-zh="瞬间">瞬间</span></h2>
+            </div>
+            <div class="dhgt-gallery-grid">
+                <figure class="dhgt-gallery-item dhgt-gallery-item-wide fade-up">
+                    <img src="assets/dhgt/car-people.jpg" alt="F1 Grid">
+                    <figcaption><span class="lang-text" data-en="The grid we dream of" data-zh="我们梦想的起步格">我们梦想的起步格</span></figcaption>
+                </figure>
+                <figure class="dhgt-gallery-item fade-up">
+                    <img src="assets/dhgt/logo-blk.png" alt="DHGT Logo Black">
+                    <figcaption>DHGT Logo</figcaption>
+                </figure>
+                <figure class="dhgt-gallery-item fade-up">
+                    <img src="assets/dhgt/race.png" alt="We race as one">
+                    <figcaption>We race as one</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join -->
+    <section class="dhgt-section dhgt-join">
+        <div class="container">
+            <div class="dhgt-join-content fade-up">
+                <h2 class="dhgt-join-title">
+                    <span class="lang-text" data-en="Join the Grid" data-zh="加入起步格">加入起步格</span>
+                </h2>
+                <p class="dhgt-join-desc">
+                    <span class="lang-text" data-en="Want to race with us? Reach out and become part of DHGT." data-zh="想和我们一起驰骋？联系我们，成为 DHGT 的一员。">想和我们一起驰骋？联系我们，成为 DHGT 的一员。</span>
+                </p>
+                <a href="index.html#contact" class="btn btn-primary btn-dhgt"><span class="lang-text" data-en="Get in Touch" data-zh="联系我们">联系我们</span></a>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer class="footer footer-dhgt">
+        <div class="container">
+            <p>Designed & Built by Hayden <span class="heart">♥</span></p>
+            <p class="footer-sub">with love and Kimi</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
