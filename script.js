@@ -169,7 +169,8 @@ function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-    ctx.scale(dpr, dpr);
+    // setTransform 重置变换矩阵，避免重复 resize 时 scale 累积
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 let resizeTimeout;
@@ -293,6 +294,7 @@ const navLinks = document.querySelector('.nav-links');
 function closeMobileMenu() {
     menuToggle.classList.remove('active');
     navLinks.classList.remove('active');
+    menuToggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
 }
 
@@ -300,6 +302,7 @@ if (menuToggle) {
     menuToggle.addEventListener('click', () => {
         menuToggle.classList.toggle('active');
         navLinks.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active') ? 'true' : 'false');
         document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
     });
 }

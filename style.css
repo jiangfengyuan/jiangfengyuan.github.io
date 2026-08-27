@@ -8,6 +8,9 @@
     --accent: #6366f1;
     --accent-light: #818cf8;
     --accent-glow: rgba(99, 102, 241, 0.3);
+    --accent-glow-strong: rgba(99, 102, 241, 0.4);
+    --accent-bg: rgba(99, 102, 241, 0.1);
+    --accent-border: rgba(99, 102, 241, 0.25);
     --border: rgba(255, 255, 255, 0.08);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -23,6 +26,9 @@
     --accent: #0071e3;
     --accent-light: #0077ed;
     --accent-glow: rgba(0, 113, 227, 0.2);
+    --accent-glow-strong: rgba(0, 113, 227, 0.3);
+    --accent-bg: rgba(0, 113, 227, 0.08);
+    --accent-border: rgba(0, 113, 227, 0.25);
     --border: rgba(0, 0, 0, 0.08);
 }
 
@@ -212,8 +218,8 @@ ul {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
     border-radius: 100px;
     font-size: 0.85rem;
     color: var(--accent-light);
@@ -282,21 +288,27 @@ ul {
     font-size: 0.95rem;
     font-weight: 500;
     border-radius: 8px;
-    transition: var(--transition);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.3s ease,
+                border-color 0.3s ease,
+                color 0.3s ease;
     cursor: pointer;
     border: none;
     font-family: var(--font-sans);
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
 }
 
 .btn-primary {
     background: var(--accent);
     color: white;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 20px var(--accent-glow);
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 10px 35px var(--accent-glow-strong);
 }
 
 .btn-outline {
@@ -308,7 +320,7 @@ ul {
 .btn-outline:hover {
     border-color: var(--accent);
     color: var(--accent-light);
-    transform: translateY(-2px);
+    transform: translate3d(0, -3px, 0);
 }
 
 .btn-large {
@@ -327,7 +339,8 @@ ul {
     color: var(--text-secondary);
     font-size: 0.8rem;
     opacity: 0.7;
-    animation: float 3s ease-in-out infinite;
+    animation: float 3.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    will-change: transform;
 }
 
 .mouse {
@@ -492,12 +505,16 @@ ul {
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 2rem;
-    transition: var(--transition);
+    transform: translateZ(0);
+    will-change: transform, box-shadow, border-color;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease;
 }
 
 .skill-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(99, 102, 241, 0.3);
+    transform: translate3d(0, -6px, 0);
+    border-color: var(--accent-border);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -529,11 +546,102 @@ ul {
 
 .skill-tag {
     padding: 0.35rem 0.8rem;
-    background: rgba(99, 102, 241, 0.1);
+    background: var(--accent-bg);
     color: var(--accent-light);
     font-size: 0.8rem;
     border-radius: 6px;
     font-family: var(--font-sans);
+}
+
+/* ==================== 作品区域 ==================== */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transform: translateZ(0);
+    will-change: transform, box-shadow, border-color;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease;
+}
+
+.project-card:hover {
+    transform: translate3d(0, -6px, 0);
+    border-color: var(--accent-border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card-featured {
+    border-color: var(--accent-border);
+    box-shadow: 0 12px 40px var(--accent-glow);
+}
+
+.project-card-featured:hover {
+    box-shadow: 0 20px 50px var(--accent-glow-strong);
+}
+
+.project-badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    background: var(--accent-bg);
+    color: var(--accent-light);
+    border: 1px solid var(--accent-border);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 100px;
+    margin-bottom: 1.2rem;
+}
+
+.project-badge-plain {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
+.project-card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+}
+
+.project-card-title-cn {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-left: 0.3rem;
+}
+
+.project-card-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    flex: 1;
+}
+
+.project-card .skill-tags {
+    margin-bottom: 1.5rem;
+}
+
+.project-card-links {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.project-card-links .btn {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.9rem;
 }
 
 /* ==================== 联系区域 ==================== */
@@ -575,7 +683,12 @@ ul {
     border: 1px solid var(--border);
     border-radius: 12px;
     color: var(--text-secondary);
-    transition: var(--transition);
+    transform: translateZ(0);
+    will-change: transform, box-shadow, border-color, color;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.3s ease,
+                color 0.3s ease;
 }
 
 .social-link svg {
@@ -586,7 +699,7 @@ ul {
 .social-link:hover {
     color: var(--accent);
     border-color: var(--accent);
-    transform: translateY(-3px);
+    transform: translate3d(0, -4px, 0);
 }
 
 /* ==================== 页脚 ==================== */
@@ -609,14 +722,17 @@ ul {
 /* ==================== 动画类 ==================== */
 .fade-up {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate3d(0, 30px, 0);
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-up.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
 }
 
 /* ==================== Keyframes ==================== */
@@ -631,8 +747,8 @@ ul {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -10px, 0); }
 }
 
 @keyframes scroll-wheel {
@@ -773,7 +889,7 @@ ul {
     display: inline-block;
     font-size: 0.65rem;
     padding: 0.15rem 0.5rem;
-    background: rgba(99, 102, 241, 0.15);
+    background: var(--accent-bg);
     color: var(--accent-light);
     border-radius: 4px;
     font-family: var(--font-sans);
@@ -833,7 +949,7 @@ ul {
     color: white;
     font-size: 1.5rem;
     font-weight: 300;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 15px var(--accent-glow-strong);
     cursor: pointer;
     transition: var(--transition);
 }
@@ -849,7 +965,7 @@ ul {
     transform: translateX(-50%);
     width: 80%;
     height: 30px;
-    background: radial-gradient(ellipse, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
     filter: blur(10px);
     z-index: -1;
 }
@@ -1052,6 +1168,10 @@ ul {
     }
     
     .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-grid {
         grid-template-columns: 1fr;
     }
     
@@ -1850,6 +1970,7 @@ body {
 }
 
 .skill-card,
+.project-card,
 .social-link,
 .btn,
 .btn-outline,
@@ -1883,6 +2004,21 @@ body {
 :root[data-theme="light"] .skill-card:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 113, 227, 0.25);
+}
+
+/* Light mode project card shadow fix */
+:root[data-theme="light"] .project-card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .project-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="light"] .project-card-featured,
+:root[data-theme="light"] .project-card-featured:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 12px 40px var(--accent-glow);
 }
 
 /* ==================== Focus Visible ==================== */
@@ -1951,12 +2087,13 @@ body {
 
 .danmaku-track {
     position: absolute;
+    left: 0;
     white-space: nowrap;
     font-size: 1.05rem;
     font-weight: 500;
     color: var(--text-secondary);
     letter-spacing: 0.01em;
-    will-change: transform;
+    will-change: left, transform;
     animation: danmakuFloat linear infinite;
     user-select: none;
     pointer-events: none;
@@ -1966,9 +2103,11 @@ body {
     color: var(--apple-text-secondary);
 }
 
+/* left(容器百分比) + transform(自身宽度) 组合，使弹幕完整横穿舞台：
+   起点在右缘外（left:100%），终点在左缘外（left:0 且自身左移 100%），速度均匀 */
 @keyframes danmakuFloat {
-    0% { transform: translateX(110%); }
-    100% { transform: translateX(-110%); }
+    0% { left: 100%; transform: translateX(0); }
+    100% { left: 0; transform: translateX(-100%); }
 }
 
 @media (max-width: 900px) {
@@ -1987,4 +2126,63 @@ body {
     .danmaku-track {
         font-size: 0.9rem;
     }
+}
+
+/* ==================== Flash 平台徽章副文（flash.html） ==================== */
+/* 徽章改为纵向排列：图标在上，平台名居中，副文小号灰色 */
+.platform-badge-apple {
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.8rem;
+}
+
+.platform-badge-apple small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--apple-text-secondary);
+}
+
+/* ==================== 全局动画顺滑优化 ==================== */
+
+/* 为常见动画元素开启 GPU 加速，避免重绘抖动 */
+.navbar,
+.hero-title,
+.hero-subtitle,
+.hero-desc,
+.section-header,
+.project-name,
+.audience-headline,
+.platforms-title,
+.statement-headline,
+.cta-content {
+    transform: translateZ(0);
+}
+
+.apple-btn,
+.feature-card-apple {
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+}
+
+.apple-btn {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.3s ease;
+}
+
+.apple-btn:hover {
+    transform: scale(1.04) translateZ(0);
+}
+
+.feature-card-apple {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* 仅有一个项目卡片时居中显示，避免两列布局左侧留白 */
+.projects-grid > .project-card:only-child {
+    grid-column: 1 / -1;
+    max-width: 640px;
+    justify-self: center;
 }
