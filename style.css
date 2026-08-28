@@ -726,15 +726,26 @@ ul {
     filter: blur(6px);
     will-change: transform, opacity, filter;
     backface-visibility: hidden;
-    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-up.visible {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     filter: blur(0);
+    animation: fadeUpIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fadeUpIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
 }
 
 /* ==================== Keyframes ==================== */
@@ -1459,15 +1470,26 @@ ul {
     opacity: 0;
     transform: translate3d(0, 50px, 0);
     filter: blur(6px);
-    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 1s cubic-bezier(0.22, 1, 0.36, 1),
-                filter 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .page-flash .fade-up.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
     filter: blur(0);
+    animation: fadeUpInFlash 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fadeUpInFlash {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 50px, 0);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
 }
 
 @keyframes phoneFloat {
