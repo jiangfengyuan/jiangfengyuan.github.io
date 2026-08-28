@@ -401,22 +401,42 @@ window.addEventListener('scroll', () => {
     let currentLang = localStorage.getItem('site-lang') || 'zh';
     if (!['zh', 'en'].includes(currentLang)) currentLang = 'zh';
 
-    function updateLanguage(lang) {
-        document.querySelectorAll('.lang-text').forEach(el => {
-            const text = el.getAttribute(`data-${lang}`);
-            if (text) el.textContent = text;
-        });
+    let langAnimated = false;
 
-        if (langToggle) {
-            langToggle.textContent = lang === 'zh' ? 'EN' : '中文';
+    function updateLanguage(lang) {
+        const apply = () => {
+            document.querySelectorAll('.lang-text').forEach(el => {
+                const text = el.getAttribute(`data-${lang}`);
+                if (text) el.textContent = text;
+            });
+
+            if (langToggle) {
+                langToggle.textContent = lang === 'zh' ? 'EN' : '中文';
+            }
+
+            htmlEl.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            localStorage.setItem('site-lang', lang);
+
+            // Re-init typewriter and danmaku for new language
+            try { initTypewriter(); } catch (e) { /* ignore */ }
+            try { if (typeof initDanmaku === 'function') initDanmaku(); } catch (e) { /* ignore */ }
+        };
+
+        // 首次加载不做动画，避免闪烁
+        if (!langAnimated) {
+            langAnimated = true;
+            apply();
+            return;
         }
 
-        htmlEl.lang = lang === 'zh' ? 'zh-CN' : 'en';
-        localStorage.setItem('site-lang', lang);
-
-        // Re-init typewriter and danmaku for new language
-        try { initTypewriter(); } catch (e) { /* ignore */ }
-        try { if (typeof initDanmaku === 'function') initDanmaku(); } catch (e) { /* ignore */ }
+        // 淡出 -> 替换 -> 淡入，切换更丝滑
+        htmlEl.classList.add('lang-switching');
+        setTimeout(() => {
+            apply();
+            requestAnimationFrame(() => {
+                htmlEl.classList.remove('lang-switching');
+            });
+        }, 140);
     }
 
     updateLanguage(currentLang);
