@@ -723,6 +723,7 @@ ul {
 .fade-up {
     opacity: 0;
     transform: translate3d(0, 30px, 0);
+    filter: blur(6px);
     will-change: transform, opacity, filter;
     backface-visibility: hidden;
     transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
@@ -733,6 +734,7 @@ ul {
 .fade-up.visible {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0);
 }
 
 /* ==================== Keyframes ==================== */
@@ -1288,6 +1290,13 @@ ul {
     --apple-text-secondary: #86868b;
     --apple-accent: #0071e3;
     --apple-border: rgba(255, 255, 255, 0.1);
+    /* 全页主题色统一为 “GitHub 上查看” 按钮的蓝色 */
+    --accent: #0071e3;
+    --accent-light: #0077ed;
+    --accent-glow: rgba(0, 113, 227, 0.3);
+    --accent-glow-strong: rgba(0, 113, 227, 0.45);
+    --accent-bg: rgba(0, 113, 227, 0.1);
+    --accent-border: rgba(0, 113, 227, 0.25);
     background: var(--apple-bg);
     color: var(--apple-text);
     transition: background 0.5s ease, color 0.5s ease;
@@ -1827,8 +1836,9 @@ ul {
 .status-dot-apple {
     width: 8px;
     height: 8px;
-    background: #f5c542;
+    background: var(--apple-accent);
     border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 113, 227, 0.6);
     animation: pulse 2.5s infinite;
 }
 
@@ -1845,11 +1855,11 @@ ul {
 /* Enhanced Animations */
 .page-flash .fade-up {
     opacity: 0;
-    transform: translateY(50px);
+    transform: translate3d(0, 50px, 0);
     filter: blur(6px);
-    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 1s cubic-bezier(0.4, 0, 0.2, 1),
-                filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .page-flash .fade-up.visible {
@@ -2514,4 +2524,128 @@ img {
 html.lang-switching .lang-text {
     opacity: 0;
     transform: translate3d(0, 5px, 0);
+}
+
+
+/* ==================== 丝滑动画增强 ==================== */
+
+/* 页面载入时整体轻微淡入 */
+@keyframes pageFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body {
+    animation: pageFadeIn 0.45s ease both;
+}
+
+/* 按钮按压回弹反馈 */
+.btn:active,
+.apple-btn:active {
+    transform: scale(0.96) translateZ(0);
+    transition-duration: 0.12s;
+}
+
+.control-btn {
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.control-btn:hover {
+    transform: translateY(-1px);
+}
+
+.control-btn:active {
+    transform: scale(0.88);
+    transition-duration: 0.12s;
+}
+
+/* 按钮图标随悬停轻微放大 */
+.apple-btn svg,
+.btn svg {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.apple-btn:hover svg,
+.btn:hover svg {
+    transform: scale(1.15);
+}
+
+/* Flash 特性卡片：图标悬浮上浮 + 卡片蓝色光晕 */
+.feature-icon-wrap {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.feature-card-apple:hover .feature-icon-wrap {
+    transform: translate3d(0, -4px, 0) scale(1.1);
+}
+
+.feature-card-apple {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s ease;
+}
+
+.feature-card-apple:hover {
+    border-color: var(--accent-border);
+}
+
+/* 平台徽章图标悬停放大 */
+.platform-badge-apple svg {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.platform-badge-apple:hover svg {
+    transform: scale(1.15);
+}
+
+/* DHGT 活动卡片图标悬浮动效 */
+.dhgt-activity-icon {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.dhgt-activity-card:hover .dhgt-activity-icon {
+    transform: translate3d(0, -4px, 0) scale(1.1);
+}
+
+/* DHGT Hero Logo 呼吸浮动（延迟等待入场动画结束） */
+@keyframes logoFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -8px, 0); }
+}
+
+.dhgt-hero-logo {
+    animation: logoFloat 7s ease-in-out 1.2s infinite;
+    will-change: transform;
+}
+
+/* 导航 Logo 悬停微动效 */
+.nav-logo {
+    display: inline-block;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-logo:hover {
+    transform: translate3d(0, -2px, 0);
+}
+
+/* 区块标题入场时轻微上移 */
+.section-header {
+    will-change: transform, opacity;
+}
+
+/* 链接点击区域按压反馈 */
+.nav-link,
+.social-link,
+.platform-badge-apple {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link:active,
+.social-link:active,
+.platform-badge-apple:active {
+    transform: scale(0.96);
+    transition-duration: 0.12s;
 }
