@@ -2772,3 +2772,50 @@ body {
         padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
     }
 }
+
+/* ==================== DHGT 公众号板块 ==================== */
+
+.dhgt-wechat {
+    background: var(--bg-secondary, var(--bg-primary));
+    text-align: center;
+}
+
+.dhgt-wechat-content {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dhgt-wechat-qr-card {
+    background: #ffffff;
+    padding: 1.25rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    margin-bottom: 1.75rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+.dhgt-wechat-qr-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+}
+
+.dhgt-wechat-qr {
+    display: block;
+    width: min(220px, 55vw);
+    height: auto;
+}
+
+.dhgt-wechat-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.dhgt-wechat-desc {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
