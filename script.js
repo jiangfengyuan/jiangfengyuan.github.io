@@ -1,20 +1,13 @@
 // ==================== 导航栏滚动效果 ====================
 const navbar = document.querySelector('.navbar');
 
-let navbarTicking = false;
-window.addEventListener('scroll', () => {
-    if (!navbarTicking) {
-        requestAnimationFrame(() => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            navbarTicking = false;
-        });
-        navbarTicking = true;
+function updateNavbar() {
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
     }
-});
+}
 
 // ==================== 打字机效果 ====================
 class TypeWriter {
@@ -357,14 +350,16 @@ function highlightNav() {
     });
 }
 
-let highlightNavTicking = false;
+// 导航栏收缩与高亮共用一个 rAF 节流监听
+let scrollTicking = false;
 window.addEventListener('scroll', () => {
-    if (!highlightNavTicking) {
+    if (!scrollTicking) {
         window.requestAnimationFrame(() => {
+            updateNavbar();
             highlightNav();
-            highlightNavTicking = false;
+            scrollTicking = false;
         });
-        highlightNavTicking = true;
+        scrollTicking = true;
     }
 });
 
@@ -374,25 +369,16 @@ window.addEventListener('scroll', () => {
     const htmlEl = document.documentElement;
     const themeToggle = document.getElementById('theme-toggle');
     const langToggle = document.getElementById('lang-toggle');
-    const pageFlash = document.querySelector('.page-flash');
 
     // --- Theme Toggle ---
     const savedTheme = localStorage.getItem('site-theme') || 'dark';
     htmlEl.dataset.theme = savedTheme;
-    if (pageFlash) {
-        pageFlash.classList.remove('theme-dark', 'theme-light');
-        pageFlash.classList.add(`theme-${savedTheme}`);
-    }
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const isDark = htmlEl.dataset.theme === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
             htmlEl.dataset.theme = newTheme;
-            if (pageFlash) {
-                pageFlash.classList.remove('theme-dark', 'theme-light');
-                pageFlash.classList.add(`theme-${newTheme}`);
-            }
             localStorage.setItem('site-theme', newTheme);
         });
     }

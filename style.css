@@ -1,4 +1,4 @@
-/* ==================== 基础重置与变量 ==================== */
+﻿/* ==================== 鍩虹閲嶇疆涓庡彉閲?==================== */
 :root {
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
@@ -61,7 +61,7 @@ ul {
     list-style: none;
 }
 
-/* 粒子背景 canvas */
+/* 绮掑瓙鑳屾櫙 canvas */
 #particle-canvas {
     position: fixed;
     top: 0;
@@ -72,7 +72,7 @@ ul {
     z-index: 0;
 }
 
-/* ==================== 导航栏 ==================== */
+/* ==================== 瀵艰埅鏍?==================== */
 .navbar {
     position: fixed;
     top: 0;
@@ -196,7 +196,7 @@ ul {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ==================== Hero 区域 ==================== */
+/* ==================== Hero 鍖哄煙 ==================== */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -279,7 +279,7 @@ ul {
     flex-wrap: wrap;
 }
 
-/* ==================== 按钮 ==================== */
+/* ==================== 鎸夐挳 ==================== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -328,7 +328,7 @@ ul {
     font-size: 1.05rem;
 }
 
-/* ==================== 滚动指示器 ==================== */
+/* ==================== 婊氬姩鎸囩ず鍣?==================== */
 .scroll-indicator {
     position: absolute;
     bottom: 2.5rem;
@@ -361,7 +361,7 @@ ul {
     animation: scroll-wheel 2s infinite;
 }
 
-/* ==================== 通用区域 ==================== */
+/* ==================== 閫氱敤鍖哄煙 ==================== */
 .section {
     padding: 7rem 0;
     position: relative;
@@ -392,7 +392,7 @@ ul {
     letter-spacing: -0.02em;
 }
 
-/* ==================== 关于区域 ==================== */
+/* ==================== 鍏充簬鍖哄煙 ==================== */
 .about {
     background: var(--bg-secondary);
 }
@@ -443,7 +443,7 @@ ul {
     font-family: var(--font-sans);
 }
 
-/* 代码窗口 */
+/* 浠ｇ爜绐楀彛 */
 .code-window {
     background: #0d0d12;
     border-radius: 12px;
@@ -493,7 +493,7 @@ ul {
 .code-bool { color: #d19a66; }
 .code-method { color: #61afef; }
 
-/* ==================== 技能区域 ==================== */
+/* ==================== 鎶€鑳藉尯鍩?==================== */
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -553,7 +553,7 @@ ul {
     font-family: var(--font-sans);
 }
 
-/* ==================== 作品区域 ==================== */
+/* ==================== 浣滃搧鍖哄煙 ==================== */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -644,7 +644,7 @@ ul {
     font-size: 0.9rem;
 }
 
-/* ==================== 联系区域 ==================== */
+/* ==================== 鑱旂郴鍖哄煙 ==================== */
 .contact {
     text-align: center;
 }
@@ -702,7 +702,7 @@ ul {
     transform: translate3d(0, -4px, 0);
 }
 
-/* ==================== 页脚 ==================== */
+/* ==================== 椤佃剼 ==================== */
 .footer {
     text-align: center;
     padding: 2.5rem 0;
@@ -719,7 +719,7 @@ ul {
     animation: heartbeat 2s infinite;
 }
 
-/* ==================== 动画类 ==================== */
+/* ==================== 鍔ㄧ敾绫?==================== */
 .fade-up {
     opacity: 0;
     transform: translate3d(0, 30px, 0);
@@ -766,381 +766,6 @@ ul {
     70% { transform: scale(1); }
 }
 
-/* ==================== 项目展示 ==================== */
-.flash {
-    background: var(--bg-primary);
-}
-
-.flash .section-header {
-    text-align: center;
-    margin-bottom: 5rem;
-}
-
-.flash .section-tag {
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.flash .section-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-top: 0.8rem;
-}
-
-.project-showcase {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 5rem;
-    align-items: start;
-}
-
-.project-visual {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    position: sticky;
-    top: 100px;
-}
-
-.phone-mockup {
-    position: relative;
-}
-
-.phone-frame {
-    width: 260px;
-    height: 520px;
-    background: #1a1a24;
-    border-radius: 36px;
-    padding: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
-    position: relative;
-}
-
-.phone-notch {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 20px;
-    background: #1a1a24;
-    border-radius: 0 0 14px 14px;
-    z-index: 2;
-}
-
-.phone-screen {
-    width: 100%;
-    height: 100%;
-    background: var(--bg-secondary);
-    border-radius: 26px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.app-header {
-    padding: 1rem;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-}
-
-.app-logo {
-    font-size: 2rem;
-    line-height: 1;
-    margin-bottom: 0.3rem;
-}
-
-.app-name-small {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-}
-
-.app-ui {
-    flex: 1;
-    padding: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    position: relative;
-    overflow-y: auto;
-}
-
-.note-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.7rem;
-    animation: slideIn 0.4s ease-out;
-}
-
-.note-card:nth-child(2) {
-    animation-delay: 0.15s;
-    animation-fill-mode: both;
-}
-
-.note-tag {
-    display: inline-block;
-    font-size: 0.65rem;
-    padding: 0.15rem 0.5rem;
-    background: var(--accent-bg);
-    color: var(--accent-light);
-    border-radius: 4px;
-    font-family: var(--font-sans);
-    margin-bottom: 0.4rem;
-}
-
-.note-text {
-    font-size: 0.8rem;
-    color: var(--text-primary);
-    line-height: 1.4;
-}
-
-.note-voice {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
-
-.voice-wave {
-    display: inline-block;
-    width: 3px;
-    height: 12px;
-    background: var(--accent);
-    border-radius: 2px;
-    animation: voiceWave 1s ease-in-out infinite;
-}
-
-.voice-wave:nth-child(2) {
-    animation-delay: 0.1s;
-    height: 18px;
-}
-
-.voice-wave:nth-child(3) {
-    animation-delay: 0.2s;
-    height: 10px;
-}
-
-.note-meta {
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    margin-top: 0.3rem;
-}
-
-.fab-btn {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    width: 44px;
-    height: 44px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 300;
-    box-shadow: 0 4px 15px var(--accent-glow-strong);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.fab-btn:hover {
-    transform: scale(1.1);
-}
-
-.phone-shadow {
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 30px;
-    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
-    filter: blur(10px);
-    z-index: -1;
-}
-
-.project-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.2rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 100px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-family: var(--font-sans);
-    font-weight: 400;
-}
-
-.status-dot {
-    width: 7px;
-    height: 7px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
-
-.project-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.project-header {
-    margin-bottom: 0.5rem;
-}
-
-.project-name {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-}
-
-.project-name-en {
-    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.project-name-cn {
-    font-size: 1.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.project-tagline {
-    font-size: 1.1rem;
-    color: var(--accent-light);
-    font-weight: 400;
-}
-
-.project-desc {
-    color: rgba(240, 240, 245, 0.75);
-    font-size: 1.15rem;
-    line-height: 1.8;
-    font-weight: 400;
-    max-width: 540px;
-}
-
-.project-desc + .project-desc {
-    margin-top: 1.2rem;
-}
-
-.feature-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    margin-top: 1rem;
-}
-
-.feature-item {
-    display: flex;
-    gap: 0.8rem;
-    padding: 1.2rem 0;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0;
-    transition: none;
-}
-
-.feature-item:nth-child(odd) {
-    padding-right: 1rem;
-}
-
-.feature-item:nth-child(even) {
-    padding-left: 1rem;
-}
-
-.feature-item:hover {
-    border-color: var(--border);
-    transform: none;
-}
-
-.feature-icon {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    color: var(--accent);
-    margin-top: 0.1rem;
-}
-
-.feature-text h4 {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.15rem;
-    color: var(--text-primary);
-}
-
-.feature-text p {
-    font-size: 0.85rem;
-    color: rgba(139, 139, 154, 0.8);
-    line-height: 1.5;
-}
-
-.project-platforms {
-    margin-top: 2.5rem;
-}
-
-.platform-label {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.8rem;
-    font-family: var(--font-sans);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 500;
-}
-
-.platform-badges {
-    display: flex;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-}
-
-.platform-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: var(--text-primary);
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.platform-badge:hover {
-    border-color: var(--accent);
-    color: var(--accent-light);
-}
-
-.platform-badge svg {
-    width: 18px;
-    height: 18px;
-}
 
 @keyframes slideIn {
     from {
@@ -1162,7 +787,7 @@ ul {
     }
 }
 
-/* ==================== 响应式 ==================== */
+/* ==================== 鍝嶅簲寮?==================== */
 @media (max-width: 900px) {
     .about-content {
         grid-template-columns: 1fr;
@@ -1185,7 +810,7 @@ ul {
         bottom: 0;
         width: 100%;
         height: 100vh;
-        height: 100dvh; /* 移动端动态视口高度，适配 Safari 工具栏 */
+        height: 100dvh; /* 绉诲姩绔姩鎬佽鍙ｉ珮搴︼紝閫傞厤 Safari 宸ュ叿鏍?*/
         margin: 0 !important;
         background: rgba(10, 10, 15, 0.97);
         backdrop-filter: blur(20px);
@@ -1219,26 +844,6 @@ ul {
         display: flex;
         z-index: 1002;
     }
-    
-    .project-showcase {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-    }
-    
-    .project-visual {
-        position: relative;
-        top: 0;
-    }
-    
-    .feature-list {
-        grid-template-columns: 1fr;
-    }
-    
-    .feature-item:nth-child(odd),
-    .feature-item:nth-child(even) {
-        padding-left: 0;
-        padding-right: 0;
-    }
 }
 
 @media (max-width: 600px) {
@@ -1258,23 +863,6 @@ ul {
     .btn {
         width: 100%;
     }
-    
-    .phone-frame {
-        width: 220px;
-        height: 440px;
-    }
-    
-    .platform-badges {
-        justify-content: center;
-    }
-    
-    .project-name {
-        font-size: 2rem;
-    }
-    
-    .project-name-cn {
-        font-size: 1.4rem;
-    }
 }
 
 /* Footer sub-line */
@@ -1286,7 +874,7 @@ ul {
 }
 
 
-/* ==================== Apple Style — Flash Page ==================== */
+/* ==================== Apple Style 鈥?Flash Page ==================== */
 
 .page-flash {
     --apple-bg: #000000;
@@ -1296,7 +884,7 @@ ul {
     --apple-text-secondary: #86868b;
     --apple-accent: #0071e3;
     --apple-border: rgba(255, 255, 255, 0.1);
-    /* 全页主题色统一为 “GitHub 上查看” 按钮的蓝色 */
+    /* 鍏ㄩ〉涓婚鑹茬粺涓€涓?鈥淕itHub 涓婃煡鐪嬧€?鎸夐挳鐨勮摑鑹?*/
     --accent: #0071e3;
     --accent-light: #0077ed;
     --accent-glow: rgba(0, 113, 227, 0.3);
@@ -1794,11 +1382,13 @@ ul {
     flex-wrap: wrap;
 }
 
+/* 寰界珷绾靛悜鎺掑垪锛氬浘鏍囧湪涓婏紝骞冲彴鍚嶅眳涓紝鍓枃灏忓彿鐏拌壊 */
 .platform-badge-apple {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.8rem 1.6rem;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.8rem;
     background: var(--apple-bg-elevated);
     border: 1px solid var(--apple-border);
     border-radius: 100px;
@@ -1806,6 +1396,12 @@ ul {
     font-weight: 500;
     color: var(--apple-text);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.platform-badge-apple small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--apple-text-secondary);
 }
 
 .platform-badge-apple:hover {
@@ -2001,8 +1597,6 @@ body {
 .flash-features,
 .flash-platforms-apple,
 .footer-apple,
-.note-card,
-.fab-btn,
 .fab-btn-apple,
 .hero,
 .about,
@@ -2119,8 +1713,7 @@ body {
     color: var(--apple-text-secondary);
 }
 
-/* left(容器百分比) + transform(自身宽度) 组合，使弹幕完整横穿舞台：
-   起点在右缘外（left:100%），终点在左缘外（left:0 且自身左移 100%），速度均匀 */
+/* left(瀹瑰櫒鐧惧垎姣? + transform(鑷韩瀹藉害) 缁勫悎锛屼娇寮瑰箷瀹屾暣妯┛鑸炲彴锛?   璧风偣鍦ㄥ彸缂樺锛坙eft:100%锛夛紝缁堢偣鍦ㄥ乏缂樺锛坙eft:0 涓旇嚜韬乏绉?100%锛夛紝閫熷害鍧囧寑 */
 @keyframes danmakuFloat {
     0% { left: 100%; transform: translateX(0); }
     100% { left: 0; transform: translateX(-100%); }
@@ -2144,29 +1737,13 @@ body {
     }
 }
 
-/* ==================== Flash 平台徽章副文（flash.html） ==================== */
-/* 徽章改为纵向排列：图标在上，平台名居中，副文小号灰色 */
-.platform-badge-apple {
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 1.8rem;
-}
+/* ==================== 鍏ㄥ眬鍔ㄧ敾椤烘粦浼樺寲 ==================== */
 
-.platform-badge-apple small {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--apple-text-secondary);
-}
-
-/* ==================== 全局动画顺滑优化 ==================== */
-
-/* 为常见动画元素开启 GPU 加速，避免重绘抖动。
-   注意：.navbar 不能加 transform，否则会成为 fixed 定位后代的包含块，导致移动端全屏菜单被限制在导航条高度内 */
+/* 涓哄父瑙佸姩鐢诲厓绱犲紑鍚?GPU 鍔犻€燂紝閬垮厤閲嶇粯鎶栧姩銆?   娉ㄦ剰锛?navbar 涓嶈兘鍔?transform锛屽惁鍒欎細鎴愪负 fixed 瀹氫綅鍚庝唬鐨勫寘鍚潡锛屽鑷寸Щ鍔ㄧ鍏ㄥ睆鑿滃崟琚檺鍒跺湪瀵艰埅鏉￠珮搴﹀唴 */
 .hero-title,
 .hero-subtitle,
 .hero-desc,
 .section-header,
-.project-name,
 .audience-headline,
 .platforms-title,
 .statement-headline,
@@ -2196,7 +1773,7 @@ body {
 }
 
 
-/* 仅有一个项目卡片时居中显示，避免两列布局左侧留白 */
+/* 浠呮湁涓€涓」鐩崱鐗囨椂灞呬腑鏄剧ず锛岄伩鍏嶄袱鍒楀竷灞€宸︿晶鐣欑櫧 */
 .projects-grid > .project-card:only-child {
     grid-column: 1 / -1;
     max-width: 640px;
@@ -2481,15 +2058,15 @@ body {
     }
 }
 
-/* ==================== 额外动画优化 ==================== */
+/* ==================== 棰濆鍔ㄧ敾浼樺寲 ==================== */
 
-/* 导航下划线更顺滑 */
+/* 瀵艰埅涓嬪垝绾挎洿椤烘粦 */
 .nav-link::after {
     transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: width;
 }
 
-/* 页面主要容器统一 GPU 层 */
+/* 椤甸潰涓昏瀹瑰櫒缁熶竴 GPU 灞?*/
 .container,
 .hero-content,
 .dhgt-hero-content,
@@ -2501,12 +2078,12 @@ body {
     transform: translateZ(0);
 }
 
-/* 图片悬停缩放更丝滑 */
+/* 鍥剧墖鎮仠缂╂斁鏇翠笣婊?*/
 img {
     transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Hero 内容进入动画 */
+/* Hero 鍐呭杩涘叆鍔ㄧ敾 */
 @keyframes heroFadeIn {
     from {
         opacity: 0;
@@ -2534,7 +2111,7 @@ img {
 .hero-content > *:nth-child(5),
 .dhgt-hero-content > *:nth-child(5) { animation-delay: 0.5s; }
 
-/* ==================== 中英文切换过渡 ==================== */
+/* ==================== 涓嫳鏂囧垏鎹㈣繃娓?==================== */
 
 .lang-text {
     display: inline-block;
@@ -2550,15 +2127,15 @@ html.lang-switching .lang-text {
     transform: translate3d(0, 5px, 0);
 }
 
-/* 语言切换时容器尺寸平滑变化（JS 临时写入内联宽高） */
+/* 璇█鍒囨崲鏃跺鍣ㄥ昂瀵稿钩婊戝彉鍖栵紙JS 涓存椂鍐欏叆鍐呰仈瀹介珮锛?*/
 .lang-text.lang-resizing {
     will-change: width, height;
 }
 
 
-/* ==================== 丝滑动画增强 ==================== */
+/* ==================== 涓濇粦鍔ㄧ敾澧炲己 ==================== */
 
-/* 页面载入时整体轻微淡入 */
+/* 椤甸潰杞藉叆鏃舵暣浣撹交寰贰鍏?*/
 @keyframes pageFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -2568,7 +2145,7 @@ body {
     animation: pageFadeIn 0.45s ease both;
 }
 
-/* 按钮按压回弹反馈 */
+/* 鎸夐挳鎸夊帇鍥炲脊鍙嶉 */
 .btn:active,
 .apple-btn:active {
     transform: scale(0.96) translateZ(0);
@@ -2589,7 +2166,7 @@ body {
     transition-duration: 0.12s;
 }
 
-/* 按钮图标随悬停轻微放大 */
+/* 鎸夐挳鍥炬爣闅忔偓鍋滆交寰斁澶?*/
 .apple-btn svg,
 .btn svg {
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -2600,7 +2177,7 @@ body {
     transform: scale(1.15);
 }
 
-/* Flash 特性卡片：图标悬浮上浮 + 卡片蓝色光晕 */
+/* Flash 鐗规€у崱鐗囷細鍥炬爣鎮诞涓婃诞 + 鍗＄墖钃濊壊鍏夋檿 */
 .feature-icon-wrap {
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
@@ -2620,7 +2197,7 @@ body {
     border-color: var(--accent-border);
 }
 
-/* 平台徽章图标悬停放大 */
+/* 骞冲彴寰界珷鍥炬爣鎮仠鏀惧ぇ */
 .platform-badge-apple svg {
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -2629,7 +2206,7 @@ body {
     transform: scale(1.15);
 }
 
-/* DHGT 活动卡片图标悬浮动效 */
+/* DHGT 娲诲姩鍗＄墖鍥炬爣鎮诞鍔ㄦ晥 */
 .dhgt-activity-icon {
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
@@ -2639,7 +2216,7 @@ body {
     transform: translate3d(0, -4px, 0) scale(1.1);
 }
 
-/* DHGT Hero Logo 呼吸浮动（延迟等待入场动画结束） */
+/* DHGT Hero Logo 鍛煎惛娴姩锛堝欢杩熺瓑寰呭叆鍦哄姩鐢荤粨鏉燂級 */
 @keyframes logoFloat {
     0%, 100% { transform: translate3d(0, 0, 0); }
     50% { transform: translate3d(0, -8px, 0); }
@@ -2650,7 +2227,7 @@ body {
     will-change: transform;
 }
 
-/* 导航 Logo 悬停微动效 */
+/* 瀵艰埅 Logo 鎮仠寰姩鏁?*/
 .nav-logo {
     display: inline-block;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -2660,12 +2237,12 @@ body {
     transform: translate3d(0, -2px, 0);
 }
 
-/* 区块标题入场时轻微上移 */
+/* 鍖哄潡鏍囬鍏ュ満鏃惰交寰笂绉?*/
 .section-header {
     will-change: transform, opacity;
 }
 
-/* 链接点击区域按压反馈 */
+/* 閾炬帴鐐瑰嚮鍖哄煙鎸夊帇鍙嶉 */
 .nav-link,
 .social-link,
 .platform-badge-apple {
@@ -2680,9 +2257,9 @@ body {
 }
 
 
-/* ==================== 全设备响应式适配 ==================== */
+/* ==================== 鍏ㄨ澶囧搷搴斿紡閫傞厤 ==================== */
 
-/* 防止任何元素造成横向溢出；clip 不会破坏 position: sticky */
+/* 闃叉浠讳綍鍏冪礌閫犳垚妯悜婧㈠嚭锛沜lip 涓嶄細鐮村潖 position: sticky */
 @supports (overflow: clip) {
     html,
     body {
@@ -2690,7 +2267,7 @@ body {
     }
 }
 
-/* 平板竖屏 / 小尺寸 Laptop（601px – 900px）：两列网格，避免单列过空 */
+/* 骞虫澘绔栧睆 / 灏忓昂瀵?Laptop锛?01px 鈥?900px锛夛細涓ゅ垪缃戞牸锛岄伩鍏嶅崟鍒楄繃绌?*/
 @media (min-width: 601px) and (max-width: 900px) {
     .skills-grid,
     .features-grid-apple,
@@ -2699,7 +2276,7 @@ body {
     }
 }
 
-/* Laptop（901px – 1200px）：特性卡片保持可读宽度 */
+/* Laptop锛?01px 鈥?1200px锛夛細鐗规€у崱鐗囦繚鎸佸彲璇诲搴?*/
 @media (min-width: 901px) and (max-width: 1200px) {
     .features-grid-apple {
         gap: 1.5rem;
@@ -2710,7 +2287,7 @@ body {
     }
 }
 
-/* 小屏手机（iPhone SE / mini 等 ≤380px）：收紧间距与字号 */
+/* 灏忓睆鎵嬫満锛坕Phone SE / mini 绛?鈮?80px锛夛細鏀剁揣闂磋窛涓庡瓧鍙?*/
 @media (max-width: 380px) {
     .nav-container,
     .container {
@@ -2748,7 +2325,7 @@ body {
     }
 }
 
-/* 大屏 PC（≥1600px）：放宽内容最大宽度，减少两侧留白 */
+/* 澶у睆 PC锛堚墺1600px锛夛細鏀惧鍐呭鏈€澶у搴︼紝鍑忓皯涓や晶鐣欑櫧 */
 @media (min-width: 1600px) {
     .container,
     .nav-container {
@@ -2757,7 +2334,7 @@ body {
 }
 
 
-/* 刘海屏安全区适配（配合 viewport-fit=cover） */
+/* 鍒樻捣灞忓畨鍏ㄥ尯閫傞厤锛堥厤鍚?viewport-fit=cover锛?*/
 .navbar {
     padding-top: max(1.2rem, env(safe-area-inset-top));
 }
@@ -2773,7 +2350,7 @@ body {
     }
 }
 
-/* ==================== DHGT 公众号板块 ==================== */
+/* ==================== DHGT 鍏紬鍙锋澘鍧?==================== */
 
 .dhgt-wechat {
     background: var(--bg-secondary, var(--bg-primary));
