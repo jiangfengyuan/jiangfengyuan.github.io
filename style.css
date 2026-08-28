@@ -1606,10 +1606,11 @@ body {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
-/* 主题切换时临时统一所有颜色/边框/阴影/图标填充过渡，避免不同元素快慢不一 */
+/* 主题切换时临时统一所有过渡时长为 0.5s，避免不同元素快慢不一；
+   只改 duration 不改 property，因此 scroll fade-up 等动画不会被截断 */
 html.is-theme-switching,
 html.is-theme-switching * {
-    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, fill 0.5s ease, stroke 0.5s ease !important;
+    transition-duration: 0.5s !important;
 }
 
 /* Light mode skill card shadow fix */

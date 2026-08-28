@@ -83,12 +83,18 @@ const fadeObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             // 添加 stagger 延迟效果
             const element = entry.target;
-            const delay = element.dataset.delay || 0;
-            
-            setTimeout(() => {
-                element.classList.add('visible');
-            }, delay);
-            
+            const delay = parseInt(element.dataset.delay || '0', 10);
+
+            // 双 rAF 确保元素先以初始状态（opacity:0 / translateY / blur）完成一次绘制，
+            // 再添加 .visible，这样 transition 才能正确触发，避免首次出现直接闪出
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        element.classList.add('visible');
+                    }, delay);
+                });
+            });
+
             fadeObserver.unobserve(element);
         }
     });
