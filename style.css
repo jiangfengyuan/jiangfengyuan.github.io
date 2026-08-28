@@ -2532,13 +2532,21 @@ img {
 
 .lang-text {
     display: inline-block;
+    vertical-align: top;
     transition: opacity 0.25s ease,
-                transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+                transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html.lang-switching .lang-text {
     opacity: 0;
     transform: translate3d(0, 5px, 0);
+}
+
+/* 语言切换时容器尺寸平滑变化（JS 临时写入内联宽高） */
+.lang-text.lang-resizing {
+    will-change: width, height;
 }
 
 

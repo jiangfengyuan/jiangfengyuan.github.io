@@ -432,7 +432,43 @@ window.addEventListener('scroll', () => {
         // 淡出 -> 替换 -> 淡入，切换更丝滑
         htmlEl.classList.add('lang-switching');
         setTimeout(() => {
+            // 记录切换前尺寸，用于容器大小变化动画
+            const els = Array.from(document.querySelectorAll('.lang-text'));
+            const before = els.map(el => ({ el, w: el.offsetWidth, h: el.offsetHeight }));
+
             apply();
+
+            // 文本替换后，从旧尺寸平滑动画到新尺寸
+            before.forEach(({ el, w, h }) => {
+                const nw = el.offsetWidth;
+                const nh = el.offsetHeight;
+                if (nw === w && nh === h) return;
+
+                el.style.width = w + 'px';
+                el.style.height = h + 'px';
+                el.style.overflow = 'hidden';
+
+                requestAnimationFrame(() => {
+                    el.classList.add('lang-resizing');
+                    el.style.width = nw + 'px';
+                    el.style.height = nh + 'px';
+                });
+
+                const cleanup = () => {
+                    el.style.width = '';
+                    el.style.height = '';
+                    el.style.overflow = '';
+                    el.classList.remove('lang-resizing');
+                };
+                el.addEventListener('transitionend', function handler(e) {
+                    if (e.propertyName !== 'width' && e.propertyName !== 'height') return;
+                    el.removeEventListener('transitionend', handler);
+                    cleanup();
+                });
+                // 容错：transitionend 未触发时兜底清理
+                setTimeout(cleanup, 500);
+            });
+
             requestAnimationFrame(() => {
                 htmlEl.classList.remove('lang-switching');
             });
