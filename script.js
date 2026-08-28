@@ -374,12 +374,21 @@ window.addEventListener('scroll', () => {
     const savedTheme = localStorage.getItem('site-theme') || 'dark';
     htmlEl.dataset.theme = savedTheme;
 
+    function beginThemeSwitch() {
+        htmlEl.classList.add('is-theme-switching');
+        clearTimeout(htmlEl._themeSwitchTimer);
+        htmlEl._themeSwitchTimer = setTimeout(() => {
+            htmlEl.classList.remove('is-theme-switching');
+        }, 550);
+    }
+
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const isDark = htmlEl.dataset.theme === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
             htmlEl.dataset.theme = newTheme;
             localStorage.setItem('site-theme', newTheme);
+            beginThemeSwitch();
         });
     }
 
