@@ -1183,6 +1183,9 @@ ul {
         left: 0;
         right: 0;
         bottom: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh; /* 移动端动态视口高度，适配 Safari 工具栏 */
         margin: 0 !important;
         background: rgba(10, 10, 15, 0.97);
         backdrop-filter: blur(20px);
@@ -1191,7 +1194,10 @@ ul {
         justify-content: center;
         align-items: center;
         gap: 2rem;
-        padding: 0;
+        padding: 5.5rem 2rem 2.5rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
         opacity: 0;
         pointer-events: none;
         transform: translateY(-10px);
@@ -2154,8 +2160,8 @@ body {
 
 /* ==================== 全局动画顺滑优化 ==================== */
 
-/* 为常见动画元素开启 GPU 加速，避免重绘抖动 */
-.navbar,
+/* 为常见动画元素开启 GPU 加速，避免重绘抖动。
+   注意：.navbar 不能加 transform，否则会成为 fixed 定位后代的包含块，导致移动端全屏菜单被限制在导航条高度内 */
 .hero-title,
 .hero-subtitle,
 .hero-desc,
@@ -2671,4 +2677,98 @@ body {
 .platform-badge-apple:active {
     transform: scale(0.96);
     transition-duration: 0.12s;
+}
+
+
+/* ==================== 全设备响应式适配 ==================== */
+
+/* 防止任何元素造成横向溢出；clip 不会破坏 position: sticky */
+@supports (overflow: clip) {
+    html,
+    body {
+        overflow-x: clip;
+    }
+}
+
+/* 平板竖屏 / 小尺寸 Laptop（601px – 900px）：两列网格，避免单列过空 */
+@media (min-width: 601px) and (max-width: 900px) {
+    .skills-grid,
+    .features-grid-apple,
+    .dhgt-activities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Laptop（901px – 1200px）：特性卡片保持可读宽度 */
+@media (min-width: 901px) and (max-width: 1200px) {
+    .features-grid-apple {
+        gap: 1.5rem;
+    }
+
+    .feature-card-apple {
+        padding: 2rem;
+    }
+}
+
+/* 小屏手机（iPhone SE / mini 等 ≤380px）：收紧间距与字号 */
+@media (max-width: 380px) {
+    .nav-container,
+    .container {
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
+    }
+
+    .hero,
+    .flash-hero,
+    .dhgt-hero {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .hero-title {
+        font-size: clamp(2.2rem, 12vw, 3rem);
+    }
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .nav-link {
+        font-size: 1.3rem;
+    }
+
+    .section,
+    .dhgt-section {
+        padding: 4rem 0;
+    }
+
+    .flash-statement,
+    .flash-audience {
+        padding: 5rem 0;
+    }
+}
+
+/* 大屏 PC（≥1600px）：放宽内容最大宽度，减少两侧留白 */
+@media (min-width: 1600px) {
+    .container,
+    .nav-container {
+        max-width: 1320px;
+    }
+}
+
+
+/* 刘海屏安全区适配（配合 viewport-fit=cover） */
+.navbar {
+    padding-top: max(1.2rem, env(safe-area-inset-top));
+}
+
+.navbar.scrolled {
+    padding-top: max(0.8rem, env(safe-area-inset-top));
+}
+
+@media (max-width: 900px) {
+    .nav-links {
+        padding-top: max(5.5rem, calc(env(safe-area-inset-top) + 4rem));
+        padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+    }
 }
