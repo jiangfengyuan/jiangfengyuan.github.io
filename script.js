@@ -371,8 +371,19 @@ window.addEventListener('scroll', () => {
     const langToggle = document.getElementById('lang-toggle');
 
     // --- Theme Toggle ---
-    const savedTheme = localStorage.getItem('site-theme') || 'dark';
+    function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+
+    const savedTheme = localStorage.getItem('site-theme') || getSystemTheme();
     htmlEl.dataset.theme = savedTheme;
+
+    // 无手动设置时，跟随系统主题变化
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        if (localStorage.getItem('site-theme')) return;
+        htmlEl.dataset.theme = e.matches ? 'light' : 'dark';
+        beginThemeSwitch();
+    });
 
     function beginThemeSwitch() {
         htmlEl.classList.add('is-theme-switching');
@@ -386,9 +397,15 @@ window.addEventListener('scroll', () => {
         themeToggle.addEventListener('click', () => {
             const isDark = htmlEl.dataset.theme === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
+            htmlEl.classList.add('is-theme-switching');
+            // 强制重排，确保过渡在颜色变化前已生效，避免闪切
+            void htmlEl.offsetWidth;
             htmlEl.dataset.theme = newTheme;
             localStorage.setItem('site-theme', newTheme);
-            beginThemeSwitch();
+            clearTimeout(htmlEl._themeSwitchTimer);
+            htmlEl._themeSwitchTimer = setTimeout(() => {
+                htmlEl.classList.remove('is-theme-switching');
+            }, 550);
         });
     }
 
