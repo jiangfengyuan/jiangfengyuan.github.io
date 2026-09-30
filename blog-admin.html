@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="站长投稿工具 — 从微信公众号粘贴文章，生成博客代码。">
+    <meta name="author" content="Hayden">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex">
+    <title>站长投稿 — Hayden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-blog">
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- 导航 -->
+    <nav class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="nav-container">
+            <a href="./" class="nav-logo">
+                <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./" class="nav-link">首页</a></li>
+                <li><a href="flash" class="nav-link">Flash</a></li>
+                <li><a href="dhgt" class="nav-link">DHGT</a></li>
+                <li><a href="blog" class="nav-link active">博客</a></li>
+                <li><a href="./#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="control-btn" aria-label="切换主题">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+            <button class="menu-toggle" aria-label="菜单" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+    <section class="blog-hero">
+        <div class="container">
+            <span class="section-tag">Admin</span>
+            <h1 class="blog-title">站长投稿</h1>
+            <p class="blog-subtitle">粘贴公众号文章，生成代码，发布到博客。</p>
+        </div>
+    </section>
+
+    <section class="admin-section">
+        <div class="container admin-container">
+
+            <ol class="admin-steps">
+                <li>在公众号编辑器里 <strong>全选并复制</strong>文章正文（Ctrl/Cmd + A，Ctrl/Cmd + C）。</li>
+                <li>回到本页，把内容<strong>粘贴到下方正文区域</strong>，填好标题等信息。</li>
+                <li>点击「生成代码」，把生成的代码粘贴到 <code>posts.js</code> 数组的最前面。</li>
+                <li>提交并推送到 GitHub，几分钟后文章即上线。</li>
+            </ol>
+
+            <div class="admin-form">
+                <label class="admin-field">
+                    <span class="admin-label">标题 <em>*</em></span>
+                    <input type="text" id="admin-title" placeholder="文章标题">
+                </label>
+                <div class="admin-field-row">
+                    <label class="admin-field">
+                        <span class="admin-label">发布日期</span>
+                        <input type="date" id="admin-date">
+                    </label>
+                    <label class="admin-field">
+                        <span class="admin-label">标签（用逗号分隔，可留空）</span>
+                        <input type="text" id="admin-tags" placeholder="例如：技术, 随笔">
+                    </label>
+                </div>
+                <label class="admin-field">
+                    <span class="admin-label">摘要（可留空，自动截取正文前 90 字）</span>
+                    <input type="text" id="admin-summary" placeholder="一句话介绍这篇文章">
+                </label>
+
+                <div class="admin-field">
+                    <span class="admin-label">正文 <em>*</em> — 直接粘贴公众号内容到这里</span>
+                    <div id="admin-editor" class="admin-editor" contenteditable="true" data-placeholder="在这里粘贴（Ctrl/Cmd + V）公众号文章内容…"></div>
+                </div>
+
+                <details class="admin-raw">
+                    <summary>或者直接粘贴 HTML 源码</summary>
+                    <textarea id="admin-html" rows="6" placeholder="粘贴文章 HTML（例如公众号文章的 .rich_media_content 内容）"></textarea>
+                    <button class="btn btn-outline" id="admin-load-html" type="button">载入到正文区域</button>
+                </details>
+
+                <div class="admin-actions">
+                    <button class="btn btn-outline" id="admin-preview" type="button">预览</button>
+                    <button class="btn btn-primary" id="admin-generate" type="button">生成代码</button>
+                </div>
+            </div>
+
+            <div class="admin-preview-wrap" id="admin-preview-wrap" hidden>
+                <h2 class="admin-block-title">预览</h2>
+                <article class="blog-article admin-preview">
+                    <div class="blog-article-content" id="admin-preview-content"></div>
+                </article>
+            </div>
+
+            <div class="admin-output-wrap" id="admin-output-wrap" hidden>
+                <h2 class="admin-block-title">生成的代码 — 粘贴到 posts.js 数组最前面</h2>
+                <textarea id="admin-output" class="admin-output" rows="12" readonly></textarea>
+                <button class="btn btn-primary" id="admin-copy" type="button">复制代码</button>
+            </div>
+
+        </div>
+    </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Designed &amp; Built by Hayden In P.R. China <span class="heart">♥</span></p>
+            <p class="footer-sub"><a href="blog" class="footer-admin-link">返回博客</a></p>
+        </div>
+    </footer>
+
+    <script src="blog-admin.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

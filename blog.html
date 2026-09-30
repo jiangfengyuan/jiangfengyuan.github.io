@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Hayden 的博客 — 同步微信公众号文章，记录技术与生活。">
+    <meta name="author" content="Hayden">
+    <meta name="referrer" content="no-referrer">
+    <title>Blog — Hayden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-blog">
+    <!-- 背景粒子 canvas -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- 导航 -->
+    <nav class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="nav-container">
+            <a href="./" class="nav-logo">
+                <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
+                <li><a href="flash" class="nav-link">Flash</a></li>
+                <li><a href="dhgt" class="nav-link">DHGT</a></li>
+                <li><a href="blog" class="nav-link active"><span class="lang-text" data-en="Blog" data-zh="博客">博客</span></a></li>
+                <li><a href="./#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
+            </ul>
+            <div class="nav-controls">
+                <button id="lang-toggle" class="control-btn" aria-label="切换语言">EN</button>
+                <button id="theme-toggle" class="control-btn" aria-label="切换主题">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+            <button class="menu-toggle" aria-label="菜单" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+    <!-- 博客头部 -->
+    <section class="blog-hero">
+        <div class="container">
+            <span class="section-tag">Blog</span>
+            <h1 class="blog-title"><span class="lang-text" data-en="Writing & Notes" data-zh="文章与随笔">文章与随笔</span></h1>
+            <p class="blog-subtitle">
+                <span class="lang-text" data-en="Synced from my WeChat official account, plus occasional notes." data-zh="同步自我的微信公众号，也记录一些零星的想法。">同步自我的微信公众号，也记录一些零星的想法。</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- 文章列表视图 -->
+    <section id="blog-list-view" class="blog-list-section">
+        <div class="container">
+            <div class="blog-toolbar">
+                <div class="blog-search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="search" id="blog-search-input" data-zh-placeholder="搜索标题、摘要或标签…" data-en-placeholder="Search title, summary or tags…" placeholder="搜索标题、摘要或标签…" aria-label="搜索文章">
+                </div>
+                <div class="blog-tags" id="blog-tag-chips"></div>
+            </div>
+            <div class="blog-posts" id="blog-post-list"></div>
+            <p class="blog-empty" id="blog-empty" hidden>
+                <span class="lang-text" data-en="No posts found." data-zh="没有找到文章。">没有找到文章。</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- 文章阅读视图 -->
+    <section id="blog-post-view" class="blog-post-section" hidden>
+        <div class="container">
+            <button class="btn btn-outline blog-back" id="blog-back-btn">
+                &larr; <span class="lang-text" data-en="All posts" data-zh="返回列表">返回列表</span>
+            </button>
+            <article class="blog-article">
+                <header class="blog-article-header">
+                    <h1 class="blog-article-title" id="post-title"></h1>
+                    <div class="blog-article-meta">
+                        <time id="post-date"></time>
+                        <span class="blog-article-tags" id="post-tags"></span>
+                    </div>
+                </header>
+                <div class="blog-article-content" id="post-content"></div>
+            </article>
+        </div>
+    </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Designed & Built by Hayden In P.R. China <span class="heart">♥</span></p>
+            <p class="footer-sub"><a href="blog-admin" class="footer-admin-link">站长投稿入口</a></p>
+        </div>
+    </footer>
+
+    <script src="posts.js"></script>
+    <script src="blog.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

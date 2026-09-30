@@ -10,6 +10,9 @@
 | --- | --- |
 | `index.html` | 主页：Hero（打字机效果）、关于我（数据滚动动画 + 代码窗口）、作品展示、技能栈、联系方式 |
 | `flash.html` | [Flash 一闪](https://github.com/jiangfengyuan/Project-FLASH) 产品页：本地优先的灵感 / 日志 / 情绪记录应用（Android · macOS），含弹幕舞台与下载入口 |
+| `dhgt.html` | DHGT 页面 |
+| `blog.html` | 个人博客：文章列表（搜索 / 标签筛选）+ 阅读页，数据来自 `posts.js` |
+| `blog-admin.html` | 站长投稿工具：粘贴公众号文章内容，生成 `posts.js` 代码片段（`noindex`，不公开链接） |
 
 ## 特性
 
@@ -30,6 +33,12 @@
 python3 -m http.server 8000
 # 打开 http://localhost:8000
 ```
+
+## 发布博客文章
+
+1. 打开 `blog-admin.html`（本地或线上均可），把公众号编辑器里的正文全选复制后粘贴进去，填好标题、日期、标签；
+2. 点击「生成代码」，复制生成的片段，粘贴到 `posts.js` 中 `BLOG_POSTS` 数组的最前面；
+3. 提交并推送，文章即上线（列表页 `blog.html`，阅读页 `blog.html?p=文章id`）。
 
 ## 部署
 
