@@ -12,7 +12,7 @@
     --accent-bg: rgba(99, 102, 241, 0.1);
     --accent-border: rgba(99, 102, 241, 0.25);
     --border: rgba(255, 255, 255, 0.08);
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC', 'WenQuanYi Micro Hei', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
