@@ -21,6 +21,7 @@
     const prevLink = document.getElementById('post-prev');
     const nextLink = document.getElementById('post-next');
     const progressBar = document.getElementById('reading-progress-bar');
+    const tocNav = document.getElementById('post-toc');
 
     // 草稿不公开：列表与阅读页都看不到
     const posts = [...BLOG_POSTS]
@@ -28,9 +29,24 @@
         .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     let activeTag = null;
     let searchText = '';
+    let currentPostId = null; // 当前阅读的文章 id（目录链接与 SEO 用）
 
     // 正文内存缓存：file -> Promise<string>
     const contentCache = {};
+
+    // 目录滚动高亮条目：{ el: 标题元素, link: 目录链接 }
+    let tocHeadings = [];
+
+    // SEO 元素（打开文章时动态改写，返回列表时还原）
+    const SITE_URL = 'https://jiangfengyuan.github.io';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    const ogType = document.querySelector('meta[property="og:type"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    const DEFAULT_DESC = metaDesc ? metaDesc.getAttribute('content') : '';
+    let jsonLdEl = null;
 
     function t(zh, en) {
         return document.documentElement.lang === 'zh-CN' ? zh : en;
@@ -69,6 +85,166 @@
             ? window.BlogContent.mdToHtml(raw)
             : String(raw || '');
         return window.BlogContent ? window.BlogContent.sanitizeHtml(html) : html;
+    }
+
+    // ---------- 阅读体验增强 ----------
+
+    // 外链新窗口打开；代码块交给 highlight.js 着色（CDN 加载失败时静默跳过）
+    function enhancePostContent() {
+        postContent.querySelectorAll('a[href^="http"]').forEach(a => {
+            if (a.hostname !== location.hostname) {
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            }
+        });
+        if (window.hljs) {
+            postContent.querySelectorAll('pre code').forEach(el => {
+                try { window.hljs.highlightElement(el); } catch (e) { /* 高亮失败不影响阅读 */ }
+            });
+        }
+    }
+
+    // 文章目录：收集 h2/h3，不少于 2 个标题才显示
+    function buildToc() {
+        tocHeadings = [];
+        tocNav.innerHTML = '';
+        const headings = postContent.querySelectorAll('h2, h3');
+        if (headings.length < 2) {
+            tocNav.hidden = true;
+            return;
+        }
+        const title = document.createElement('p');
+        title.className = 'post-toc-title';
+        title.textContent = t('目录', 'Contents');
+        const list = document.createElement('ul');
+        list.className = 'post-toc-list';
+        headings.forEach((h, i) => {
+            const id = 'post-h-' + i;
+            h.id = id;
+            const li = document.createElement('li');
+            li.className = 'post-toc-item' + (h.tagName === 'H3' ? ' post-toc-sub' : '');
+            const a = document.createElement('a');
+            a.href = '#' + id;
+            a.textContent = h.textContent;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                history.replaceState(null, '',
+                    'blog.html?p=' + encodeURIComponent(currentPostId) + '#' + id);
+            });
+            li.appendChild(a);
+            list.appendChild(li);
+            tocHeadings.push({ el: h, link: a });
+        });
+        tocNav.appendChild(title);
+        tocNav.appendChild(list);
+        tocNav.hidden = false;
+    }
+
+    // 滚动高亮当前小节（取顶部偏移以内最后一个标题）
+    function updateTocSpy() {
+        if (!tocHeadings.length || postView.hidden) return;
+        let current = 0;
+        tocHeadings.forEach((h, i) => {
+            if (h.el.getBoundingClientRect().top <= 120) current = i;
+        });
+        tocHeadings.forEach((h, i) => h.link.classList.toggle('active', i === current));
+    }
+
+    function clearToc() {
+        tocHeadings = [];
+        tocNav.innerHTML = '';
+        tocNav.hidden = true;
+    }
+
+    // 图片灯箱：点击正文图片放大查看，Esc / 点击空白处关闭
+    const lightbox = document.createElement('div');
+    lightbox.className = 'img-lightbox';
+    lightbox.hidden = true;
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.innerHTML = '<img alt=""><p class="img-lightbox-caption"></p>';
+    document.body.appendChild(lightbox);
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxCaption = lightbox.querySelector('.img-lightbox-caption');
+
+    function openLightbox(img) {
+        const fig = img.closest('figure');
+        const figCaption = fig ? fig.querySelector('figcaption') : null;
+        const caption = figCaption ? figCaption.textContent : (img.alt || '');
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt || '';
+        lightboxCaption.textContent = caption;
+        lightboxCaption.hidden = !caption;
+        lightbox.hidden = false;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImg.removeAttribute('src');
+        document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
+    });
+    postContent.addEventListener('click', (e) => {
+        const img = e.target.closest('img');
+        if (!img || !postContent.contains(img)) return;
+        if (img.closest('a')) e.preventDefault(); // 图片被链接包裹时只开灯箱，不跳转
+        openLightbox(img);
+    });
+
+    // 代码高亮配色跟随站点明暗主题
+    function syncHljsTheme() {
+        const isLight = document.documentElement.dataset.theme === 'light';
+        const light = document.getElementById('hljs-theme-light');
+        const dark = document.getElementById('hljs-theme-dark');
+        if (light) light.disabled = !isLight;
+        if (dark) dark.disabled = isLight;
+    }
+
+    // ---------- 动态 SEO：打开文章时改写 meta 并注入 JSON-LD ----------
+    function setMeta(el, value) { if (el) el.setAttribute('content', value); }
+
+    function updateSeoForPost(post) {
+        const desc = post.summary || DEFAULT_DESC;
+        const url = SITE_URL + '/blog?p=' + encodeURIComponent(post.id);
+        setMeta(metaDesc, desc);
+        setMeta(ogTitle, post.title);
+        setMeta(ogDesc, desc);
+        setMeta(ogUrl, url);
+        setMeta(ogType, 'article');
+        if (canonicalLink) canonicalLink.setAttribute('href', url);
+        if (jsonLdEl) jsonLdEl.remove();
+        jsonLdEl = document.createElement('script');
+        jsonLdEl.type = 'application/ld+json';
+        // 把 < 替换为 unicode 转义，防止标题中的 </script> 提前闭合标签
+        jsonLdEl.textContent = JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: desc,
+            datePublished: post.date,
+            author: { '@type': 'Person', name: 'Hayden' },
+            keywords: (post.tags || []).join(', '),
+            url: url,
+            mainEntityOfPage: url
+        }).replace(/</g, '\\u003c');
+        document.head.appendChild(jsonLdEl);
+    }
+
+    function resetSeo() {
+        const url = SITE_URL + '/blog';
+        setMeta(metaDesc, DEFAULT_DESC);
+        setMeta(ogTitle, 'Blog — Hayden');
+        setMeta(ogDesc, DEFAULT_DESC);
+        setMeta(ogUrl, url);
+        setMeta(ogType, 'website');
+        if (canonicalLink) canonicalLink.setAttribute('href', url);
+        if (jsonLdEl) { jsonLdEl.remove(); jsonLdEl = null; }
     }
 
     // 按需加载正文，带内存缓存（失败时不缓存，便于重试）
@@ -187,6 +363,7 @@
         const max = doc.scrollHeight - window.innerHeight;
         const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
         progressBar.style.width = (ratio * 100).toFixed(2) + '%';
+        updateTocSpy();
     }
 
     function openPost(id, push) {
@@ -195,6 +372,7 @@
             showList(push);
             return;
         }
+        currentPostId = id;
         postTitle.textContent = post.title;
         postDate.textContent = formatDate(post.date);
         postDate.setAttribute('datetime', post.date || '');
@@ -203,7 +381,9 @@
         postStats.textContent = t('加载中…', 'Loading…');
         postError.hidden = true;
         postContent.innerHTML = '';
+        clearToc();
         renderPostNav(post);
+        updateSeoForPost(post);
         listView.hidden = true;
         document.querySelector('.blog-hero').hidden = true;
         postView.hidden = false;
@@ -221,12 +401,21 @@
                 if (postView.hidden || currentId !== new URLSearchParams(location.search).get('p')) return;
                 const cleaned = renderContent(post, raw);
                 postContent.innerHTML = cleaned;
+                enhancePostContent();
+                buildToc();
                 const stats = getReadingStats(cleaned);
                 postStats.textContent = t(
                     `约 ${stats.totalChars} 字 · 阅读约需 ${stats.minutes} 分钟`,
                     `~${stats.totalChars} words · ${stats.minutes} min read`
                 );
                 updateReadingProgress();
+                // 支持目录锚点直达（blog.html?p=id#post-h-N）
+                if (location.hash) {
+                    const anchor = document.getElementById(location.hash.slice(1));
+                    if (anchor && postContent.contains(anchor)) {
+                        anchor.scrollIntoView({ behavior: 'auto', block: 'start' });
+                    }
+                }
             })
             .catch(() => {
                 if (postView.hidden || currentId !== new URLSearchParams(location.search).get('p')) return;
@@ -236,10 +425,13 @@
     }
 
     function showList(push) {
+        currentPostId = null;
         postView.hidden = true;
         listView.hidden = false;
         document.querySelector('.blog-hero').hidden = false;
         document.title = 'Blog — Hayden';
+        clearToc();
+        resetSeo();
         if (push) history.pushState({}, '', 'blog.html');
         updateReadingProgress();
     }
@@ -282,6 +474,12 @@
     new MutationObserver(applyLang).observe(document.documentElement, {
         attributes: true, attributeFilter: ['lang']
     });
+
+    // 主题切换时同步代码高亮配色（script.js 初始化主题也会触发一次）
+    new MutationObserver(syncHljsTheme).observe(document.documentElement, {
+        attributes: true, attributeFilter: ['data-theme']
+    });
+    syncHljsTheme();
 
     // 初始渲染
     const initialId = new URLSearchParams(location.search).get('p');

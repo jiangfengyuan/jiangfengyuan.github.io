@@ -12,7 +12,7 @@
 | `flash.html` | [Flash 一闪](https://github.com/jiangfengyuan/Project-FLASH) 产品页：本地优先的灵感 / 日志 / 情绪记录应用（Android · macOS），含弹幕舞台与下载入口 |
 | `dhgt.html` | DHGT 页面 |
 | `blog.html` | 个人博客：文章列表（搜索 / 标签筛选）+ 阅读页，数据来自 `posts.js` |
-| `blog-admin.html` | 站长投稿工具：粘贴公众号文章内容，生成 `posts.js` 代码片段（`noindex`，不公开链接） |
+| `blog-admin.html` | 站长投稿工具：粘贴公众号文章或 Markdown 写作，生成 `posts.js` 代码片段（`noindex`，不公开链接） |
 
 ## 特性
 
@@ -36,12 +36,27 @@ python3 -m http.server 8000
 
 ## 发布博客文章
 
-1. 打开 `blog-admin.html`（本地或线上均可），把公众号编辑器里的正文全选复制后粘贴进去（标题自动提取，实时显示字数/图片数）；
-2. 点击「生成并下载」：浏览器会下载正文文件 `<id>.html`，把它放进仓库的 `posts/` 文件夹；
-3. 把输出区累计的元数据行粘贴到 `posts.js` 中 `BLOG_POSTS` 数组里（可连续转载多篇后一次性粘贴）；
-4. 提交并推送，文章即上线（列表页 `blog.html`，阅读页 `blog.html?p=文章id`）。
+投稿工具（`blog-admin.html`）支持两种模式，可随时切换：
 
-博客结构：`posts.js` 只存元数据（id/标题/日期/标签/摘要/文件路径，支持 `draft: true` 草稿），正文是 `posts/` 下的独立 HTML 片段，阅读页按需 fetch 加载。
+- **公众号粘贴**（默认）：把公众号编辑器里的正文全选复制后粘贴进去，粘贴即自动净化（`content.js` 语义白名单：剥离公众号冗余样式与隐藏节点、修复 `data-src` 懒加载图片、`h1` 降为 `h2`），标题自动提取，实时显示字数/图片数；
+- **Markdown 写作**：直接在编辑器里写 Markdown（支持标题、表格、代码块、引用、列表、图片等），正文保存为 `.md` 原文，阅读页由 `content.js` 现场渲染。
+
+发布步骤：
+
+1. 打开 `blog-admin.html`（本地或线上均可），粘贴或编写正文；
+2. 点击「生成并下载」：浏览器会下载正文文件 `<id>.html` 或 `<id>.md`，把它放进仓库的 `posts/` 文件夹；
+3. 把输出区累计的元数据行粘贴到 `posts.js` 中 `BLOG_POSTS` 数组里（可连续转载多篇后一次性粘贴）；
+4. 提交并推送，文章即上线（列表页 `blog.html`，阅读页 `blog.html?p=文章id`）；
+5. 新文章记得同步补进 `sitemap.xml`。
+
+博客结构：`posts.js` 只存元数据（id/标题/日期/标签/摘要/文件路径，支持 `draft: true` 草稿），正文是 `posts/` 下的独立 HTML 片段或 Markdown 文件，阅读页按需 fetch 加载，统一经 `content.js` 白名单净化后渲染。
+
+阅读页特性：阅读进度条、文章目录（h2/h3 自动生成，滚动高亮当前小节）、上一篇/下一篇导航、预计阅读时长、图片点击放大（灯箱）、外链新窗口打开、代码块语法高亮（highlight.js，跟随站点明暗主题）。
+
+## SEO
+
+- `sitemap.xml` 收录全部页面与文章地址，`robots.txt` 指向它并屏蔽投稿工具；
+- 打开文章时 `blog.js` 动态改写 `description` / Open Graph / canonical，并注入 `BlogPosting` JSON-LD 结构化数据。
 
 ## 部署
 

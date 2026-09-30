@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /blog-admin
+Disallow: /blog-admin.html
+
+Sitemap: https://jiangfengyuan.github.io/sitemap.xml

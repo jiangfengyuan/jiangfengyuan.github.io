@@ -6,10 +6,20 @@
     <meta name="description" content="Hayden 的博客 — 同步微信公众号文章，记录技术与生活。">
     <meta name="author" content="Hayden">
     <meta name="referrer" content="no-referrer">
+    <link rel="canonical" href="https://jiangfengyuan.github.io/blog">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hayden">
+    <meta property="og:title" content="Blog — Hayden">
+    <meta property="og:description" content="Hayden 的博客 — 同步微信公众号文章，记录技术与生活。">
+    <meta property="og:url" content="https://jiangfengyuan.github.io/blog">
+    <meta name="twitter:card" content="summary">
     <title>Blog — Hayden</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- 代码高亮主题：明暗两套，由 blog.js 跟随 data-theme 切换启用 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme-light" disabled>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme-dark">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-blog">
@@ -97,6 +107,7 @@
                         <span class="blog-article-tags" id="post-tags"></span>
                     </div>
                 </header>
+                <nav class="post-toc" id="post-toc" aria-label="文章目录" hidden></nav>
                 <div class="blog-article-content" id="post-content"></div>
                 <p class="blog-article-error" id="post-error" hidden>
                     <span class="lang-text" data-en="Failed to load this post. Please refresh and try again." data-zh="文章加载失败，请刷新重试。">文章加载失败，请刷新重试。</span>
@@ -123,6 +134,7 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
     <script src="posts.js"></script>
     <script src="content.js"></script>
     <script src="blog.js"></script>

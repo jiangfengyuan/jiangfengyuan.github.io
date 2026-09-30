@@ -14,6 +14,14 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    // 危险 URL 协议拦截：javascript:/vbscript: 一律拒绝，data: 仅放行图片（浏览器会忽略 URL 中的空白字符，先压缩再判断）
+    function safeUrl(url, allowDataImage) {
+        var compact = String(url || '').replace(/\s+/g, '').toLowerCase();
+        if (/^(javascript|vbscript):/.test(compact)) return null;
+        if (/^data:/.test(compact) && !(allowDataImage && /^data:image\//.test(compact))) return null;
+        return url;
+    }
+
     // 内联 Markdown：**粗体** *斜体* ~~删除线~~ `行内代码` [文字](链接) ![图注](图片)
     function inlineMD(text) {
         var s = escapeHTML(text);
@@ -25,11 +33,14 @@
         });
         // 图片 ![alt](src)
         s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (m, alt, src) {
-            return '<img src="' + src + '" alt="' + alt + '" referrerpolicy="no-referrer" loading="lazy">';
+            var u = safeUrl(src, true);
+            return u === null ? alt
+                : '<img src="' + u + '" alt="' + alt + '" referrerpolicy="no-referrer" loading="lazy">';
         });
         // 链接 [text](href)
         s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (m, t, href) {
-            return '<a href="' + href + '">' + t + '</a>';
+            var u = safeUrl(href, false);
+            return u === null ? t : '<a href="' + u + '">' + t + '</a>';
         });
         s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
         s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
@@ -153,10 +164,13 @@
             // 独立成段的图片 -> figure（alt 作为图注）
             var imgOnly = line.match(/^\s*!\[([^\]]*)\]\(([^)\s]+)\)\s*$/);
             if (imgOnly) {
-                html.push('<figure><img src="' + escapeHTML(imgOnly[2]) + '" alt="' + escapeHTML(imgOnly[1]) +
-                    '" referrerpolicy="no-referrer" loading="lazy">' +
-                    (imgOnly[1] ? '<figcaption>' + escapeHTML(imgOnly[1]) + '</figcaption>' : '') +
-                    '</figure>');
+                var imgUrl = safeUrl(imgOnly[2], true);
+                if (imgUrl !== null) {
+                    html.push('<figure><img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(imgOnly[1]) +
+                        '" referrerpolicy="no-referrer" loading="lazy">' +
+                        (imgOnly[1] ? '<figcaption>' + escapeHTML(imgOnly[1]) + '</figcaption>' : '') +
+                        '</figure>');
+                }
                 i++;
                 continue;
             }
@@ -220,16 +234,22 @@
                     child.remove();
                     return;
                 }
+                // 公众号懒加载图片的真实地址在 data-src 里，需在清理属性前先取出
+                var pendingDataSrc = tag === 'img' ? child.getAttribute('data-src') : null;
                 // 清除非白名单属性
                 var keep = ALLOWED_ATTRS[tag] || {};
                 Array.from(child.attributes).forEach(function (attr) {
                     if (!keep[attr.name]) child.removeAttribute(attr.name);
                 });
                 if (tag === 'img') {
-                    var dataSrc = child.getAttribute('data-src');
-                    if (dataSrc && !child.getAttribute('src')) child.setAttribute('src', dataSrc);
+                    var src = child.getAttribute('src') || '';
+                    if (pendingDataSrc && (!src || src.indexOf('data:') === 0)) child.setAttribute('src', pendingDataSrc);
+                    if (safeUrl(child.getAttribute('src'), true) === null) child.removeAttribute('src');
                     child.setAttribute('referrerpolicy', 'no-referrer');
                     child.setAttribute('loading', 'lazy');
+                }
+                if (tag === 'a' && safeUrl(child.getAttribute('href'), false) === null) {
+                    child.removeAttribute('href');
                 }
             });
             // 删除空标签（img/br/hr/td/th 除外）
