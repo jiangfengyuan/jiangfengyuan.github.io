@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="站长投稿工具 — 从微信公众号粘贴文章，生成博客代码。">
+    <meta name="description" content="站长投稿工具 — 从微信公众号粘贴文章，生成博客文章文件与元数据。">
     <meta name="author" content="Hayden">
     <meta name="referrer" content="no-referrer">
     <meta name="robots" content="noindex">
@@ -49,7 +49,7 @@
         <div class="container">
             <span class="section-tag">Admin</span>
             <h1 class="blog-title">站长投稿</h1>
-            <p class="blog-subtitle">粘贴公众号文章，生成代码，发布到博客。</p>
+            <p class="blog-subtitle">粘贴公众号文章，下载正文文件，登记元数据，发布到博客。</p>
         </div>
     </section>
 
@@ -58,14 +58,15 @@
 
             <ol class="admin-steps">
                 <li>在公众号编辑器里 <strong>全选并复制</strong>文章正文（Ctrl/Cmd + A，Ctrl/Cmd + C）。</li>
-                <li>回到本页，把内容<strong>粘贴到下方正文区域</strong>，填好标题等信息。</li>
-                <li>点击「生成代码」，把生成的代码粘贴到 <code>posts.js</code> 数组的最前面。</li>
-                <li>提交并推送到 GitHub，几分钟后文章即上线。</li>
+                <li>回到本页，把内容<strong>粘贴到下方正文区域</strong>，核对标题、日期、标签与摘要。</li>
+                <li>点击「生成并下载」：浏览器会下载 <code>posts/&lt;id&gt;.html</code> 文件，把它放进仓库的 <code>posts/</code> 文件夹。</li>
+                <li>把输出区里的<strong>元数据行</strong>粘贴到 <code>posts.js</code> 数组的最前面（可连续转载多篇，一次性粘贴）。</li>
+                <li><code>git add</code>、<code>commit</code> 并 <strong>push</strong> 到 GitHub，几分钟后文章即上线。</li>
             </ol>
 
             <div class="admin-form">
                 <label class="admin-field">
-                    <span class="admin-label">标题 <em>*</em></span>
+                    <span class="admin-label">标题 <em>*</em>（粘贴正文后自动提取，可修改）</span>
                     <input type="text" id="admin-title" placeholder="文章标题">
                 </label>
                 <div class="admin-field-row">
@@ -86,6 +87,10 @@
                 <div class="admin-field">
                     <span class="admin-label">正文 <em>*</em> — 直接粘贴公众号内容到这里</span>
                     <div id="admin-editor" class="admin-editor" contenteditable="true" data-placeholder="在这里粘贴（Ctrl/Cmd + V）公众号文章内容…"></div>
+                    <div class="admin-stats" id="admin-stats">
+                        <span class="admin-stat">字数 <strong id="admin-stat-chars">0</strong></span>
+                        <span class="admin-stat">图片 <strong id="admin-stat-images">0</strong></span>
+                    </div>
                 </div>
 
                 <details class="admin-raw">
@@ -96,7 +101,7 @@
 
                 <div class="admin-actions">
                     <button class="btn btn-outline" id="admin-preview" type="button">预览</button>
-                    <button class="btn btn-primary" id="admin-generate" type="button">生成代码</button>
+                    <button class="btn btn-primary" id="admin-generate" type="button">生成并下载</button>
                 </div>
             </div>
 
@@ -108,9 +113,12 @@
             </div>
 
             <div class="admin-output-wrap" id="admin-output-wrap" hidden>
-                <h2 class="admin-block-title">生成的代码 — 粘贴到 posts.js 数组最前面</h2>
+                <h2 class="admin-block-title">元数据 — 粘贴到 posts.js 数组最前面（多篇可累计）</h2>
                 <textarea id="admin-output" class="admin-output" rows="12" readonly></textarea>
-                <button class="btn btn-primary" id="admin-copy" type="button">复制代码</button>
+                <div class="admin-actions">
+                    <button class="btn btn-primary" id="admin-copy" type="button">复制元数据</button>
+                    <button class="btn btn-outline" id="admin-clear-output" type="button">清空输出区</button>
+                </div>
             </div>
 
         </div>

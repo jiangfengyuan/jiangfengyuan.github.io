@@ -1,4 +1,4 @@
-﻿/* ==================== 鍩虹閲嶇疆涓庡彉閲?==================== */
+/* ==================== 鍩虹閲嶇疆涓庡彉閲?==================== */
 :root {
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
@@ -2580,6 +2580,11 @@ body {
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.post-card:hover .post-card-title {
+    color: var(--accent-light);
 }
 
 .post-card-summary {
@@ -2587,6 +2592,10 @@ body {
     font-size: 0.92rem;
     line-height: 1.7;
     flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .post-card-more {
@@ -2598,7 +2607,9 @@ body {
 .blog-empty {
     text-align: center;
     color: var(--text-secondary);
-    padding: 4rem 0;
+    padding: 5rem 1rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
 }
 
 /* 文章阅读页 */
@@ -2671,21 +2682,36 @@ body {
     letter-spacing: -0.01em;
 }
 
+.blog-article-content h2,
+.blog-article-content h3 {
+    padding-left: 0.7em;
+    border-left: 3px solid var(--accent);
+}
+
 .blog-article-content img {
     max-width: 100% !important;
     height: auto !important;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     display: block;
     margin: 1.5em auto;
 }
 
+:root[data-theme="light"] .blog-article-content img {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
 .blog-article-content blockquote {
     border-left: 3px solid var(--accent);
-    padding: 0.5em 1.2em;
+    padding: 0.8em 1.2em;
     margin: 1.5em 0;
     color: var(--text-secondary);
     background: var(--accent-bg);
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 10px 10px 0;
+}
+
+.blog-article-content blockquote p:last-child {
+    margin-bottom: 0;
 }
 
 .blog-article-content a {
@@ -2713,14 +2739,114 @@ body {
 .blog-article-content pre {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
     overflow-x: auto;
-    margin-bottom: 1.2em;
+    margin: 1.4em 0;
+    line-height: 1.7;
+}
+
+.blog-article-content :not(pre) > code {
+    background: var(--accent-bg);
+    color: var(--accent-light);
+    padding: 0.15em 0.45em;
+    border-radius: 5px;
 }
 
 .blog-article-content section {
     margin-bottom: 0;
+}
+
+/* 阅读进度条 */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: transparent;
+    z-index: 1100;
+    pointer-events: none;
+}
+
+.reading-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.1s linear;
+}
+
+/* 文章 meta 统计（字数 / 阅读时长） */
+.blog-article-stats {
+    color: var(--text-secondary);
+}
+
+/* 文章加载错误提示 */
+.blog-article-error {
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+/* 上一篇 / 下一篇导航 */
+.post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.2rem 1.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transform: translateZ(0);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease;
+}
+
+.post-nav-link:hover {
+    transform: translate3d(0, -6px, 0);
+    border-color: var(--accent-border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="light"] .post-nav-link:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.post-nav-next {
+    text-align: right;
+}
+
+.post-nav-link[hidden] {
+    display: none;
+}
+
+.post-nav-label {
+    font-size: 0.8rem;
+    color: var(--accent-light);
+    font-family: var(--font-mono);
+}
+
+.post-nav-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .footer-admin-link {
@@ -2748,6 +2874,7 @@ body {
 .admin-steps {
     background: var(--bg-card);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-border);
     border-radius: 12px;
     padding: 1.5rem 1.5rem 1.5rem 2.8rem;
     margin-bottom: 2.5rem;
@@ -2755,6 +2882,10 @@ body {
     font-size: 0.95rem;
     line-height: 2;
     list-style: decimal;
+}
+
+:root[data-theme="light"] .admin-steps {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .admin-steps strong {
@@ -2842,6 +2973,26 @@ body {
 .admin-editor img {
     max-width: 100%;
     height: auto;
+    border-radius: 8px;
+}
+
+/* 编辑器统计栏（字数 / 图片） */
+.admin-stats {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.admin-stat strong {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent-light);
+    margin-left: 0.35em;
 }
 
 .admin-raw summary {
@@ -2878,6 +3029,10 @@ body {
     padding: 2rem;
 }
 
+:root[data-theme="light"] .admin-preview {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
 .admin-output {
     width: 100%;
     background: var(--bg-card);
@@ -2890,6 +3045,12 @@ body {
     line-height: 1.6;
     resize: vertical;
     margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.admin-output:focus {
+    border-color: var(--accent);
 }
 
 /* Blog Responsive */
@@ -2915,5 +3076,18 @@ body {
 
     .admin-actions {
         flex-direction: column;
+    }
+
+    .post-nav {
+        grid-template-columns: 1fr;
+    }
+
+    .post-nav-next {
+        text-align: left;
+    }
+
+    .admin-stats {
+        flex-wrap: wrap;
+        gap: 0.6rem 1.2rem;
     }
 }

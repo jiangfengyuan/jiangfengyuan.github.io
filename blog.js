@@ -1,5 +1,6 @@
 // ==================== 博客列表与阅读页 ====================
-// 依赖 posts.js 提供的 BLOG_POSTS 数组；仅在有 #blog-list-view 的页面运行。
+// 依赖 posts.js 提供的 BLOG_POSTS 元数据数组；仅在有 #blog-list-view 的页面运行。
+// 正文 HTML 存放在 posts/<id>.html，阅读时按需 fetch 并做内存缓存。
 (function () {
     const listView = document.getElementById('blog-list-view');
     const postView = document.getElementById('blog-post-view');
@@ -9,11 +10,27 @@
     const tagChips = document.getElementById('blog-tag-chips');
     const searchInput = document.getElementById('blog-search-input');
     const emptyHint = document.getElementById('blog-empty');
+    const noResultHint = document.getElementById('blog-no-result');
     const backBtn = document.getElementById('blog-back-btn');
+    const postTitle = document.getElementById('post-title');
+    const postDate = document.getElementById('post-date');
+    const postTags = document.getElementById('post-tags');
+    const postStats = document.getElementById('post-stats');
+    const postContent = document.getElementById('post-content');
+    const postError = document.getElementById('post-error');
+    const prevLink = document.getElementById('post-prev');
+    const nextLink = document.getElementById('post-next');
+    const progressBar = document.getElementById('reading-progress-bar');
 
-    const posts = [...BLOG_POSTS].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    // 草稿不公开：列表与阅读页都看不到
+    const posts = [...BLOG_POSTS]
+        .filter(post => !post.draft)
+        .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     let activeTag = null;
     let searchText = '';
+
+    // 正文内存缓存：file -> Promise<string>
+    const contentCache = {};
 
     function t(zh, en) {
         return document.documentElement.lang === 'zh-CN' ? zh : en;
@@ -42,8 +59,7 @@
 
     function getSummary(post) {
         if (post.summary) return post.summary;
-        const text = stripTags(post.content || '');
-        return text.length > 90 ? text.slice(0, 90) + '…' : text;
+        return '';
     }
 
     // 公众号正文 HTML 清洗：去 script、修复 data-src 图片与防盗链
@@ -66,12 +82,38 @@
         return div.innerHTML;
     }
 
+    // 按需加载正文，带内存缓存（失败时不缓存，便于重试）
+    function loadContent(post) {
+        if (!contentCache[post.file]) {
+            contentCache[post.file] = fetch(post.file)
+                .then(res => {
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return res.text();
+                })
+                .catch(err => {
+                    delete contentCache[post.file];
+                    throw err;
+                });
+        }
+        return contentCache[post.file];
+    }
+
+    // 字数统计与预计阅读时长（中文约 400 字/分钟，英文约 200 词/分钟）
+    function getReadingStats(html) {
+        const text = stripTags(html);
+        const cjkCount = (text.match(/[一-鿿]/g) || []).length;
+        const wordCount = (text.replace(/[一-鿿]/g, ' ').match(/\S+/g) || []).length;
+        const totalChars = cjkCount + wordCount;
+        const minutes = Math.max(1, Math.ceil(cjkCount / 400 + wordCount / 200));
+        return { totalChars, minutes };
+    }
+
     function filteredPosts() {
         const q = searchText.trim().toLowerCase();
         return posts.filter(post => {
             if (activeTag && !(post.tags || []).includes(activeTag)) return false;
             if (!q) return true;
-            const haystack = [post.title, post.summary, (post.tags || []).join(' '), stripTags(post.content || '')]
+            const haystack = [post.title, post.summary, (post.tags || []).join(' ')]
                 .join(' ').toLowerCase();
             return haystack.includes(q);
         });
@@ -83,6 +125,7 @@
             if (!allTags.includes(tag)) allTags.push(tag);
         }));
         tagChips.innerHTML = '';
+        if (!allTags.length) return;
         const allChip = document.createElement('button');
         allChip.className = 'blog-tag-chip' + (activeTag === null ? ' active' : '');
         allChip.textContent = t('全部', 'All');
@@ -100,7 +143,10 @@
     function renderList() {
         const visible = filteredPosts();
         postList.innerHTML = '';
-        emptyHint.hidden = visible.length > 0;
+        // 区分两种空状态：博客为空 vs 搜索/筛选无结果
+        const isFiltering = activeTag !== null || searchText.trim() !== '';
+        emptyHint.hidden = !(posts.length === 0);
+        noResultHint.hidden = !(posts.length > 0 && visible.length === 0 && isFiltering);
         visible.forEach(post => {
             const card = document.createElement('a');
             card.className = 'post-card';
@@ -126,18 +172,49 @@
         renderList();
     }
 
+    // 上一篇 / 下一篇（按日期排序后的相邻文章；下一篇 = 更新的文章）
+    function renderPostNav(post) {
+        const index = posts.findIndex(p => p.id === post.id);
+        const next = index > 0 ? posts[index - 1] : null;
+        const prev = index < posts.length - 1 ? posts[index + 1] : null;
+        prevLink.hidden = !prev;
+        nextLink.hidden = !next;
+        if (prev) {
+            prevLink.href = 'blog.html?p=' + encodeURIComponent(prev.id);
+            prevLink.querySelector('.post-nav-title').textContent = prev.title;
+        }
+        if (next) {
+            nextLink.href = 'blog.html?p=' + encodeURIComponent(next.id);
+            nextLink.querySelector('.post-nav-title').textContent = next.title;
+        }
+    }
+
+    function updateReadingProgress() {
+        if (!progressBar || postView.hidden) {
+            if (progressBar) progressBar.style.width = '0%';
+            return;
+        }
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - window.innerHeight;
+        const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        progressBar.style.width = (ratio * 100).toFixed(2) + '%';
+    }
+
     function openPost(id, push) {
         const post = posts.find(p => p.id === id);
         if (!post) {
             showList(push);
             return;
         }
-        document.getElementById('post-title').textContent = post.title;
-        document.getElementById('post-date').textContent = formatDate(post.date);
-        document.getElementById('post-date').setAttribute('datetime', post.date || '');
-        document.getElementById('post-tags').innerHTML =
+        postTitle.textContent = post.title;
+        postDate.textContent = formatDate(post.date);
+        postDate.setAttribute('datetime', post.date || '');
+        postTags.innerHTML =
             (post.tags || []).map(tag => '<span class="skill-tag">' + escapeHTML(tag) + '</span>').join('');
-        document.getElementById('post-content').innerHTML = normalizeContentHTML(post.content);
+        postStats.textContent = t('加载中…', 'Loading…');
+        postError.hidden = true;
+        postContent.innerHTML = '';
+        renderPostNav(post);
         listView.hidden = true;
         document.querySelector('.blog-hero').hidden = true;
         postView.hidden = false;
@@ -146,6 +223,27 @@
             history.pushState({ post: id }, '', 'blog.html?p=' + encodeURIComponent(id));
         }
         window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+        updateReadingProgress();
+
+        const currentId = id;
+        loadContent(post)
+            .then(html => {
+                // 等待期间用户已切换到别的文章/返回列表则丢弃
+                if (postView.hidden || currentId !== new URLSearchParams(location.search).get('p')) return;
+                const cleaned = normalizeContentHTML(html);
+                postContent.innerHTML = cleaned;
+                const stats = getReadingStats(cleaned);
+                postStats.textContent = t(
+                    `约 ${stats.totalChars} 字 · 阅读约需 ${stats.minutes} 分钟`,
+                    `~${stats.totalChars} words · ${stats.minutes} min read`
+                );
+                updateReadingProgress();
+            })
+            .catch(() => {
+                if (postView.hidden || currentId !== new URLSearchParams(location.search).get('p')) return;
+                postStats.textContent = '';
+                postError.hidden = false;
+            });
     }
 
     function showList(push) {
@@ -154,14 +252,26 @@
         document.querySelector('.blog-hero').hidden = false;
         document.title = 'Blog — Hayden';
         if (push) history.pushState({}, '', 'blog.html');
+        updateReadingProgress();
     }
 
     backBtn.addEventListener('click', () => showList(true));
+
+    [prevLink, nextLink].forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = new URLSearchParams(new URL(link.href).search).get('p');
+            if (id) openPost(id, true);
+        });
+    });
 
     searchInput.addEventListener('input', () => {
         searchText = searchInput.value;
         renderList();
     });
+
+    window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    window.addEventListener('resize', updateReadingProgress);
 
     window.addEventListener('popstate', () => {
         const id = new URLSearchParams(location.search).get('p');

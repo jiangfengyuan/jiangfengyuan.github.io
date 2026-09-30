@@ -16,6 +16,11 @@
     <!-- 背景粒子 canvas -->
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
+    <!-- 阅读进度条（fixed，accent 色） -->
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+
     <!-- 导航 -->
     <nav class="navbar">
         <div class="navbar-bg"></div>
@@ -69,6 +74,9 @@
             </div>
             <div class="blog-posts" id="blog-post-list"></div>
             <p class="blog-empty" id="blog-empty" hidden>
+                <span class="lang-text" data-en="No posts yet — stay tuned!" data-zh="暂无文章，敬请期待～">暂无文章，敬请期待～</span>
+            </p>
+            <p class="blog-empty" id="blog-no-result" hidden>
                 <span class="lang-text" data-en="No posts found." data-zh="没有找到文章。">没有找到文章。</span>
             </p>
         </div>
@@ -85,10 +93,24 @@
                     <h1 class="blog-article-title" id="post-title"></h1>
                     <div class="blog-article-meta">
                         <time id="post-date"></time>
+                        <span class="blog-article-stats" id="post-stats"></span>
                         <span class="blog-article-tags" id="post-tags"></span>
                     </div>
                 </header>
                 <div class="blog-article-content" id="post-content"></div>
+                <p class="blog-article-error" id="post-error" hidden>
+                    <span class="lang-text" data-en="Failed to load this post. Please refresh and try again." data-zh="文章加载失败，请刷新重试。">文章加载失败，请刷新重试。</span>
+                </p>
+                <nav class="post-nav" aria-label="上一篇 / 下一篇">
+                    <a class="post-nav-link post-nav-prev" id="post-prev" href="#">
+                        <span class="post-nav-label">&larr; <span class="lang-text" data-en="Previous" data-zh="上一篇">上一篇</span></span>
+                        <span class="post-nav-title"></span>
+                    </a>
+                    <a class="post-nav-link post-nav-next" id="post-next" href="#">
+                        <span class="post-nav-label"><span class="lang-text" data-en="Next" data-zh="下一篇">下一篇</span> &rarr;</span>
+                        <span class="post-nav-title"></span>
+                    </a>
+                </nav>
             </article>
         </div>
     </section>
