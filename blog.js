@@ -62,24 +62,13 @@
         return '';
     }
 
-    // 公众号正文 HTML 清洗：去 script、修复 data-src 图片与防盗链
-    function normalizeContentHTML(html) {
-        const div = document.createElement('div');
-        div.innerHTML = String(html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
-        div.querySelectorAll('img').forEach(img => {
-            const dataSrc = img.getAttribute('data-src');
-            const src = img.getAttribute('src') || '';
-            if (dataSrc && (!src || src.indexOf('data:') === 0)) {
-                img.setAttribute('src', dataSrc);
-            }
-            img.removeAttribute('data-src');
-            img.setAttribute('referrerpolicy', 'no-referrer');
-            img.setAttribute('loading', 'lazy');
-            // 公众号图片常带 visibility:hidden，等待其 JS 显示，这里直接显示
-            if (img.style.visibility === 'hidden') img.style.visibility = 'visible';
-            if (img.style.width && img.style.width.indexOf('%') === -1) img.style.maxWidth = '100%';
-        });
-        return div.innerHTML;
+    // 正文统一净化：Markdown 先渲染成 HTML，再与抓取到的 HTML 一起过白名单
+    function renderContent(post, raw) {
+        const isMarkdown = /\.md($|\?)/i.test(post.file || '');
+        const html = isMarkdown && window.BlogContent
+            ? window.BlogContent.mdToHtml(raw)
+            : String(raw || '');
+        return window.BlogContent ? window.BlogContent.sanitizeHtml(html) : html;
     }
 
     // 按需加载正文，带内存缓存（失败时不缓存，便于重试）
@@ -227,10 +216,10 @@
 
         const currentId = id;
         loadContent(post)
-            .then(html => {
+            .then(raw => {
                 // 等待期间用户已切换到别的文章/返回列表则丢弃
                 if (postView.hidden || currentId !== new URLSearchParams(location.search).get('p')) return;
-                const cleaned = normalizeContentHTML(html);
+                const cleaned = renderContent(post, raw);
                 postContent.innerHTML = cleaned;
                 const stats = getReadingStats(cleaned);
                 postStats.textContent = t(

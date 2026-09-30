@@ -12,6 +12,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-mode-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+        .admin-mode-tab {
+            padding: 6px 16px; border-radius: 8px; border: 1px solid var(--border);
+            background: transparent; color: var(--text-secondary); font-size: 14px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+        }
+        .admin-mode-tab:hover { color: var(--text-primary); border-color: var(--accent); }
+        .admin-mode-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .admin-md {
+            width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border);
+            background: var(--bg-card); color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.7;
+            resize: vertical; box-sizing: border-box;
+        }
+        .admin-md:focus { outline: none; border-color: var(--accent); }
+    </style>
 </head>
 <body class="page-blog">
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
@@ -57,9 +74,9 @@
         <div class="container admin-container">
 
             <ol class="admin-steps">
-                <li>在公众号编辑器里 <strong>全选并复制</strong>文章正文（Ctrl/Cmd + A，Ctrl/Cmd + C）。</li>
-                <li>回到本页，把内容<strong>粘贴到下方正文区域</strong>，核对标题、日期、标签与摘要。</li>
-                <li>点击「生成并下载」：浏览器会下载 <code>posts/&lt;id&gt;.html</code> 文件，把它放进仓库的 <code>posts/</code> 文件夹。</li>
+                <li>在公众号编辑器里 <strong>全选并复制</strong>文章正文（Ctrl/Cmd + A，Ctrl/Cmd + C），回到本页粘贴到下方正文区域；或切换到 <strong>Markdown 模式</strong> 直接写 Markdown。</li>
+                <li>粘贴的内容会被<strong>自动净化</strong>（剥掉内联样式与多余包装，只保留段落、标题、列表、表格、图片等语义标签），核对标题、日期、标签与摘要。</li>
+                <li>点击「生成并下载」：富文本模式下载 <code>posts/&lt;id&gt;.html</code>，Markdown 模式下载 <code>posts/&lt;id&gt;.md</code>，把它放进仓库的 <code>posts/</code> 文件夹。</li>
                 <li>把输出区里的<strong>元数据行</strong>粘贴到 <code>posts.js</code> 数组的最前面（可连续转载多篇，一次性粘贴）。</li>
                 <li><code>git add</code>、<code>commit</code> 并 <strong>push</strong> 到 GitHub，几分钟后文章即上线。</li>
             </ol>
@@ -85,8 +102,18 @@
                 </label>
 
                 <div class="admin-field">
-                    <span class="admin-label">正文 <em>*</em> — 直接粘贴公众号内容到这里</span>
-                    <div id="admin-editor" class="admin-editor" contenteditable="true" data-placeholder="在这里粘贴（Ctrl/Cmd + V）公众号文章内容…"></div>
+                    <div class="admin-mode-tabs" role="tablist">
+                        <button type="button" class="admin-mode-tab active" id="admin-mode-rich" role="tab" aria-selected="true">富文本模式</button>
+                        <button type="button" class="admin-mode-tab" id="admin-mode-md" role="tab" aria-selected="false">Markdown 模式</button>
+                    </div>
+                    <div id="admin-pane-rich">
+                        <span class="admin-label">正文 <em>*</em> — 直接粘贴公众号内容到这里（自动净化）</span>
+                        <div id="admin-editor" class="admin-editor" contenteditable="true" data-placeholder="在这里粘贴（Ctrl/Cmd + V）公众号文章内容…"></div>
+                    </div>
+                    <div id="admin-pane-md" hidden>
+                        <span class="admin-label">正文 <em>*</em> — 使用 Markdown 语法编写</span>
+                        <textarea id="admin-md" class="admin-md" rows="12" placeholder="# 文章标题&#10;&#10;支持 **粗体**、*斜体*、[链接](https://example.com)、![图片](https://example.com/a.jpg)&#10;&#10;- 无序列表项&#10;1. 有序列表项&#10;&#10;> 引用&#10;&#10;| 表头 | 表头 |&#10;| --- | --- |&#10;| 单元格 | 单元格 |"></textarea>
+                    </div>
                     <div class="admin-stats" id="admin-stats">
                         <span class="admin-stat">字数 <strong id="admin-stat-chars">0</strong></span>
                         <span class="admin-stat">图片 <strong id="admin-stat-images">0</strong></span>
@@ -132,6 +159,7 @@
         </div>
     </footer>
 
+    <script src="content.js"></script>
     <script src="blog-admin.js"></script>
     <script src="script.js"></script>
 </body>
