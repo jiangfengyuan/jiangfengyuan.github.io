@@ -1,0 +1,3 @@
+# Screenshot source
+
+`start-screen.png` is the project-rendered screenshot from [Cloud Republic](https://github.com/jiangfengyuan/Cloud-Republica/blob/685cb2771052b4ff9c906aaa36318317e7405c76/docs/images/start-screen.png), commit `685cb2771052b4ff9c906aaa36318317e7405c76`. The source code and original game content are MIT-licensed, copyright © 2026 Hayden Jiang. See [LICENSE](https://github.com/jiangfengyuan/Cloud-Republica/blob/685cb2771052b4ff9c906aaa36318317e7405c76/LICENSE) and [README](https://github.com/jiangfengyuan/Cloud-Republica/blob/685cb2771052b4ff9c906aaa36318317e7405c76/README.md).

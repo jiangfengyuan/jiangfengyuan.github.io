@@ -1,0 +1,160 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+---
+
+<Base title="文章导入工具 — Hayden" titleEn="Article import — Hayden" noindex active="blog">
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">WRITING WORKSPACE</p>
+      <h1>
+        <Text text={{ zh: '从粘贴，到一篇文章。', en: 'From a paste to a post.' }} />
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: '粘贴公众号正文或使用 Markdown 写作。内容在浏览器中整理，导出后可交给仓库或 Pages CMS。',
+            en: 'Paste a WeChat article or write in Markdown. Prepare content in your browser, then export it to the repository or Pages CMS.',
+          }}
+        />
+      </p>
+      <div class="actions">
+        <a class="btn" href="https://app.pagescms.org/">
+          <Text text={{ zh: '打开内容管理', en: 'Open content manager' }} /> ↗
+        </a>
+      </div>
+    </header>
+    <noscript>
+      <p class="notice">
+        此导入工具需要 JavaScript。你也可以使用 Pages CMS，或直接编辑 Markdown 文件。 This tool
+        needs JavaScript; you can also use Pages CMS or edit Markdown files.
+      </p>
+    </noscript>
+    <section class="section import-grid" style="padding-top:12px">
+      <form data-import-form>
+        <div class="form-field">
+          <label for="post-title">
+            <Text text={{ zh: '标题', en: 'Title' }} />
+          </label>
+          <input id="post-title" name="title" required />
+        </div>
+        <div class="split" style="gap:20px">
+          <div class="form-field">
+            <label for="post-date">
+              <Text text={{ zh: '日期', en: 'Date' }} />
+            </label>
+            <input id="post-date" type="date" name="date" required />
+          </div>
+          <div class="form-field">
+            <label for="post-language">
+              <Text text={{ zh: '原文语言', en: 'Original language' }} />
+            </label>
+            <select id="post-language" name="language">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="post-tags">
+            <Text text={{ zh: '标签（逗号分隔）', en: 'Tags (comma separated)' }} />
+          </label>
+          <input id="post-tags" name="tags" />
+        </div>
+        <div class="form-field">
+          <label for="post-summary">
+            <Text text={{ zh: '摘要（可留空）', en: 'Summary (optional)' }} />
+          </label>
+          <textarea id="post-summary" name="summary" rows="3"></textarea>
+        </div>
+        <div class="form-field">
+          <label for="post-mode">
+            <Text text={{ zh: '正文输入方式', en: 'Body input' }} />
+          </label>
+          <select id="post-mode" name="mode">
+            <option value="rich">公众号 / HTML</option>
+            <option value="markdown">Markdown</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label id="editor-label">
+            <Text text={{ zh: '正文', en: 'Body' }} />
+          </label>
+          <div
+            class="editor"
+            contenteditable="true"
+            role="textbox"
+            aria-multiline="true"
+            aria-labelledby="editor-label"
+            data-rich-editor
+            data-placeholder="在这里粘贴正文 / Paste content here"
+          ></div>
+          <textarea name="markdown" rows="15" aria-labelledby="editor-label" hidden></textarea>
+        </div>
+        <details class="form-field">
+          <summary>
+            <Text text={{ zh: '直接粘贴 HTML 源码', en: 'Paste HTML source' }} />
+          </summary>
+          <textarea name="htmlsource" rows="6" aria-label="HTML source"></textarea>
+          <button type="button" class="btn" data-load-html>
+            <Text text={{ zh: '载入正文', en: 'Load content' }} />
+          </button>
+        </details>
+        <label style="font-size:13px">
+          <input type="checkbox" name="draft" checked />{' '}
+          <Text
+            text={{
+              zh: '保存为草稿（不会进入公开页面）',
+              en: 'Save as draft (excluded from published pages)',
+            }}
+          />
+        </label>
+        <div class="actions" style="margin-top:24px">
+          <button class="btn" type="button" data-preview-button>
+            <Text text={{ zh: '预览', en: 'Preview' }} />
+          </button>
+          <button class="btn primary" type="submit">
+            <Text text={{ zh: '导出文章', en: 'Export article' }} />
+          </button>
+          <button
+            class="text-link"
+            type="button"
+            data-reset-import
+            style="background:none;border:0"
+          >
+            <Text text={{ zh: '新文章', en: 'New article' }} />
+          </button>
+        </div>
+        <p class="import-message" role="status" data-import-message></p>
+        <p class="import-help">
+          <Text
+            text={{
+              zh: '上传导出的文件到 src/content/posts/ 即可参与构建。CMS 中可切换源码模式粘贴正文，再填写标题、日期等信息。公开仓库里的草稿源文件仍然公开。',
+              en: 'Upload the exported file to src/content/posts/ to build it. In the CMS, paste the body in Source mode and fill in the title, date and metadata. Draft source files in a public repository remain public.',
+            }}
+          />
+        </p>
+        <div class="import-output form-field" data-output-wrap hidden>
+          <label for="post-output">
+            <Text text={{ zh: '文章文件', en: 'Article file' }} />
+          </label>
+          <textarea id="post-output" data-import-output readonly></textarea>
+          <button class="btn" type="button" data-copy-body>
+            <Text text={{ zh: '复制正文到 CMS', en: 'Copy body for CMS' }} />
+          </button>
+        </div>
+      </form>
+      <div>
+        <div class="import-preview">
+          <p class="eyebrow" style="margin-bottom:24px">
+            <Text text={{ zh: '正文预览', en: 'BODY PREVIEW' }} />
+          </p>
+          <div class="article-content" data-import-preview></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    import '../scripts/importer';
+  </script>
+</Base>

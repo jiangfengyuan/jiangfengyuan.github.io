@@ -1,0 +1,137 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Text from '../components/Text.astro';
+import { profile, site } from '../data/content';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import '../styles/pages.css';
+interface Props {
+  title: string;
+  titleEn?: string;
+  description?: { zh: string; en: string };
+  image?: string;
+  active?: string;
+  noindex?: boolean;
+  type?: string;
+}
+const {
+  title,
+  titleEn = title,
+  description = profile.description,
+  image = '/assets/social/index.png',
+  active = '',
+  noindex = false,
+  type = 'website',
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, site).href;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title data-title-zh={title} data-title-en={titleEn}>{title}</title>
+    <meta
+      name="description"
+      content={description.zh}
+      data-meta-zh={description.zh}
+      data-meta-en={description.en}
+    />
+    <meta name="author" content="Hayden" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href="/rss.xml" />
+    <meta name="theme-color" content="#f6f4ef" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Hayden" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} data-meta-zh={title} data-meta-en={titleEn} />
+    <meta
+      property="og:description"
+      content={description.zh}
+      data-meta-zh={description.zh}
+      data-meta-en={description.en}
+    />
+    <meta property="og:image" content={new URL(image, site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} data-meta-zh={title} data-meta-en={titleEn} />
+    <meta
+      name="twitter:description"
+      content={description.zh}
+      data-meta-zh={description.zh}
+      data-meta-en={description.en}
+    />
+    <meta name="twitter:image" content={new URL(image, site).href} />
+    <ClientRouter />
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('site-theme');
+        document.documentElement.dataset.theme =
+          t === 'light' || t === 'dark'
+            ? t
+            : matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        const l = localStorage.getItem('site-lang');
+        document.documentElement.dataset.lang = l === 'en' ? 'en' : 'zh';
+        document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
+      } catch {
+        document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      <Text text={{ zh: '跳至正文', en: 'Skip to content' }} />
+    </a>
+    <Header active={active} />
+    <main id="main-content" tabindex="-1" transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+    <noscript>
+      <style>
+        .menu-toggle {
+          display: none !important;
+        }
+        @media (max-width: 760px) {
+          .site-header {
+            position: relative;
+          }
+          .nav-shell {
+            flex-wrap: wrap;
+          }
+          .site-nav {
+            display: flex !important;
+            position: static !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            flex-wrap: wrap;
+            width: 100%;
+            order: 3;
+            box-shadow: none !important;
+          }
+        }
+      </style>
+    </noscript>
+    <script>
+      import '../scripts/site';
+      import '../scripts/reveal';
+    </script>
+  </body>
+</html>

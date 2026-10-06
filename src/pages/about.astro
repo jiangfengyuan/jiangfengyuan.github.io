@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import Icon from '../components/Icon.astro';
+import { profile } from '../data/content';
+---
+
+<Base title="关于 Hayden — 一个保持好奇的人" titleEn="About Hayden — A curious mind" active="about">
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">HELLO, AGAIN.</p>
+      <h1 class="about-heading">
+        <Text
+          text={{
+            zh: '作品之外，\n也是一个普通的我。',
+            en: 'Behind the projects,\njust a curious person.',
+          }}
+          class="pre-line"
+        />
+      </h1>
+    </header>
+    <section class="section split">
+      <aside class="about-profile dot-field">
+        <p class="eyebrow">A FEW WORDS ABOUT ME</p>
+        <div class="about-symbol" aria-hidden="true">
+          ✳
+        </div>
+        <h2>{profile.name}</h2>
+        <p style="margin-top:12px" class="muted">
+          <Text text={profile.role} />
+        </p>
+        <div class="inline-links">
+          <a href={profile.github} class="text-link">
+            GitHub ↗
+          </a>
+          <a href={profile.bilibili} class="text-link">
+            Bilibili ↗
+          </a>
+        </div>
+      </aside>
+      <div class="about-content">
+        {profile.bio.map((p) => (
+          <p>
+            <Text text={p} />
+          </p>
+        ))}
+        <div id="skills" class="skills-line">
+          {profile.skills.map((s) => (
+            <span class="tag">{s}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section section-bordered split">
+      <div>
+        <p class="eyebrow">BEYOND THE EDITOR</p>
+        <h2 style="margin-top:16px">
+          <Text
+            text={{
+              zh: '技术之外，\n还有速度与热爱。',
+              en: 'Beyond technology,\nthere’s a love of racing.',
+            }}
+            class="pre-line"
+          />
+        </h2>
+      </div>
+      <div>
+        <p>
+          <Text
+            text={{
+              zh: 'DHGT 是分享赛车文化的另一片空间。和朋友们聊模拟器、看比赛、探索汽车工程，让热爱有了共同的方向。',
+              en: 'DHGT is another space for sharing motorsport. Talking simulators, watching races and exploring automotive engineering give that passion a shared direction.',
+            }}
+          />
+        </p>
+        <a class="text-link" href="/dhgt/" style="margin-top:24px">
+          <Text text={{ zh: '认识 DHGT', en: 'Meet DHGT' }} /> ↗
+        </a>
+      </div>
+    </section>
+    <section id="contact" class="section">
+      <div class="contact-box dot-field">
+        <div>
+          <p class="eyebrow">SAY HELLO</p>
+          <h2>
+            <Text
+              text={{ zh: '下一次交流，从你好开始。', en: 'A conversation starts with hello.' }}
+            />
+          </h2>
+          <p>{profile.email}</p>
+        </div>
+        <a class="btn primary" href={'mailto:' + profile.email}>
+          <Text text={{ zh: '联系我', en: 'Get in touch' }} />
+          <Icon name="mail" />
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

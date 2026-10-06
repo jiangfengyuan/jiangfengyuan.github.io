@@ -1,0 +1,33 @@
+---
+import Text from './Text.astro';
+import { profile } from '../data/content';
+---
+
+<footer class="site-footer container">
+  <div class="footer-top">
+    <a class="wordmark" href="/">
+      hayden
+      <span class="wordmark-dot" aria-hidden="true">
+        .
+      </span>
+    </a>
+    <p>
+      <Text text={{ zh: '保持好奇，慢慢创造。', en: 'Stay curious. Make something thoughtful.' }} />
+    </p>
+    <a class="text-link" href={'mailto:' + profile.email}>
+      {profile.email} ↗
+    </a>
+  </div>
+  <div class="footer-bottom">
+    <span>© {new Date().getFullYear()} Hayden</span>
+    <div>
+      <a href={profile.github}>GitHub ↗</a>
+      <a href={profile.bilibili}>Bilibili ↗</a>
+      <a href="/dhgt/">DHGT</a>
+      <a href="/rss.xml">RSS</a>
+    </div>
+    <span>
+      <Text text={{ zh: '用心设计，持续生长。', en: 'Made with care. Always growing.' }} />
+    </span>
+  </div>
+</footer>

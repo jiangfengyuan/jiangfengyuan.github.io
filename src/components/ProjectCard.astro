@@ -1,0 +1,99 @@
+---
+import Text from './Text.astro';
+import Icon from './Icon.astro';
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { projects } from '../data/content';
+import republicaCover from '../assets/republica/start-screen.png';
+import dhgtCover from '../assets/dhgt/race.png';
+interface Props {
+  project: (typeof projects)[number];
+  compact?: boolean;
+}
+const { project: p, compact = false } = Astro.props;
+const covers: Record<string, ImageMetadata> = {
+  republica: republicaCover,
+  dhgt: dhgtCover,
+};
+const cover = covers[p.id];
+---
+
+<article class:list={['project-card', p.accent, { compact }]}>
+  <a href={p.href} class:list={['project-media', p.id]} aria-label={p.name}>
+    <div class="media-grid" aria-hidden="true"></div>
+    {p.id === 'flash' ? (
+      <>
+        <span class="flash-mark" aria-hidden="true">
+          ✳
+        </span>
+        <div class="phone">
+          <img
+            src={p.image}
+            alt={p.imageAlt.zh}
+            data-alt-zh={p.imageAlt.zh}
+            data-alt-en={p.imageAlt.en}
+            loading="lazy"
+            decoding="async"
+            width="540"
+            height="1200"
+          />
+        </div>
+        <span class="media-note" aria-hidden="true">
+          a little space
+          <br />
+          for your everyday.
+        </span>
+      </>
+    ) : cover ? (
+      <Picture
+        src={cover}
+        alt={p.imageAlt.zh}
+        data-alt-zh={p.imageAlt.zh}
+        data-alt-en={p.imageAlt.en}
+        widths={[480, 720, 960]}
+        sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1000px) calc(100vw - 48px), 560px"
+        formats={['avif', 'webp']}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <img
+        src={p.image}
+        alt={p.imageAlt.zh}
+        data-alt-zh={p.imageAlt.zh}
+        data-alt-en={p.imageAlt.en}
+        loading="lazy"
+        decoding="async"
+        width="1440"
+        height="1080"
+      />
+    )}
+    <span class="media-arrow glass" aria-hidden="true">
+      <Icon name="external" />
+    </span>
+  </a>
+  <div class="project-info">
+    <p class="eyebrow">
+      <Text text={p.category} />
+    </p>
+    <h3>
+      <a href={p.href}>
+        {p.name} <span aria-hidden="true">↗</span>
+      </a>
+    </h3>
+    <p>
+      <Text text={p.description} />
+    </p>
+    <div class="project-meta">
+      <span class="status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <Text text={p.status} />
+      </span>
+      <div class="tags">
+        {p.tags.map((t) => (
+          <span>{t}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</article>

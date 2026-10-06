@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Text from './Text.astro';
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  searchable?: boolean;
+}
+const { posts, searchable = false } = Astro.props;
+---
+
+<div class="post-list">
+  {posts.map((post, i) => (
+    <article
+      class="post-row"
+      data-post={searchable ? '' : undefined}
+      data-search={(
+        post.data.title +
+        ' ' +
+        post.data.summary +
+        ' ' +
+        post.data.tags.join(' ')
+      ).toLocaleLowerCase()}
+      data-tags={JSON.stringify(post.data.tags)}
+    >
+      <div class="post-row-index" aria-hidden="true">
+        {String(i + 1).padStart(2, '0')}
+      </div>
+      <div class="post-row-body">
+        <div class="post-meta">
+          <time datetime={post.data.date}>{post.data.date.replaceAll('-', '.')}</time>
+          <span>{post.data.tags.join(' / ')}</span>
+          <span class="language-note">
+            <Text
+              text={{
+                zh: post.data.language === 'zh' ? '中文原文' : '英文原文',
+                en: post.data.language === 'zh' ? 'In Chinese' : 'In English',
+              }}
+            />
+          </span>
+        </div>
+        <h3>
+          <a href={'/blog/' + post.data.id + '/'}>{post.data.title}</a>
+        </h3>
+        <p>{post.data.summary}</p>
+      </div>
+      <a class="post-row-arrow" href={'/blog/' + post.data.id + '/'} aria-label={post.data.title}>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </article>
+  ))}
+</div>
