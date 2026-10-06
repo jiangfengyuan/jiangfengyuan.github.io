@@ -6,36 +6,58 @@
     <meta name="description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
     <meta name="author" content="Hayden">
     <title>Flash — Hayden</title>
+    <link rel="canonical" href="https://jiangfengyuan.github.io/flash">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hayden">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:title" content="Flash — Hayden">
+    <meta property="og:description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
+    <meta property="og:url" content="https://jiangfengyuan.github.io/flash">
+    <meta property="og:image" content="https://jiangfengyuan.github.io/assets/social/flash.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Flash — Hayden">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Flash — Hayden">
+    <meta name="twitter:description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
+    <meta name="twitter:image" content="https://jiangfengyuan.github.io/assets/social/flash.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-flash">
+    <a class="skip-link" href="#main-content"><span class="lang-text" data-en="Skip to main content" data-zh="跳至主要内容">跳至主要内容</span></a>
     <canvas id="particle-canvas"></canvas>
 
     <!-- 导航 -->
-    <nav class="navbar navbar-apple">
+    <nav aria-label="主导航" class="navbar navbar-apple">
         <div class="navbar-bg"></div>
         <div class="nav-container">
             <a href="./" class="nav-logo">
                 <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="./" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
                 <li><a href="flash" class="nav-link active">Flash</a></li>
                 <li><a href="dhgt" class="nav-link">DHGT</a></li>
                 <li><a href="blog" class="nav-link"><span class="lang-text" data-en="Blog" data-zh="博客">博客</span></a></li>
+                <li><a href="updates" class="nav-link"><span class="lang-text" data-en="Updates" data-zh="动态">动态</span></a></li>
                 <li><a href="./#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
             </ul>
             <div class="nav-controls">
                 <button id="lang-toggle" class="control-btn" aria-label="切换语言">EN</button>
                 <button id="theme-toggle" class="control-btn" aria-label="切换主题">
-                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg aria-hidden="true" focusable="false" class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg aria-hidden="true" focusable="false" class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
             </div>
-            <button class="menu-toggle" aria-label="菜单">
+            <button class="menu-toggle" aria-label="菜单" aria-controls="primary-navigation">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -43,7 +65,7 @@
         </div>
     </nav>
 
-    <main>
+    <main id="main-content" tabindex="-1">
     <!-- Hero -->
     <section class="flash-hero">
         <div class="container">
@@ -58,7 +80,7 @@
             </p>
             <div class="hero-cta fade-up">
                 <a href="https://github.com/jiangfengyuan/Project-FLASH" target="_blank" rel="noopener noreferrer" class="apple-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     <span class="lang-text" data-en="View on GitHub" data-zh="GitHub 上查看">GitHub 上查看</span>
                 </a>
             </div>
@@ -88,7 +110,7 @@
             <div class="features-grid-apple">
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="Quick Capture" data-zh="快速记录">快速记录</span>
@@ -99,7 +121,7 @@
                 </div>
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 3z"></path></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 3z"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="Idea Flow" data-zh="灵感池 Idea Flow">灵感池 Idea Flow</span>
@@ -110,7 +132,7 @@
                 </div>
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="Calendar Aggregation" data-zh="日历聚合">日历聚合</span>
@@ -121,7 +143,7 @@
                 </div>
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="Mood Tracking & Trends" data-zh="情绪记录与趋势">情绪记录与趋势</span>
@@ -132,7 +154,7 @@
                 </div>
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="Local-First · Privacy" data-zh="本地优先 · 隐私">本地优先 · 隐私</span>
@@ -143,7 +165,7 @@
                 </div>
                 <div class="feature-card-apple fade-up">
                     <div class="feature-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
                         <span class="lang-text" data-en="JSON Backup Sync" data-zh="JSON 备份互通">JSON 备份互通</span>
@@ -178,12 +200,12 @@
             </h2>
             <div class="platform-badges-apple fade-up">
                 <span class="platform-badge-apple">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
                     Android
                     <small class="lang-text" data-en="Native Kotlin · Alpha available" data-zh="原生 Kotlin · Alpha 已发布">原生 Kotlin · Alpha 已发布</small>
                 </span>
                 <span class="platform-badge-apple">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.96 1.07-3.11-1.05.05-2.31.72-3.06 1.64-.68.83-1.28 2.18-1.12 3.27 1.21.09 2.43-.78 3.11-1.8z"/></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.96 1.07-3.11-1.05.05-2.31.72-3.06 1.64-.68.83-1.28 2.18-1.12 3.27 1.21.09 2.43-.78 3.11-1.8z"/></svg>
                     macOS
                     <small class="lang-text" data-en="Native SwiftUI · Menu Bar Companion" data-zh="原生 SwiftUI · 含菜单栏伴侣">原生 SwiftUI · 含菜单栏伴侣</small>
                 </span>
@@ -200,21 +222,22 @@
                     <span class="lang-text" data-en="Android Alpha is out · macOS Alpha ready" data-zh="Android Alpha 已发布 · macOS Alpha 已就绪">Android Alpha 已发布 · macOS Alpha 已就绪</span>
                 </p>
                 <a href="https://github.com/jiangfengyuan/Project-FLASH/releases/tag/Android-v0.1.0-Alpha" target="_blank" rel="noopener noreferrer" class="apple-btn apple-btn-large">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="lang-text" data-en="Download Android Alpha" data-zh="下载 Android Alpha">下载 Android Alpha</span>
                 </a>
                 <a href="https://github.com/jiangfengyuan/Project-FLASH" target="_blank" rel="noopener noreferrer" class="apple-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     <span class="lang-text" data-en="View Source on GitHub" data-zh="查看 GitHub 源码">查看 GitHub 源码</span>
                 </a>
                 <a href="https://ifdian.net/a/HEY10086D" target="_blank" rel="noopener noreferrer" class="apple-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     <span class="lang-text" data-en="Support on Afdian" data-zh="爱发电支持">爱发电支持</span>
                 </a>
             </div>
         </div>
     </section>
 
+    <div class="container project-update-cta"><a class="update-link" href="updates"><span class="lang-text" data-en="View project updates" data-zh="查看项目动态">查看项目动态</span> →</a></div>
     </main>
 
     <footer class="footer footer-apple">

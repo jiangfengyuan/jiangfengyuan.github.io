@@ -5,7 +5,8 @@
     --bg-card: #16161f;
     --text-primary: #f0f0f5;
     --text-secondary: #8b8b9a;
-    --accent: #6366f1;
+    --accent: #a5b4fc;
+    --button-bg: #4f46e5;
     --accent-light: #818cf8;
     --accent-glow: rgba(99, 102, 241, 0.3);
     --accent-glow-strong: rgba(99, 102, 241, 0.4);
@@ -23,7 +24,8 @@
     --bg-card: #ffffff;
     --text-primary: #1d1d1f;
     --text-secondary: #6e6e73;
-    --accent: #0071e3;
+    --accent: #005bb5;
+    --button-bg: #005bb5;
     --accent-light: #0077ed;
     --accent-glow: rgba(0, 113, 227, 0.2);
     --accent-glow-strong: rgba(0, 113, 227, 0.3);
@@ -301,7 +303,7 @@ ul {
 }
 
 .btn-primary {
-    background: var(--accent);
+    background: var(--button-bg, var(--accent));
     color: white;
     box-shadow: 0 4px 20px var(--accent-glow);
 }
@@ -3373,4 +3375,52 @@ body {
     padding: 0;
     display: block;
     overflow-x: auto;
+}
+
+/* Sharing / updates and accessibility refinements */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; top: 1rem; left: 1rem; z-index: 2000; padding: .75rem 1rem; background: var(--bg-card); color: var(--text-primary); transform: translateY(-200%); border: 2px solid var(--accent); border-radius: 8px; }
+.skip-link:focus { transform: none; }
+.update-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.25rem, 4vw, 2rem); scroll-margin-top: 100px; }
+.update-card h2, .update-card h3 { margin: .8rem 0; font-size: clamp(1.2rem, 3vw, 1.65rem); line-height: 1.45; }
+.update-card p { color: var(--text-secondary); margin-bottom: 1.25rem; max-width: 75ch; }
+.update-meta { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--text-secondary); font-family: var(--font-mono); font-size: .85rem; }
+.update-meta span { color: var(--accent); }
+.update-link { color: var(--accent); text-decoration: underline; text-underline-offset: .25em; display: inline-block; padding: .5rem 0; }
+.updates-section { padding-top: 10rem; min-height: 80vh; }
+.updates-intro { color: var(--text-secondary); margin: 1rem auto 0; max-width: 65ch; }
+.updates-list { display: grid; gap: 1.5rem; max-width: 900px; margin: auto; }
+.project-update-cta { padding-top: 1.5rem; padding-bottom: 2rem; text-align: center; }
+:root[data-theme="light"] { --text-secondary: #595960; }
+.page-flash { --apple-text-secondary: #a1a1aa; --apple-accent: #67b1ff; }
+:root[data-theme="light"] .page-flash { --apple-text-secondary: #595960; --apple-accent: #005bb5; }
+.page-flash .apple-btn { background: #005bb5; }
+.page-flash .apple-btn:hover { background: #004f9e; }
+.page-dhgt { --dhgt-accent: #ff6b6b; --dhgt-accent-light: #ff8585; }
+:root[data-theme="light"] .page-dhgt { --dhgt-accent: #b90000; --dhgt-accent-light: #b90000; }
+.btn-dhgt { background: #b90000 !important; }
+.btn-dhgt:hover { background: #a50000 !important; }
+:root[data-theme="light"] .code-name, :root[data-theme="light"] .code-bool { color: #805800; }
+:root[data-theme="light"] .code-property { color: #b33028; }
+:root[data-theme="light"] .code-string { color: #327031; }
+:root[data-theme="light"] .code-method { color: #285bc0; }
+.logo-bracket { opacity: 1; }
+@media (max-width: 900px) {
+    .nav-controls { position: relative; z-index: 1002; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #particle-canvas, .danmaku-stage, .cursor { display: none; }
+    *, *::before, *::after { transition-delay: 0s !important; animation-delay: 0s !important; }
+    .hero-content > *, .dhgt-hero-content > * { opacity: 1 !important; transform: none !important; }
+    .btn:hover, .apple-btn:hover, .project-card:hover, .skill-card:hover, .feature-card-apple:hover, .dhgt-activity-card:hover { transform: none !important; }
+}
+@media (max-width: 900px) {
+    .nav-links { transition-property: opacity, transform; }
+}
+
+.page-flash { --accent: #67b1ff; }
+:root[data-theme="light"] .page-flash { --accent: #005bb5; }
+.footer-sub { opacity: 1; }
+@media (min-width: 901px) {
+    .nav-links { position: relative; z-index: 1; }
 }

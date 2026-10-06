@@ -12,7 +12,15 @@
     <meta property="og:title" content="Blog — Hayden">
     <meta property="og:description" content="Hayden 的博客 — 同步微信公众号文章，记录技术与生活。">
     <meta property="og:url" content="https://jiangfengyuan.github.io/blog">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://jiangfengyuan.github.io/assets/social/blog.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://jiangfengyuan.github.io/assets/social/blog.png">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+
     <title>Blog — Hayden</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +31,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-blog">
+    <a class="skip-link" href="#main-content"><span class="lang-text" data-en="Skip to main content" data-zh="跳至主要内容">跳至主要内容</span></a>
     <!-- 背景粒子 canvas -->
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
@@ -38,11 +47,12 @@
             <a href="./" class="nav-logo">
                 <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="./" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
                 <li><a href="flash" class="nav-link">Flash</a></li>
                 <li><a href="dhgt" class="nav-link">DHGT</a></li>
                 <li><a href="blog" class="nav-link active"><span class="lang-text" data-en="Blog" data-zh="博客">博客</span></a></li>
+                <li><a href="updates" class="nav-link"><span class="lang-text" data-en="Updates" data-zh="动态">动态</span></a></li>
                 <li><a href="./#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
             </ul>
             <div class="nav-controls">
@@ -52,7 +62,7 @@
                     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
             </div>
-            <button class="menu-toggle" aria-label="菜单" aria-expanded="false">
+            <button class="menu-toggle" aria-label="菜单" aria-controls="primary-navigation" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>

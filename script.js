@@ -1,3 +1,5 @@
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 // ==================== 导航栏滚动效果 ====================
 const navbar = document.querySelector('.navbar');
 
@@ -65,6 +67,7 @@ function initTypewriter() {
     if (!text) return;
 
     if (currentTypewriter) currentTypewriter.stop();
+    if (motionPreference.matches) { currentTypewriter = null; typingElement.textContent = text; return; }
     typingElement.textContent = '';
     currentTypewriter = new TypeWriter(typingElement, text, 150);
 }
@@ -116,9 +119,11 @@ fadeUpGroups.forEach((group) => {
 
 // ==================== 数字滚动动画 ====================
 function animateNumber(element, target, duration = 2000) {
+    if (motionPreference.matches) { element.textContent = target + '+'; return; }
     const startTime = performance.now();
     
     function update(currentTime) {
+        if (motionPreference.matches) { element.textContent = target + '+'; return; }
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         // easeOutQuart 缓动，收尾更自然
@@ -164,7 +169,7 @@ let particles = [];
 let animationId;
 
 function resizeCanvas() {
-    if (!canvas) return;
+    if (!canvas || !ctx) return;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
@@ -259,6 +264,7 @@ if (canvas && ctx) {
     }
 
     function animateParticles() {
+        if (motionPreference.matches || document.hidden) { animationId = null; return; }
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
@@ -273,14 +279,20 @@ if (canvas && ctx) {
     }
 
     initParticles();
-    animateParticles();
+    if (!motionPreference.matches) animateParticles();
+    motionPreference.addEventListener('change', () => {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!motionPreference.matches && !document.hidden) animateParticles();
+    });
 
     // ==================== 性能优化：页面不可见时暂停粒子动画 ====================
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             cancelAnimationFrame(animationId);
             animationId = null;
-        } else if (!animationId) {
+        } else if (!animationId && !motionPreference.matches) {
             animateParticles();
         }
     });
@@ -290,46 +302,66 @@ if (canvas && ctx) {
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
-function closeMobileMenu() {
+const mobileNavigation = window.matchMedia('(max-width: 900px)');
+const navControls = document.querySelector('.nav-controls');
+const mainContent = document.querySelector('main');
+const siteFooter = document.querySelector('footer');
+const navLogo = document.querySelector('.nav-logo');
+const backgroundRegions = [navControls, mainContent, siteFooter, navLogo].filter(Boolean);
+
+function syncMobileMenu() {
+    const open = mobileNavigation.matches && navLinks.classList.contains('active');
+    navLinks.inert = mobileNavigation.matches && !open;
+    menuToggle.setAttribute('aria-expanded', String(open));
+    backgroundRegions.forEach(el => { el.inert = open; });
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMobileMenu(restoreFocus = false) {
+    if (!menuToggle || !navLinks) return;
     menuToggle.classList.remove('active');
     navLinks.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    syncMobileMenu();
+    if (restoreFocus) menuToggle.focus();
 }
 
-if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active') ? 'true' : 'false');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+if (menuToggle && navLinks) {
+    syncMobileMenu();
+    mobileNavigation.addEventListener('change', () => {
+        const focusedInside = navLinks.contains(document.activeElement);
+        closeMobileMenu(mobileNavigation.matches && focusedInside);
     });
-}
-
-// 点击导航链接后关闭菜单
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        if (navLinks.classList.contains('active')) {
-            closeMobileMenu();
+    menuToggle.addEventListener('click', () => {
+        const open = !navLinks.classList.contains('active');
+        menuToggle.classList.toggle('active', open);
+        navLinks.classList.toggle('active', open);
+        syncMobileMenu();
+        if (open) setTimeout(() => {
+            if (navLinks.classList.contains('active')) navLinks.querySelector('a').focus();
+        }, 100);
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (!navLinks.classList.contains('active')) return;
+            closeMobileMenu(true);
+            const href = link.getAttribute('href');
+            if (href.startsWith('#')) {
+                const target = document.getElementById(href.slice(1));
+                if (target) { target.setAttribute('tabindex', '-1'); target.focus({preventScroll: true}); }
+            }
+        });
+    });
+    document.addEventListener('keydown', e => {
+        if (!mobileNavigation.matches || !navLinks.classList.contains('active')) return;
+        if (e.key === 'Escape') { e.preventDefault(); closeMobileMenu(true); }
+        if (e.key === 'Tab') {
+            const focusable = [...navLinks.querySelectorAll('a[href]'), menuToggle];
+            const index = focusable.indexOf(document.activeElement);
+            e.preventDefault();
+            focusable[(index + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
         }
     });
-});
-
-// 点击页面其他区域关闭菜单
-document.addEventListener('click', (e) => {
-    if (navLinks.classList.contains('active') && 
-        !navLinks.contains(e.target) && 
-        !menuToggle.contains(e.target)) {
-        closeMobileMenu();
-    }
-});
-
-// ESC 键关闭菜单
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-        closeMobileMenu();
-    }
-});
+}
 
 // ==================== 平滑滚动与导航高亮 ====================
 const sections = document.querySelectorAll('section[id]');
@@ -381,12 +413,14 @@ window.addEventListener('scroll', () => {
         return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     }
 
-    const savedTheme = localStorage.getItem('site-theme') || getSystemTheme();
+    function safeStorageGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+    function safeStorageSet(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+    const savedTheme = safeStorageGet('site-theme') || getSystemTheme();
     htmlEl.dataset.theme = savedTheme;
 
     // 无手动设置时，跟随系统主题变化
     window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        if (localStorage.getItem('site-theme')) return;
+        if (safeStorageGet('site-theme')) return;
         htmlEl.dataset.theme = e.matches ? 'light' : 'dark';
         beginThemeSwitch();
     });
@@ -407,7 +441,7 @@ window.addEventListener('scroll', () => {
             // 强制重排，确保过渡在颜色变化前已生效，避免闪切
             void htmlEl.offsetWidth;
             htmlEl.dataset.theme = newTheme;
-            localStorage.setItem('site-theme', newTheme);
+            safeStorageSet('site-theme', newTheme);
             clearTimeout(htmlEl._themeSwitchTimer);
             htmlEl._themeSwitchTimer = setTimeout(() => {
                 htmlEl.classList.remove('is-theme-switching');
@@ -416,7 +450,7 @@ window.addEventListener('scroll', () => {
     }
 
     // --- Language Toggle ---
-    let currentLang = localStorage.getItem('site-lang') || 'zh';
+    let currentLang = safeStorageGet('site-lang') || 'zh';
     if (!['zh', 'en'].includes(currentLang)) currentLang = 'zh';
 
     let langAnimated = false;
@@ -433,7 +467,7 @@ window.addEventListener('scroll', () => {
             }
 
             htmlEl.lang = lang === 'zh' ? 'zh-CN' : 'en';
-            localStorage.setItem('site-lang', lang);
+            safeStorageSet('site-lang', lang);
 
             // Re-init typewriter and danmaku for new language
             try { initTypewriter(); } catch (e) { /* ignore */ }
@@ -441,7 +475,7 @@ window.addEventListener('scroll', () => {
         };
 
         // 首次加载不做动画，避免闪烁
-        if (!langAnimated) {
+        if (!langAnimated || motionPreference.matches) {
             langAnimated = true;
             apply();
             return;
@@ -609,3 +643,11 @@ function initDanmaku() {
 }
 
 initDanmaku();
+
+
+motionPreference.addEventListener('change', () => {
+    initTypewriter();
+    if (motionPreference.matches) {
+        document.querySelectorAll('.stat-number').forEach(el => { el.textContent = el.dataset.target + '+'; });
+    }
+});

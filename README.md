@@ -65,3 +65,11 @@ python3 -m http.server 8000
 ---
 
 Designed & Built by Hayden ♥ with love and Kimi
+
+
+## 官网分享信息、可访问性与项目动态
+
+- 页面分享卡片图位于 `assets/social/`（1200 × 630），网站图标提供 SVG、PNG 与 Apple Touch Icon；主页、Flash、DHGT、博客和项目动态均使用分享预览图。
+- `updates.html` 是双语项目动态页：首页和 Flash / DHGT 页面链接到最新记录。条目以 `update-card` 为模板，按日期倒序维护；更新 `time` 日期、唯一锚点和 `data-zh` / `data-en` 文案。Sitemap 收录 `/updates`。
+- Flash 与 DHGT 首批条目是基于既有产品页面整理的概览，不代表版本发布或新活动；正式版本详情请链接到项目发布记录。
+- 手机菜单支持焦点管理、Tab 循环与 Escape；`prefers-reduced-motion` 控制粒子、弹幕和文字/计数动效。
