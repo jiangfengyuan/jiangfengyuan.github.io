@@ -1,0 +1,124 @@
+{
+  "activities": [
+    {
+      "title": {
+        "zh": "一起看懂比赛",
+        "en": "Understand the race together"
+      },
+      "body": {
+        "zh": "从 F1、WEC、WRC 到 GT 与 MotoGP，交流车手、赛道、轮胎与进站策略。从看比赛开始，走近速度背后的工程与判断。",
+        "en": "From F1, WEC and WRC to GT and MotoGP, talk drivers, circuits, tyres and pit strategy. Discover the engineering and decisions behind the speed."
+      }
+    },
+    {
+      "title": {
+        "zh": "来，开一圈",
+        "en": "Come take a lap"
+      },
+      "body": {
+        "zh": "招新海报介绍了赛车模拟器体验与线下卡丁车活动方向。无论经验多少，都可以从第一圈开始认识驾驶与走线；具体安排以社团通知为准。",
+        "en": "Recruitment posters introduce simulator experiences and outdoor karting as club activities. Start with your first lap, whatever your experience. Check club announcements for arrangements."
+      }
+    },
+    {
+      "title": {
+        "zh": "把热爱做成作品",
+        "en": "Turn passion into stories"
+      },
+      "body": {
+        "zh": "赛事前瞻、赛后回顾、公众号封面与社团视觉，让每个值得记住的瞬间留下来。也一起探索汽车工业、赛车技术与汽车文化。",
+        "en": "Race previews, recaps, editorial covers and club visuals preserve the moments worth remembering. Explore the automotive industry, racing technology and car culture along the way."
+      }
+    }
+  ],
+  "gallery": [
+    {
+      "image": "intro",
+      "title": {
+        "zh": "向速度与热爱出发",
+        "en": "Towards speed and passion"
+      },
+      "category": {
+        "zh": "社团介绍 · 品牌视觉",
+        "en": "CLUB INTRODUCTION · IDENTITY"
+      },
+      "body": {
+        "zh": "以 GT 标志与黑金色调呈现社团的出发点。",
+        "en": "The GT mark and a black-and-gold palette introduce the club."
+      },
+      "alt": {
+        "zh": "DHGT 介绍封面：黑色底图、GT 标志与“向速度与热爱出发”文字",
+        "en": "DHGT introduction cover with a GT mark and a message about speed and passion"
+      },
+      "href": "/blog/20260827-uzA9yg/",
+      "width": 900,
+      "height": 383
+    },
+    {
+      "image": "all-nighter",
+      "title": {
+        "zh": "不眠之夜大奖赛",
+        "en": "All-Nighter Grand Prix"
+      },
+      "category": {
+        "zh": "社团视觉 · 主题海报",
+        "en": "CLUB VISUALS · THEME POSTER"
+      },
+      "body": {
+        "zh": "蓝色 GT 标志与 All-Nighter Grand Prix 字样组成的主题视觉。",
+        "en": "A blue GT mark and All-Nighter Grand Prix lettering form this theme poster."
+      },
+      "alt": {
+        "zh": "不眠之夜大奖赛海报：蓝色 GT 标志、All-Nighter Grand Prix 标题与社团署名",
+        "en": "All-Nighter Grand Prix poster with a blue GT mark and club credit"
+      },
+      "href": null,
+      "width": 1600,
+      "height": 1131
+    },
+    {
+      "image": "baku",
+      "title": {
+        "zh": "只差 0.196s",
+        "en": "Just 0.196 seconds"
+      },
+      "category": {
+        "zh": "公众号封面 · 巴库赛后",
+        "en": "EDITORIAL COVER · BAKU RECAP"
+      },
+      "body": {
+        "zh": "速度拖影与醒目的数字，连接巴库赛后文章的叙事。",
+        "en": "Motion blur and a bold time gap introduce the Baku recap."
+      },
+      "alt": {
+        "zh": "巴库赛后封面：DHGT 标志、0.196s 字样与赛车速度拖影",
+        "en": "Baku recap cover with the DHGT mark, 0.196s lettering and a blurred racing car"
+      },
+      "href": "/blog/20260926-S5g3_V/",
+      "width": 1600,
+      "height": 681
+    },
+    {
+      "image": "verstappen",
+      "title": {
+        "zh": "维斯塔潘专题",
+        "en": "Verstappen feature"
+      },
+      "category": {
+        "zh": "公众号封面 · 人物专题",
+        "en": "EDITORIAL COVER · DRIVER FEATURE"
+      },
+      "body": {
+        "zh": "日落、庆祝瞬间与人物肖像拼接成的专题封面。",
+        "en": "Sunset, a celebration and a driver portrait come together in this feature cover."
+      },
+      "alt": {
+        "zh": "维斯塔潘专题封面：日落赛车、庆祝姿态与人物肖像拼贴",
+        "en": "Verstappen feature cover combining a sunset racing scene, a celebration and a portrait"
+      },
+      "href": null,
+      "width": 1600,
+      "height": 683
+    }
+  ]
+}

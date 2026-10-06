@@ -106,3 +106,34 @@ content:
       - { name: github, label: GitHub, type: string }
       - { name: bilibili, label: Bilibili, type: string }
       - { name: skills, label: 技能, type: string, list: true }
+  - name: dhgt
+    label: DHGT 社团页面
+    type: file
+    path: src/data/dhgt.json
+    format: json
+    fields:
+      - name: activities
+        label: 活动方向
+        type: object
+        list: true
+        fields:
+          - { name: title, label: 标题, component: localized }
+          - { name: body, label: 简介, component: localized }
+      - name: gallery
+        label: 社团视觉作品
+        type: object
+        list: true
+        fields:
+          - {
+              name: image,
+              label: 图片标识（对应 gallery 目录 WebP 文件）,
+              type: string,
+              readonly: true,
+            }
+          - { name: title, label: 标题, component: localized }
+          - { name: category, label: 分类, component: localized }
+          - { name: body, label: 简介, component: localized }
+          - { name: alt, label: 替代文字, component: localized }
+          - { name: width, label: 图片宽度, type: number, readonly: true }
+          - { name: height, label: 图片高度, type: number, readonly: true }
+          - { name: href, label: 相关文章链接, type: string }

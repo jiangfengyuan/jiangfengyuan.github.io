@@ -3,34 +3,15 @@ import Base from '../layouts/Base.astro';
 import Text from '../components/Text.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PostList from '../components/PostList.astro';
+import club from '../data/dhgt.json';
 import { Picture } from 'astro:assets';
-import banner from '../assets/dhgt/race.png';
+import banner from '../assets/dhgt/track.jpg';
 import { projects, publishedPosts } from '../data/content';
 const p = projects.find((p) => p.id === 'dhgt')!;
-const posts = await publishedPosts();
-const activities = [
-  {
-    title: { zh: '模拟赛车', en: 'Sim racing' },
-    body: {
-      zh: '从模拟器里感受驾驶、练习走线，与朋友交流技巧和设置。',
-      en: 'Experience driving, practice racing lines and share techniques and setups with friends.',
-    },
-  },
-  {
-    title: { zh: '赛事观赛', en: 'Race watching' },
-    body: {
-      zh: '一起看比赛，聊策略、车手和赛道，分享每个比赛周末的精彩。',
-      en: 'Watch together, talk strategy, drivers and circuits, and share the moments of each race weekend.',
-    },
-  },
-  {
-    title: { zh: '汽车文化', en: 'Car culture' },
-    body: {
-      zh: '从历史到工程与设计，在交流、讲座和主题活动中分享热爱。',
-      en: 'Share history, engineering and design through conversations, talks and themed gatherings.',
-    },
-  },
-];
+const posts = (await publishedPosts()).filter((post) =>
+  post.data.tags.some((tag) => ['DHGT', '赛车', 'F1', '赛事', 'F1周报'].includes(tag)),
+);
+const { activities, gallery } = club;
 ---
 
 <Base
@@ -66,16 +47,46 @@ const activities = [
             height="300"
             decoding="async"
           />
-          <p class="eyebrow">WE RACE AS ONE.</p>
+          <p class="eyebrow">DONGHUA · DONGCHENG / WE RACE AS ONE.</p>
           <h1>
-            <Text text={{ zh: 'DHGT 汽车运动社', en: 'DHGT Motorsport Club' }} />
+            <Text text={{ zh: '东华 DHGT 汽车运动社', en: 'DHGT Motorsport Club' }} />
           </h1>
+          <p class="club-lead">
+            <Text
+              text={{
+                zh: '从生态园，到东城。赛道不同，热爱未变。',
+                en: 'From Ecology Park to Dongcheng. A new track, the same passion.',
+              }}
+            />
+          </p>
           <a class="btn" href="#wechat">
-            <Text text={{ zh: '关注我们的热爱', en: 'Follow our passion' }} /> ↗
+            <Text text={{ zh: '关注社团', en: 'Follow the club' }} /> ↗
           </a>
         </div>
       </div>
     </section>
+    <nav
+      class="club-jumps"
+      aria-label="社团页面章节"
+      data-label-zh="社团页面章节"
+      data-label-en="Club page sections"
+    >
+      <a href="#about">
+        <Text text={{ zh: '认识 DHGT', en: 'Meet DHGT' }} />
+      </a>
+      <a href="#activities">
+        <Text text={{ zh: '一起做什么', en: 'What we share' }} />
+      </a>
+      <a href="#visuals">
+        <Text text={{ zh: '社团视觉', en: 'Club visuals' }} />
+      </a>
+      <a href="#stories">
+        <Text text={{ zh: '赛事与记录', en: 'Stories' }} />
+      </a>
+      <a href="#wechat">
+        <Text text={{ zh: '关注公众号', en: 'WeChat' }} />
+      </a>
+    </nav>
     <section id="about" class="section section-bordered split">
       <div>
         <p class="eyebrow">A SHARED PASSION</p>
@@ -96,14 +107,18 @@ const activities = [
         <p>
           <Text
             text={{
-              zh: '我们的口号很简单：We race as one。无论你是资深的模拟器车手，还是刚刚入坑一级方程式的新粉丝，这里都有你的位置。',
-              en: 'Our slogan is simple: We race as one. Whether you are a seasoned sim racer or just getting into Formula 1, there is a seat for you here.',
+              zh: '2025 年，东华 DHGT 汽车运动社（东城）正式成立，延续生态园的汽车运动文化。我们希望让更多同学了解汽车赛事、汽车工业与汽车文化，从“看比赛”走向“看懂比赛”。',
+              en: 'Founded in Dongcheng in 2025, DHGT carries forward the motorsport culture of Ecology Park. We help students explore racing, the automotive industry and car culture, moving from watching a race to understanding it.',
             }}
           />
         </p>
       </div>
     </section>
-    <section class="section">
+    <section id="activities" class="section">
+      <SectionHeading
+        eyebrow={{ zh: '学习 / 交流 / 探索', en: 'LEARN / SHARE / EXPLORE' }}
+        title={{ zh: '因为热爱，一起出发。', en: 'A shared passion. A place to start.' }}
+      />
       <div class="feature-grid">
         {activities.map((a, i) => (
           <article class="feature">
@@ -118,14 +133,65 @@ const activities = [
         ))}
       </div>
     </section>
-    <section class="section">
+    <section id="visuals" class="section section-bordered">
+      <SectionHeading
+        eyebrow={{ zh: '海报与公众号封面', en: 'POSTERS & EDITORIAL COVERS' }}
+        title={{ zh: '热爱，也有自己的样子。', en: 'Passion has a visual language.' }}
+      />
+      <div class="club-gallery">
+        {gallery.map((item) => (
+          <figure class="club-visual">
+            <a
+              class="club-artwork"
+              href={'/assets/dhgt/gallery/' + item.image + '.webp'}
+              aria-label={'查看完整图片：' + item.alt.zh}
+              data-label-zh={'查看完整图片：' + item.alt.zh}
+              data-label-en={'View full image: ' + item.alt.en}
+            >
+              <img
+                src={'/assets/dhgt/gallery/' + item.image + '.webp'}
+                alt={item.alt.zh}
+                data-alt-zh={item.alt.zh}
+                data-alt-en={item.alt.en}
+                loading="lazy"
+                decoding="async"
+                width={item.width}
+                height={item.height}
+              />
+            </a>
+            <figcaption>
+              <p class="eyebrow">
+                <Text text={item.category} />
+              </p>
+              <h3>
+                <Text text={item.title} />
+              </h3>
+              <p>
+                <Text text={item.body} />
+              </p>
+              {item.href && (
+                <a class="text-link" href={item.href}>
+                  <Text text={{ zh: '阅读相关文章', en: 'Read the story' }} /> ↗
+                </a>
+              )}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="club-gallery-note">
+        <Text
+          text={{ zh: '点击图片查看完整设计。', en: 'Select an image to view the full design.' }}
+        />
+      </p>
+    </section>
+    <section id="stories" class="section">
       <SectionHeading
         eyebrow={{ zh: '赛事与社团记录', en: 'RACING & COMMUNITY NOTES' }}
         title={{ zh: '把热爱写下来。', en: 'Stories from the grid.' }}
         href="/blog/"
         label={{ zh: '更多文章', en: 'More writing' }}
       />
-      <PostList posts={posts.slice(0, 3)} />
+      <PostList posts={posts} />
     </section>
     <section id="wechat" class="section">
       <div class="qr-panel">
@@ -147,8 +213,8 @@ const activities = [
           <p>
             <Text
               text={{
-                zh: '微信扫码关注公众号，获取活动预告、观赛安排、模拟器聚会与社团动态。想和我们一起驰骋？从这里开始。',
-                en: 'Scan with WeChat for activity announcements, race screenings, sim-racing meetups and club news. Want to race with us? Start here.',
+                zh: '微信扫码关注公众号，阅读赛事前瞻、赛后回顾与汽车文化内容，了解社团活动消息。无论是 F1 老车迷，还是刚刚喜欢上汽车的小白，我们都欢迎你。',
+                en: 'Scan with WeChat for race previews, recaps, car culture and club announcements. Whether you have followed F1 for years or are just discovering cars, you are welcome here.',
               }}
             />
           </p>
@@ -160,3 +226,74 @@ const activities = [
     </section>
   </div>
 </Base>
+
+<style>
+  .club-lead {
+    max-width: 660px;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .club-jumps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    margin-bottom: 32px;
+    padding-block: 20px;
+    border-block: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .club-jumps a {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+  .club-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px;
+  }
+  .club-visual {
+    margin: 0;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .club-artwork {
+    display: flex;
+    align-items: center;
+    background: #0b1026;
+    aspect-ratio: 2.35 / 1;
+  }
+  .club-artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .club-visual figcaption {
+    padding: 28px;
+  }
+  .club-visual h3 {
+    margin-block: 12px;
+  }
+  .club-visual figcaption > p:not(.eyebrow),
+  .club-gallery-note {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .club-visual .text-link {
+    margin-top: 18px;
+  }
+  .club-gallery-note {
+    margin-top: 20px;
+  }
+  @media (max-width: 760px) {
+    .club-gallery {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .club-visual figcaption {
+      padding: 24px;
+    }
+  }
+</style>
