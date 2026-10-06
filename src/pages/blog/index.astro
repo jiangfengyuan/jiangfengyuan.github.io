@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import Icon from '../../components/Icon.astro';
+import PostList from '../../components/PostList.astro';
+import { publishedPosts } from '../../data/content';
+const posts = await publishedPosts();
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+---
+
+<Base
+  title="写作与随笔 — Hayden"
+  titleEn="Writing & notes — Hayden"
+  image="/assets/social/blog.png"
+  active="blog"
+>
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">WRITING / NOTES / THINGS I CARE ABOUT</p>
+      <h1>
+        <Text text={{ zh: '文字，留给慢一点的时间。', en: 'Words for a slower moment.' }} />
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: '写下赛车的热爱，记下创作的过程。这里有我的文章与随笔，保留写作时的语言和心情。',
+            en: 'Motorsport, making things and thoughts along the way. Articles and notes, kept in the language they were written in.',
+          }}
+        />
+      </p>
+    </header>
+    <section class="section" style="padding-top:12px" data-blog-filter>
+      <div class="filter-bar">
+        <label class="search-field">
+          <Icon name="search" />
+          <input
+            type="search"
+            data-search-input
+            placeholder="搜索标题、摘要或标签…"
+            data-placeholder-zh="搜索标题、摘要或标签…"
+            data-placeholder-en="Search titles, summaries or tags…"
+            aria-label="搜索文章"
+            data-label-zh="搜索文章"
+            data-label-en="Search articles"
+          />
+        </label>
+        <div
+          class="filter-chips"
+          role="group"
+          aria-label="按标签筛选"
+          data-label-zh="按标签筛选"
+          data-label-en="Filter by tag"
+        >
+          <button data-filter-tag="all" aria-pressed="true">
+            <Text text={{ zh: '全部', en: 'All' }} />
+          </button>
+          {tags.map((t) => (
+            <button data-filter-tag={t} aria-pressed="false">
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p class="filter-count" data-result-count aria-live="polite"></p>
+      <PostList posts={posts} searchable />
+      <div class="empty-state" data-filter-empty hidden>
+        <Text
+          text={{
+            zh: '没有找到文章，试试其他关键词或标签。',
+            en: 'No articles found. Try a different keyword or tag.',
+          }}
+        />
+      </div>
+      {posts.length === 0 && (
+        <p class="empty-state">
+          <Text
+            text={{ zh: '还没有文章，之后再来看看。', en: 'No writing yet. Check back soon.' }}
+          />
+        </p>
+      )}
+    </section>
+  </div>
+  <script>
+    import '../../scripts/filters';
+    import { redirectLegacyPost } from '../../scripts/legacy';
+    redirectLegacyPost();
+  </script>
+</Base>

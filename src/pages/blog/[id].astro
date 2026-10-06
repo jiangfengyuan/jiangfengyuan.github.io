@@ -1,0 +1,142 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import Icon from '../../components/Icon.astro';
+import { publishedPosts, site } from '../../data/content';
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return posts.map((post, i) => ({
+    params: { id: post.data.id },
+    props: { post, previous: posts[i + 1], next: posts[i - 1] },
+  }));
+}
+const { post, previous, next } = Astro.props;
+const { Content, headings } = await render(post);
+const minutes = Math.max(1, Math.ceil((post.body || '').replace(/<[^>]*>/g, '').length / 450));
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.summary,
+  datePublished: post.data.date,
+  author: { '@type': 'Person', name: 'Hayden', url: site + '/about/' },
+  inLanguage: post.data.language === 'zh' ? 'zh-CN' : 'en',
+  mainEntityOfPage: site + '/blog/' + post.data.id + '/',
+  image: new URL(post.data.cover || '/assets/social/blog.png', site).href,
+};
+---
+
+<Base
+  title={post.data.title + ' — Hayden'}
+  description={{ zh: post.data.summary, en: post.data.summary }}
+  image={post.data.cover || '/assets/social/blog.png'}
+  active="blog"
+  type="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+    <meta property="article:published_time" content={post.data.date} />
+  </Fragment>
+  <div class="reading-progress" aria-hidden="true">
+    <span data-reading-progress></span>
+  </div>
+  <div class="article-shell">
+    <article class="article-main" lang={post.data.language === 'zh' ? 'zh-CN' : 'en'}>
+      <header class="article-header">
+        <a class="text-link" href="/blog/">
+          ← <Text text={{ zh: '所有文章', en: 'All writing' }} />
+        </a>
+        <h1>{post.data.title}</h1>
+        <p class="article-summary">{post.data.summary}</p>
+        <div class="post-meta">
+          <time datetime={post.data.date}>{post.data.date.replaceAll('-', '.')}</time>
+          <span>{post.data.tags.join(' / ')}</span>
+          <span>
+            <Text
+              text={{
+                zh: `约 ${minutes} 分钟 · ${post.data.language === 'zh' ? '中文原文' : '英文原文'}`,
+                en: `${minutes} min read · ${post.data.language === 'zh' ? 'In Chinese' : 'In English'}`,
+              }}
+            />
+          </span>
+        </div>
+      </header>
+      {post.data.cover && (
+        <img
+          src={post.data.cover}
+          alt={post.data.coverAlt || post.data.title}
+          width="1200"
+          height="630"
+        />
+      )}
+      <div class="article-content" data-article-content>
+        <Content />
+      </div>
+      <nav
+        class="article-nav"
+        aria-label="文章导航"
+        data-label-zh="文章导航"
+        data-label-en="Article navigation"
+      >
+        {previous && (
+          <a href={'/blog/' + previous.data.id + '/'}>
+            <span class="eyebrow">
+              <Text text={{ zh: '上一篇', en: 'Previous' }} />
+            </span>
+            {previous.data.title} ↙
+          </a>
+        )}
+        {next && (
+          <a href={'/blog/' + next.data.id + '/'}>
+            <span class="eyebrow">
+              <Text text={{ zh: '下一篇', en: 'Next' }} />
+            </span>
+            {next.data.title} ↗
+          </a>
+        )}
+      </nav>
+    </article>
+    <aside class="article-aside" data-article-aside hidden={headings.length === 0}>
+      <h2>
+        <Text text={{ zh: '文章目录', en: 'ON THIS PAGE' }} />
+      </h2>
+      <nav aria-label="文章目录" data-label-zh="文章目录" data-label-en="Table of contents">
+        <ul class="toc">
+          {headings
+            .filter((h) => h.depth === 2 || h.depth === 3)
+            .map((h) => (
+              <li class={'depth-' + h.depth}>
+                <a href={'#' + h.slug}>{h.text.length > 50 ? h.text.slice(0, 50) + '…' : h.text}</a>
+              </li>
+            ))}
+        </ul>
+      </nav>
+      <a class="text-link" href="#main-content" style="margin-top:24px">
+        <Text text={{ zh: '回到顶部', en: 'Back to top' }} /> ↑
+      </a>
+    </aside>
+  </div>
+  <dialog
+    class="lightbox"
+    data-lightbox
+    aria-label="图片预览"
+    data-label-zh="图片预览"
+    data-label-en="Image preview"
+  >
+    <button
+      class="icon-button"
+      data-lightbox-close
+      aria-label="关闭预览"
+      data-label-zh="关闭预览"
+      data-label-en="Close preview"
+    >
+      <Icon name="close" />
+    </button>
+    <img data-lightbox-image alt="" />
+    <p data-lightbox-caption class="muted" style="text-align:center;margin-top:12px"></p>
+  </dialog>
+  <script>
+    import '../../scripts/article';
+  </script>
+</Base>

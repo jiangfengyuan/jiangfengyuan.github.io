@@ -1,0 +1,173 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostList from '../components/PostList.astro';
+import UpdateList from '../components/UpdateList.astro';
+import { profile, projects, updates, publishedPosts } from '../data/content';
+const posts = await publishedPosts();
+---
+
+<Base
+  title="Hayden — 创作、作品与日常"
+  titleEn="Hayden — Projects, writing & everyday life"
+  active="home"
+>
+  <div class="container">
+    <section id="home" class="home-hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">A SMALL CORNER OF THE INTERNET</p>
+        <h1 class="pre-line">
+          <Text text={profile.intro} />
+        </h1>
+        <p>
+          <Text text={profile.description} />
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="/projects/">
+            <Text text={{ zh: '看看我的作品', en: 'Explore my projects' }} />
+            <Icon />
+          </a>
+          <a class="btn" href="/blog/">
+            <Text text={{ zh: '读一些文字', en: 'Read my writing' }} />
+            <Icon name="external" />
+          </a>
+        </div>
+        <div class="hero-footnote">
+          <Text
+            text={{
+              zh: '学生 / 独立开发者 / 始终好奇',
+              en: 'STUDENT / INDIE DEVELOPER / ALWAYS CURIOUS',
+            }}
+          />
+        </div>
+      </div>
+      <div class="hero-board dot-field reveal">
+        <span class="board-note" aria-hidden="true">
+          IDEAS → LITTLE THINGS THAT WORK
+        </span>
+        <span class="board-label" aria-hidden="true">
+          make.
+          <br />
+          play.
+          <br />
+          repeat.
+        </span>
+        <a href="/republica/" class="board-game" aria-label="Cloud Republic">
+          <img
+            src="/assets/republica/start-screen.png"
+            alt="Cloud Republic 游戏开始界面"
+            data-alt-zh="Cloud Republic 游戏开始界面"
+            data-alt-en="Cloud Republic game start screen"
+            width="1440"
+            height="1080"
+            fetchpriority="high"
+          />
+        </a>
+        <a href="/flash/" class="board-phone" aria-label="Flash">
+          <img
+            src="/assets/flash/home.webp"
+            alt="Flash Android 快速记录界面"
+            data-alt-zh="Flash Android 快速记录界面"
+            data-alt-en="Flash Android quick capture screen"
+            width="540"
+            height="1200"
+            fetchpriority="high"
+          />
+        </a>
+        <span class="board-stamp glass" aria-hidden="true">
+          ✳ made with curiosity
+        </span>
+      </div>
+    </section>
+    <div class="hero-bottom">
+      <div>
+        <span>01 / NATIVE APPS</span>
+        <span>02 / WEB EXPERIMENTS</span>
+        <span>03 / WRITING & LIFE</span>
+      </div>
+      <span>DESIGNED TO KEEP GROWING ↙</span>
+    </div>
+    <section id="projects" class="section">
+      <SectionHeading
+        eyebrow={{ zh: '精选作品 / SELECTED WORK', en: 'SELECTED WORK / 01' }}
+        title={{ zh: '小小想法，慢慢成形。', en: 'Small ideas, taking shape.' }}
+        href="/projects/"
+        label={{ zh: '全部作品', en: 'All projects' }}
+      />
+      <div class="project-grid">
+        {projects
+          .filter((p) => p.id !== 'dhgt')
+          .map((p) => (
+            <ProjectCard project={p} />
+          ))}
+      </div>
+    </section>
+    <section class="section section-bordered">
+      <SectionHeading
+        eyebrow={{ zh: '文字与思考 / WRITING', en: 'WRITING / 02' }}
+        title={{ zh: '写下热爱，也记录过程。', en: 'Notes on things I care about.' }}
+        href="/blog/"
+        label={{ zh: '全部文章', en: 'All writing' }}
+      />
+      <PostList posts={posts.slice(0, 3)} />
+    </section>
+    <section class="section">
+      <SectionHeading
+        eyebrow={{ zh: '持续生长 / IN PROGRESS', en: 'IN PROGRESS / 03' }}
+        title={{ zh: '最近在忙些什么。', en: 'A little progress, lately.' }}
+        href="/updates/"
+        label={{ zh: '全部动态', en: 'All updates' }}
+      />
+      <UpdateList items={updates.slice(0, 2)} />
+    </section>
+    <section id="about" class="section section-bordered about-mini">
+      <div>
+        <p class="eyebrow">THE PERSON BEHIND THE PROJECTS</p>
+        <h2>
+          <Text
+            text={{ zh: '喜欢动手，\n也喜欢想一想。', en: 'A builder.\nAnd a curious mind.' }}
+            class="pre-line"
+          />
+        </h2>
+        <div id="skills" class="skills-line">
+          {profile.skills.slice(0, 4).map((s) => (
+            <span class="tag">{s}</span>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p>
+          <Text text={profile.bio[1]} />
+        </p>
+        <a href="/about/" class="text-link">
+          <Text text={{ zh: '更多关于我', en: 'More about me' }} /> ↗
+        </a>
+      </div>
+    </section>
+    <section id="contact" class="section">
+      <div class="contact-box dot-field">
+        <div>
+          <p class="eyebrow">LET’S MAKE A CONNECTION</p>
+          <h2>
+            <Text text={{ zh: '有想法，或者只想打个招呼？', en: 'An idea, or just a hello?' }} />
+          </h2>
+          <p>
+            <Text
+              text={{
+                zh: '项目合作、技术交流，或聊聊赛车。我都很欢迎。',
+                en: 'Projects, technology or a conversation about racing. I’d love to hear from you.',
+              }}
+            />
+          </p>
+        </div>
+        <a class="btn primary" href={'mailto:' + profile.email}>
+          <Text text={{ zh: '写一封邮件', en: 'Send an email' }} />
+          <Icon name="mail" />
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

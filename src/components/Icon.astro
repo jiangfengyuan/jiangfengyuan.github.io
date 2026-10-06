@@ -1,0 +1,27 @@
+---
+const { name = 'arrow', size = 20 } = Astro.props;
+const paths: Record<string, string> = {
+  arrow: 'M5 12h14m-6-6 6 6-6 6',
+  external: 'M7 17 17 7M7 7h10v10',
+  sun: 'M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6l1.4 1.4m10 10 1.4 1.4M5.6 18.4l1.4-1.4m10-10 1.4-1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+  menu: 'M4 8h16M4 16h16',
+  close: 'm6 6 12 12M6 18 18 6',
+  search: 'M20 20l-5-5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0',
+  spark: 'm12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z',
+  mail: 'M3 5h18v14H3zM3 5l9 7 9-7',
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={paths[name] || paths.arrow} />
+</svg>

@@ -1,0 +1,163 @@
+[
+  {
+    "id": "flash",
+    "name": "Flash",
+    "subtitle": {
+      "zh": "一闪 · 留住每一个念头",
+      "en": "A place for your passing thoughts"
+    },
+    "category": {
+      "zh": "本地优先 · 原生应用",
+      "en": "Local-first · Native app"
+    },
+    "description": {
+      "zh": "灵感、日志、情绪和任务，在一个安静的空间里。Android、macOS 与 HarmonyOS 原生三端，让记录留在你的设备上。",
+      "en": "Ideas, journals, moods and tasks in one quiet space. Three native apps for Android, macOS and HarmonyOS, with your records kept on your device."
+    },
+    "status": {
+      "zh": "Aero0.1.0 · Alpha",
+      "en": "Aero0.1.0 · Alpha"
+    },
+    "tags": ["Android", "macOS", "HarmonyOS"],
+    "href": "/flash/",
+    "github": "https://github.com/jiangfengyuan/Project-FLASH",
+    "action": "https://github.com/jiangfengyuan/Project-FLASH/releases",
+    "image": "/assets/flash/home.webp",
+    "imageAlt": {
+      "zh": "Flash Android 此刻页：今天的片段、快速记录和底部导航",
+      "en": "Flash Android Today screen with daily summary, quick capture and navigation"
+    },
+    "accent": "lavender",
+    "source": "b2249d7",
+    "sourceDate": "2026-10-04",
+    "features": [
+      {
+        "title": {
+          "zh": "先记下来，再慢慢整理",
+          "en": "Capture now. Organize later."
+        },
+        "body": {
+          "zh": "快速文本记录，日志与灵感按时间排列。用关键词、标签和日期寻找内容，macOS 菜单栏也能快速记下一笔。",
+          "en": "Quick text capture with a chronological record of journals and ideas. Find entries by keyword, tag and date, or capture from the macOS menu bar."
+        }
+      },
+      {
+        "title": {
+          "zh": "照顾日常，也看见情绪",
+          "en": "Make room for your everyday."
+        },
+        "body": {
+          "zh": "日历里的任务、截止日期与提醒，搭配七级情绪和笔记。回顾本周、本月、近 30 天或近 90 天的变化。",
+          "en": "Calendar tasks, deadlines and reminders alongside seven mood levels and notes. Review your week, month, last 30 or last 90 days."
+        }
+      },
+      {
+        "title": {
+          "zh": "数据在自己手里",
+          "en": "Your records stay yours."
+        },
+        "body": {
+          "zh": "统一 v2 备份包含任务，支持导入差异预览、合并与替换，以及旧版恢复。跨端真机互传验收仍在推进。",
+          "en": "Shared v2 backups include tasks, import previews, merge or replace options and legacy recovery. Cross-platform device transfer validation is still in progress."
+        }
+      }
+    ]
+  },
+  {
+    "id": "republica",
+    "name": "Cloud Republic",
+    "subtitle": {
+      "zh": "云端共和国 · 在金星，建一座城",
+      "en": "Build a city in the clouds of Venus"
+    },
+    "category": {
+      "zh": "卡牌策略 · 浏览器游戏",
+      "en": "Card strategy · Browser game"
+    },
+    "description": {
+      "zh": "在硫酸云层之上，用卡牌、资源与每一回合的选择守住浮城。66 张卡牌、20 个事件，让每一次建设都有新的可能。",
+      "en": "Above the sulfuric clouds, keep a floating city alive through cards, resources and choices. 66 cards and 20 events make every run a new possibility."
+    },
+    "status": {
+      "zh": "可在线试玩 · MIT",
+      "en": "Playable online · MIT"
+    },
+    "tags": ["TypeScript", "Vite", "Offline"],
+    "href": "/republica/",
+    "github": "https://github.com/jiangfengyuan/Cloud-Republica",
+    "action": "https://jiangfengyuan.github.io/Cloud-Republica/",
+    "image": "/assets/republica/start-screen.png",
+    "imageAlt": {
+      "zh": "Cloud Republic 开始界面：新建共和国、难度选择与卡牌规则",
+      "en": "Cloud Republic start screen with difficulty selection and card rules"
+    },
+    "accent": "sage",
+    "source": "685cb27",
+    "sourceDate": "2026-09-19",
+    "features": [
+      {
+        "title": {
+          "zh": "卡牌，决定城市的性格",
+          "en": "A city shaped by your deck."
+        },
+        "body": {
+          "zh": "66 张卡牌与 20 个环境事件，搭配阵营、牌库构筑、局外传承和 9 节点科技树。",
+          "en": "66 cards and 20 environmental events, with factions, deck building, meta progression and a nine-node tech tree."
+        }
+      },
+      {
+        "title": {
+          "zh": "每一步，都有取舍",
+          "en": "Every turn asks a question."
+        },
+        "body": {
+          "zh": "每回合最多打出 3 张牌，平衡资源、修理与建设。在最终回合前达到 100% 净化、建成至少 6 个栖息地。",
+          "en": "Play up to three cards each turn and balance resources, repairs and construction. Reach 100% purification and at least six habitats before the final turn."
+        }
+      },
+      {
+        "title": {
+          "zh": "随时开始，留住进度",
+          "en": "Start anywhere. Keep your progress."
+        },
+        "body": {
+          "zh": "三档难度与沙盒，中英双语与三套主题。支持离线运行、本地存档和确定性重放；主分支已完成 TypeScript 迁移。",
+          "en": "Three difficulties and a sandbox, Chinese/English and three themes. Offline play, local saves and deterministic replay, with the TypeScript migration completed."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dhgt",
+    "name": "DHGT",
+    "subtitle": {
+      "zh": "汽车运动社 · We race as one.",
+      "en": "Motorsport club · We race as one."
+    },
+    "category": {
+      "zh": "社团实践 · 赛车文化",
+      "en": "Community · Motorsport"
+    },
+    "description": {
+      "zh": "一群热爱速度与精准的同学。从模拟赛车到赛事观赛，分享工程、汽车与赛车文化。",
+      "en": "A community of students who love speed and precision, sharing sim racing, race watching, engineering and car culture."
+    },
+    "status": {
+      "zh": "关注公众号获取活动消息",
+      "en": "Follow the club for activity news"
+    },
+    "tags": ["Sim racing", "Formula 1", "Community"],
+    "href": "/dhgt/",
+    "github": "",
+    "action": "/dhgt/#wechat",
+    "image": "/assets/dhgt/race.png",
+    "imageAlt": {
+      "zh": "赛车在赛道上行驶的画面",
+      "en": "A racing car on track"
+    },
+    "accent": "rose",
+    "source": "",
+    "sourceDate": "2026-10-06",
+    "features": []
+  }
+]

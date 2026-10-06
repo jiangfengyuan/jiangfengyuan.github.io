@@ -1,0 +1,70 @@
+---
+import Text from './Text.astro';
+import Icon from './Icon.astro';
+const { active = '' } = Astro.props;
+const links = [
+  ['home', '/', { zh: '首页', en: 'Home' }],
+  ['projects', '/projects/', { zh: '作品', en: 'Projects' }],
+  ['blog', '/blog/', { zh: '写作', en: 'Writing' }],
+  ['updates', '/updates/', { zh: '动态', en: 'Updates' }],
+  ['about', '/about/', { zh: '关于', en: 'About' }],
+] as const;
+---
+
+<header class="site-header">
+  <div class="nav-shell glass">
+    <a class="wordmark" href="/" aria-label="Hayden — Home">
+      hayden
+      <span class="wordmark-dot" aria-hidden="true">
+        .
+      </span>
+    </a>
+    <nav
+      id="site-nav"
+      class="site-nav"
+      aria-label="主导航"
+      data-label-zh="主导航"
+      data-label-en="Main navigation"
+    >
+      {links.map(([id, href, label]) => (
+        <a href={href} aria-current={active === id ? 'page' : undefined}>
+          <Text text={label} />
+        </a>
+      ))}
+    </nav>
+    <div class="nav-tools">
+      <button
+        class="icon-button lang-toggle"
+        type="button"
+        data-lang-toggle
+        aria-label="切换到英文"
+        data-label-zh="切换到英文"
+        data-label-en="Switch to Chinese"
+      >
+        EN
+      </button>
+      <button
+        class="icon-button"
+        type="button"
+        data-theme-toggle
+        aria-label="切换主题"
+        data-label-zh="切换主题"
+        data-label-en="Change color theme"
+      >
+        <Icon name="sun" />
+      </button>
+      <button
+        class="icon-button menu-toggle"
+        type="button"
+        data-menu-toggle
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label="打开菜单"
+        data-label-zh="打开菜单"
+        data-label-en="Open navigation"
+      >
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+</header>

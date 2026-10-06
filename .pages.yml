@@ -1,0 +1,108 @@
+media:
+  input: public/assets/uploads
+  output: /assets/uploads
+components:
+  localized:
+    type: object
+    fields:
+      - { name: zh, label: 中文, type: text, required: true }
+      - { name: en, label: English, type: text, required: true }
+content:
+  - name: posts
+    label: 文章
+    type: collection
+    path: src/content/posts
+    filename: '{fields.id}.md'
+    format: yaml-frontmatter
+    view: { primary: title, sort: date, order: desc }
+    fields:
+      - name: id
+        label: 文章 ID（发布后保持不变）
+        type: string
+        required: true
+        pattern: { regex: '^[A-Za-z0-9_-]+$', message: 仅使用字母、数字、短横线与下划线 }
+      - { name: title, label: 标题, type: string, required: true }
+      - { name: date, label: 日期, type: date, required: true, options: { format: yyyy-MM-dd } }
+      - { name: tags, label: 标签, type: string, list: true }
+      - { name: summary, label: 摘要, type: text }
+      - {
+          name: language,
+          label: 原文语言,
+          type: select,
+          options: { values: [zh, en] },
+          default: zh,
+        }
+      - { name: draft, label: 草稿（公开仓库源文件仍公开）, type: boolean, default: true }
+      - { name: cover, label: 封面, type: image }
+      - { name: coverAlt, label: 封面替代文字, type: string }
+      - { name: body, label: 正文, type: rich-text, options: { format: markdown, switcher: true } }
+  - name: updates
+    label: 项目动态
+    type: file
+    path: src/data/updates.json
+    format: json
+    list: true
+    fields:
+      - { name: id, label: 唯一锚点, type: string, required: true }
+      - { name: date, label: 日期, type: date, required: true, options: { format: yyyy-MM-dd } }
+      - {
+          name: project,
+          label: 项目,
+          type: select,
+          options: { values: [flash, republica, website, dhgt] },
+          required: true,
+        }
+      - { name: title, label: 标题, component: localized }
+      - { name: body, label: 内容, component: localized }
+      - { name: sourceDate, label: 仓库核对日期, type: date, options: { format: yyyy-MM-dd } }
+      - name: links
+        label: 来源与入口
+        type: object
+        list: true
+        fields:
+          - { name: label, label: 链接文字, component: localized }
+          - { name: href, label: 链接, type: string, required: true }
+  - name: projects
+    label: 项目介绍
+    type: file
+    path: src/data/projects.json
+    format: json
+    list: true
+    fields:
+      - { name: id, label: 项目 ID, type: string, readonly: true }
+      - { name: name, label: 名称, type: string, required: true }
+      - { name: subtitle, label: 副标题, component: localized }
+      - { name: category, label: 分类, component: localized }
+      - { name: description, label: 简介, component: localized }
+      - { name: status, label: 当前状态, component: localized }
+      - { name: tags, label: 平台与技术, type: string, list: true }
+      - { name: href, label: 项目页, type: string, readonly: true }
+      - { name: github, label: 源码仓库, type: string }
+      - { name: action, label: 下载或试玩入口, type: string }
+      - { name: image, label: 展示图片, type: image }
+      - { name: imageAlt, label: 图片替代文字, component: localized }
+      - { name: accent, label: 强调色, type: select, options: { values: [lavender, sage, rose] } }
+      - { name: source, label: 参考提交, type: string }
+      - { name: sourceDate, label: 核对日期, type: date, options: { format: yyyy-MM-dd } }
+      - name: features
+        label: 功能介绍
+        type: object
+        list: true
+        fields:
+          - { name: title, label: 标题, component: localized }
+          - { name: body, label: 简介, component: localized }
+  - name: profile
+    label: 个人资料
+    type: file
+    path: src/data/profile.json
+    format: json
+    fields:
+      - { name: name, label: 姓名, type: string, required: true }
+      - { name: role, label: 身份, component: localized }
+      - { name: intro, label: 首页标题, component: localized }
+      - { name: description, label: 首页简介, component: localized }
+      - { name: bio, label: 关于我段落, component: localized, list: true }
+      - { name: email, label: 邮箱, type: string }
+      - { name: github, label: GitHub, type: string }
+      - { name: bilibili, label: Bilibili, type: string }
+      - { name: skills, label: 技能, type: string, list: true }

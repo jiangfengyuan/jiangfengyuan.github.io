@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PostList from '../components/PostList.astro';
+import { projects, publishedPosts } from '../data/content';
+const p = projects.find((p) => p.id === 'dhgt')!;
+const posts = await publishedPosts();
+const activities = [
+  {
+    title: { zh: '模拟赛车', en: 'Sim racing' },
+    body: {
+      zh: '从模拟器里感受驾驶、练习走线，与朋友交流技巧和设置。',
+      en: 'Experience driving, practice racing lines and share techniques and setups with friends.',
+    },
+  },
+  {
+    title: { zh: '赛事观赛', en: 'Race watching' },
+    body: {
+      zh: '一起看比赛，聊策略、车手和赛道，分享每个比赛周末的精彩。',
+      en: 'Watch together, talk strategy, drivers and circuits, and share the moments of each race weekend.',
+    },
+  },
+  {
+    title: { zh: '汽车文化', en: 'Car culture' },
+    body: {
+      zh: '从历史到工程与设计，在交流、讲座和主题活动中分享热爱。',
+      en: 'Share history, engineering and design through conversations, talks and themed gatherings.',
+    },
+  },
+];
+---
+
+<Base
+  title="DHGT — 汽车运动社"
+  titleEn="DHGT — Motorsport club"
+  description={p.description}
+  image="/assets/social/dhgt.png"
+  active="projects"
+>
+  <div class="container">
+    <section class="club-hero">
+      <div class="club-banner">
+        <img
+          src="/assets/dhgt/race.png"
+          width="1440"
+          height="900"
+          alt={p.imageAlt.zh}
+          data-alt-zh={p.imageAlt.zh}
+          data-alt-en={p.imageAlt.en}
+        />
+        <div>
+          <img
+            class="club-logo"
+            src="/assets/dhgt/logo-wht.png"
+            alt="DHGT 汽车运动社标志"
+            data-alt-zh="DHGT 汽车运动社标志"
+            data-alt-en="DHGT Motorsport Club logo"
+            width="600"
+            height="300"
+          />
+          <p class="eyebrow">WE RACE AS ONE.</p>
+          <h1>
+            <Text text={{ zh: 'DHGT 汽车运动社', en: 'DHGT Motorsport Club' }} />
+          </h1>
+          <a class="btn" href="#wechat">
+            <Text text={{ zh: '关注我们的热爱', en: 'Follow our passion' }} /> ↗
+          </a>
+        </div>
+      </div>
+    </section>
+    <section id="about" class="section section-bordered split">
+      <div>
+        <p class="eyebrow">A SHARED PASSION</p>
+        <h2 style="margin-top:16px">
+          <Text
+            text={{
+              zh: '赛车精神，\n属于每个热爱它的人。',
+              en: 'The spirit of racing,\nfor everyone who loves it.',
+            }}
+            class="pre-line"
+          />
+        </h2>
+      </div>
+      <div>
+        <p>
+          <Text text={p.description} />
+        </p>
+        <p>
+          <Text
+            text={{
+              zh: '我们的口号很简单：We race as one。无论你是资深的模拟器车手，还是刚刚入坑一级方程式的新粉丝，这里都有你的位置。',
+              en: 'Our slogan is simple: We race as one. Whether you are a seasoned sim racer or just getting into Formula 1, there is a seat for you here.',
+            }}
+          />
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="feature-grid">
+        {activities.map((a, i) => (
+          <article class="feature">
+            <span class="feature-number">0{i + 1} /</span>
+            <h3>
+              <Text text={a.title} />
+            </h3>
+            <p>
+              <Text text={a.body} />
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <SectionHeading
+        eyebrow={{ zh: '赛事与社团记录', en: 'RACING & COMMUNITY NOTES' }}
+        title={{ zh: '把热爱写下来。', en: 'Stories from the grid.' }}
+        href="/blog/"
+        label={{ zh: '更多文章', en: 'More writing' }}
+      />
+      <PostList posts={posts.slice(0, 3)} />
+    </section>
+    <section id="wechat" class="section">
+      <div class="qr-panel">
+        <img
+          src="/assets/wechat-qr.jpg"
+          alt="东华汽车运动社微信公众号二维码"
+          data-alt-zh="东华汽车运动社微信公众号二维码"
+          data-alt-en="WeChat QR code for DHGT Motorsport Club"
+          loading="lazy"
+          width="400"
+          height="400"
+        />
+        <div>
+          <p class="eyebrow">LET’S JOIN THE GRID</p>
+          <h3>
+            <Text text={{ zh: '东华汽车运动社', en: 'DHGT Motorsport Club' }} />
+          </h3>
+          <p>
+            <Text
+              text={{
+                zh: '微信扫码关注公众号，获取活动预告、观赛安排、模拟器聚会与社团动态。想和我们一起驰骋？从这里开始。',
+                en: 'Scan with WeChat for activity announcements, race screenings, sim-racing meetups and club news. Want to race with us? Start here.',
+              }}
+            />
+          </p>
+          <a class="text-link" href="/updates/#dhgt-baseline" style="margin-top:18px">
+            <Text text={{ zh: '社团动态', en: 'Club updates' }} /> ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

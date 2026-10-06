@@ -1,88 +1,63 @@
-# jiangfengyuan.github.io
+# Hayden — Projects, writing & everyday life
 
-> Hayden 的个人主页 — 原生 HTML/CSS/JS 构建，零框架、零构建步骤，GitHub Pages 直接部署。
+Hayden 的作品、产品介绍与写作空间。Astro 7 + TypeScript + 原生 CSS，生成静态 HTML，通过 GitHub Actions 发布到 GitHub Pages。
 
-**在线访问**：https://jiangfengyuan.github.io
+## 开发与验证
 
-## 页面
+需要 Node.js 24 LTS 和 npm，依赖版本由 package-lock.json 锁定。
 
-| 页面 | 说明 |
-| --- | --- |
-| `index.html` | 主页：Hero（打字机效果）、关于我（数据滚动动画 + 代码窗口）、作品展示、技能栈、联系方式 |
-| `flash.html` | [Flash 一闪](https://github.com/jiangfengyuan/Project-FLASH) 产品页：本地优先的灵感 / 日志 / 情绪记录应用（Android · macOS · HarmonyOS），含三端 Alpha 状态与发布记录入口 |
-| `republica.html` | Cloud Republic 云端共和国：卡牌策略、玩法介绍、离线存档与在线试玩入口 |
-| `updates.html` | 项目动态：仓库核对日期、提交来源与实现 / 发布边界 |
-| `dhgt.html` | DHGT 页面 |
-| `blog.html` | 个人博客：文章列表（搜索 / 标签筛选）+ 阅读页，数据来自 `posts.js` |
-| `blog-admin.html` | 站长投稿工具：粘贴公众号文章或 Markdown 写作，生成 `posts.js` 代码片段（`noindex`，不公开链接） |
-
-## 特性
-
-- **中英双语**：`data-en` / `data-zh` 属性驱动，一键切换，偏好存入 `localStorage`
-- **明暗双主题**：CSS 变量体系（`--accent` 系列 token），切换全局过渡
-- **粒子背景**：Canvas 粒子网络，支持 DPR 适配，页面不可见时自动暂停
-- **滚动动画**：IntersectionObserver 驱动的分组 stagger 淡入 + 数字滚动
-- **可访问性**：`prefers-reduced-motion` 降级、焦点可见性、aria 标注
-- **响应式**：900px / 600px 双断点，移动端全屏菜单
-
-## 技术栈
-
-原生 HTML5 / CSS3 / JavaScript（ES6+），无框架、无构建工具。字体：Inter + JetBrains Mono（Google Fonts）。
-
-## 本地预览
-
-```bash
-python3 -m http.server 8000
-# 打开 http://localhost:8000
+```sh
+npm ci
+npm run dev
+npm test
+npm run build
+npm run preview
+npm run test:e2e
 ```
 
-## 发布博客文章
+本地端到端测试使用已安装的 Chrome。Linux CI 可先运行 `npx playwright install --with-deps chromium`，再以 `CI=1 npm run test:e2e` 验证。`ASTRO_TELEMETRY_DISABLED=1` 可关闭构建工具遥测。
 
-投稿工具（`blog-admin.html`）支持两种模式，可随时切换：
+## 页面和内容
 
-- **公众号粘贴**（默认）：把公众号编辑器里的正文全选复制后粘贴进去，粘贴即自动净化（`content.js` 语义白名单：剥离公众号冗余样式与隐藏节点、修复 `data-src` 懒加载图片、`h1` 降为 `h2`），标题自动提取，实时显示字数/图片数；
-- **Markdown 写作**：直接在编辑器里写 Markdown（支持标题、表格、代码块、引用、列表、图片等），正文保存为 `.md` 原文，阅读页由 `content.js` 现场渲染。
+- `/` 个人首页；`/projects/` 作品目录；`/about/` 个人资料与联系。
+- `/flash/`、`/republica/`、`/dhgt/`：独立产品和社团页面。
+- `/blog/` 写作列表；`/blog/<ID>/` 预渲染文章；`/updates/` 项目动态。
+- `/blog-admin/` 私用文章导入工具（noindex，未列入导航或 sitemap）。
+- `src/content/posts/*.md` 文章；`src/data/` 中的项目、动态和个人资料为 CMS 内容源。
+- `src/components/` 与 `src/layouts/` 共享 UI；`src/styles/` 包含设计变量、基础、组件及页面样式；`src/scripts/` 按交互划分。
 
-发布步骤：
+中文默认，同一 URL 切换英文界面。文章保留原文语言。`site-lang`、`site-theme` 沿用旧站偏好；主题首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。
 
-1. 打开 `blog-admin.html`（本地或线上均可），粘贴或编写正文；
-2. 点击「生成并下载」：浏览器会下载正文文件 `<id>.html` 或 `<id>.md`，把它放进仓库的 `posts/` 文件夹；
-3. 把输出区累计的元数据行粘贴到 `posts.js` 中 `BLOG_POSTS` 数组里（可连续转载多篇后一次性粘贴）；
-4. 提交并推送，文章即上线（列表页 `blog.html`，阅读页 `blog.html?p=文章id`）；
-5. 新文章记得同步补进 `sitemap.xml`。
+## Pages CMS
 
-博客结构：`posts.js` 只存元数据（id/标题/日期/标签/摘要/文件路径，支持 `draft: true` 草稿），正文是 `posts/` 下的独立 HTML 片段或 Markdown 文件，阅读页按需 fetch 加载，统一经 `content.js` 白名单净化后渲染。
+1. 登录 [Pages CMS](https://app.pagescms.org/)，用 GitHub 授权 `jiangfengyuan/jiangfengyuan.github.io` 仓库。
+2. 选择 `main`，管理界面会读取仓库根目录 `.pages.yml`。
+3. 编辑文章、项目动态、项目介绍或个人资料，图片上传至 `public/assets/uploads/`。
+4. 草稿勾选时，文章不生成公开地址，也不进入列表、搜索、RSS 或 sitemap。公开仓库中的源文件仍然公开。
+5. 取消草稿并保存，CMS 提交触发 GitHub Actions。只有构建成功后才部署；失败时线上保留上一版，在 Actions 查看诊断。
 
-阅读页特性：阅读进度条、文章目录（h2/h3 自动生成，滚动高亮当前小节）、上一篇/下一篇导航、预计阅读时长、图片点击放大（灯箱）、外链新窗口打开、代码块语法高亮（highlight.js，跟随站点明暗主题）。
+文章 ID 发布后保持不变；仅使用字母、数字、`-` 与 `_`。字段包含标题、日期（YYYY-MM-DD）、标签、摘要、原文语言、草稿、可选封面和封面替代文字。首次 GitHub 登录授权需要仓库所有者完成；无需把密钥放进官网。
 
-## SEO
+## 公众号导入与 Markdown 写作
 
-- `sitemap.xml` 收录全部页面与文章地址，`robots.txt` 指向它并屏蔽投稿工具；
-- 打开文章时 `blog.js` 动态改写 `description` / Open Graph / canonical，并注入 `BlogPosting` JSON-LD 结构化数据。
+打开 `/blog-admin/`，粘贴公众号正文或 HTML 源码，或者切换到 Markdown。工具移除脚本、隐藏节点、事件属性与危险链接，保留表格、题注、列表和代码。
 
-## 部署
+- 预览后导出完整 Markdown 文件，上传到 `src/content/posts/`。
+- 或复制正文，粘贴到 Pages CMS 的 **Source** 模式，填写标题、日期、标签等元数据。
+- 导入默认为草稿。外部公众号图片保留原引用，不自动下载；失效时阅读页显示提示。新文章建议使用 CMS 图片上传。
 
-推送到 `main` 分支即自动部署（GitHub Pages）。
+## 兼容与部署
 
----
+旧 `/flash.html` 等页面兼容到新地址，保留查询参数与锚点；`/blog?p=ID` 和 `/blog.html?p=ID` 跳转到对应文章。无脚本访问旧文章链接时仍可从文章目录选择 ID。
 
-Designed & Built by Hayden ♥ with love and Kimi
+GitHub 仓库 **Settings → Pages → Build and deployment → Source** 使用 **GitHub Actions**。推送 `main` 后运行 `.github/workflows/pages.yml`，执行依赖安装、内容测试、类型检查和静态构建，再发布 `dist/`。PR 仅构建，不部署。
 
+回滚基线：`2ca3906`（原生 HTML/CSS/JS 旧站）。重构后的回滚使用先前成功构建的 Astro 提交；需要回到旧站时，恢复该提交并将 Pages Source 改回 branch/main。
 
-## 官网分享信息、可访问性与项目动态
+## 内容与图片依据
 
-- 页面分享卡片图位于 `assets/social/`（1200 × 630），网站图标提供 SVG、PNG 与 Apple Touch Icon；主页、Flash、DHGT、博客和项目动态均使用分享预览图。
-- `updates.html` 是双语项目动态页：首页和 Flash / DHGT 页面链接到最新记录。条目以 `update-card` 为模板，按日期倒序维护；更新 `time` 日期、唯一锚点和 `data-zh` / `data-en` 文案。Sitemap 收录 `/updates`。
-- Flash 与 DHGT 首批条目是基于既有产品页面整理的概览，不代表版本发布或新活动；正式版本详情请链接到项目发布记录。
-- 手机菜单支持焦点管理、Tab 循环与 Escape；`prefers-reduced-motion` 控制粒子、弹幕和文字/计数动效。
+- Flash：Project-FLASH `b2249d7`（2026-10-04）。三端 Alpha、真机互传、签名和新版发布边界按公开文档表达。Android 截图来自本地开发验证，说明见 `public/assets/flash/README.md`。
+- Cloud Republic：Cloud-Republica `685cb27`（2026-09-19），保留原始截图及 MIT 来源说明。
+- DHGT 与七篇文章：旧站 `2ca3906` 内容迁移；原文、文章 ID、日期、标签、图片与题注保留。
 
-
-## 内容依据（2026-10-06 核对）
-
-| 仓库 | 参考提交 | 依据 |
-| --- | --- | --- |
-| [Project-FLASH](https://github.com/jiangfengyuan/Project-FLASH) | `b2249d7` · 2026-10-04 | README、ROADMAP、harmonyos/README 与设备品质 / 互传验收文档；三端原生工程仍为 Alpha，历史 APK 不代表当前主分支 |
-| [Cloud-Republica](https://github.com/jiangfengyuan/Cloud-Republica) | `685cb27` · 2026-09-19 | README、package.json 与 TypeScript 游戏内容；66 卡、20 事件、9 节点科技树、双语 / 主题 / 离线与本地存档 |
-| [个人网站](https://github.com/jiangfengyuan/jiangfengyuan.github.io) | `9651849` · 2026-10-06 | 已有博客搜索、目录、阅读进度、图片放大、代码高亮与本轮之前上线的分享 / 键盘 / 动效支持 |
-
-本轮同步中英双语的首页作品、Flash 产品页、Cloud Republic 产品页和动态页。Flash 的未推送本地开发不作为已上线功能；HarmonyOS 真机 / 签名、跨端互传及新版分发边界以仓库文档为准。Cloud Republic 截图来源与许可证见 `assets/republica/README.md`。
+迁移后，可用 `node scripts/migrate-articles.mjs /path/to/old/posts` 比较原文与生成 HTML 的文本、表格、图片引用和题注。

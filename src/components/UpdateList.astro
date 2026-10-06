@@ -1,0 +1,52 @@
+---
+import Text from './Text.astro';
+import { updates } from '../data/content';
+const { items = updates, filtered = false } = Astro.props;
+const names: Record<string, string> = {
+  flash: 'Flash',
+  republica: 'Cloud Republic',
+  website: 'Website',
+  dhgt: 'DHGT',
+};
+function normalize(href: string) {
+  return href
+    .replace(/^(flash|republica|dhgt|blog|updates)(\.html)?(?=#|$)/, '/$1/')
+    .replace(/^\.\//, '/');
+}
+---
+
+<div class="updates-list">
+  {items.map((u: (typeof updates)[number]) => (
+    <article
+      class="update-row"
+      id={u.id}
+      data-update={filtered ? '' : undefined}
+      data-project={u.project}
+    >
+      <div class="update-side">
+        <time datetime={u.date}>{u.date.replaceAll('-', '.')}</time>
+        <span class="tag">{names[u.project]}</span>
+      </div>
+      <div>
+        <h3>
+          <Text text={u.title} />
+        </h3>
+        <p>
+          <Text text={u.body} />
+        </p>
+        {u.sourceDate && (
+          <p class="source-note">
+            <Text text={{ zh: '仓库记录', en: 'Repository snapshot' }} /> · {u.sourceDate}
+          </p>
+        )}
+        <div class="inline-links">
+          {u.links.map((l) => (
+            <a class="text-link" href={normalize(l.href)}>
+              <Text text={l.label} /> <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </article>
+  ))}
+</div>

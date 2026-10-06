@@ -1,0 +1,159 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { projects } from '../data/content';
+const p = projects.find((p) => p.id === 'flash')!;
+const platforms = [
+  {
+    name: 'Android',
+    stack: 'Kotlin · Compose · Room',
+    body: {
+      zh: 'Material 与 Glass 两种主题，快速文本记录、日历任务与回顾。',
+      en: 'Material and Glass themes, quick text capture, calendar tasks and reviews.',
+    },
+  },
+  {
+    name: 'macOS',
+    stack: 'SwiftUI · SwiftData · universal2',
+    body: {
+      zh: '原生桌面体验，菜单栏快速记录，统一备份导入与导出。',
+      en: 'A native desktop experience, menu-bar capture and shared backup import/export.',
+    },
+  },
+  {
+    name: 'HarmonyOS',
+    stack: 'ArkTS · ArkUI · Encrypted RDB',
+    body: {
+      zh: '手机、折叠屏与平板布局，今日服务卡片、通知和系统主题。',
+      en: 'Layouts for phones, foldables and tablets, a Today service card, notifications and system themes.',
+    },
+  },
+];
+---
+
+<Base
+  title="Flash 一闪 — 留住每一个念头"
+  titleEn="Flash — A place for your passing thoughts"
+  description={p.description}
+  image="/assets/social/flash.png"
+  active="projects"
+>
+  <div class="container">
+    <section class="product-hero">
+      <div class="product-copy">
+        <p class="eyebrow">
+          <Text text={p.category} />
+        </p>
+        <h1>
+          Flash<span class="wordmark-dot">.</span>
+        </h1>
+        <h2>
+          <Text
+            text={{ zh: '一闪而过，也值得留下。', en: 'A passing thought.\nWorth keeping.' }}
+            class="pre-line"
+          />
+        </h2>
+        <p>
+          <Text text={p.description} />
+        </p>
+        <div class="actions">
+          <a class="btn primary" href={p.action}>
+            <Text text={{ zh: '查看发布记录', en: 'View release history' }} />
+            <Icon name="external" />
+          </a>
+          <a class="btn" href={p.github}>
+            GitHub <Icon name="external" />
+          </a>
+        </div>
+        <span class="status">
+          <span class="status-dot"></span>
+          <Text text={p.status} />
+        </span>
+      </div>
+      <div class="product-visual lavender ruled-grid">
+        <div class="phone">
+          <img
+            src={p.image}
+            width="540"
+            height="1200"
+            alt={p.imageAlt.zh}
+            data-alt-zh={p.imageAlt.zh}
+            data-alt-en={p.imageAlt.en}
+            fetchpriority="high"
+          />
+        </div>
+        <span class="visual-label">ANDROID / DEVELOPMENT PREVIEW</span>
+      </div>
+    </section>
+    <section class="section section-bordered">
+      <SectionHeading
+        eyebrow={{ zh: '给日常一点空间', en: 'A LITTLE SPACE FOR EVERYDAY' }}
+        title={{ zh: '简单记录，慢慢回看。', en: 'Capture simply. Look back thoughtfully.' }}
+      />
+      <div class="feature-grid">
+        {p.features.map((f, i) => (
+          <article class="feature">
+            <span class="feature-number">0{i + 1} /</span>
+            <h3>
+              <Text text={f.title} />
+            </h3>
+            <p>
+              <Text text={f.body} />
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <SectionHeading
+        eyebrow={{ zh: '原生三端', en: 'THREE NATIVE PLATFORMS' }}
+        title={{ zh: '不同设备，一样用心。', en: 'Different devices. The same care.' }}
+      />
+      <div class="platform-grid">
+        {platforms.map((v) => (
+          <article class="platform">
+            <h3>{v.name}</h3>
+            <p class="eyebrow">{v.stack}</p>
+            <p>
+              <Text text={v.body} />
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="notice">
+        <Text
+          text={{
+            zh: '当前仍为三端 Alpha 候选阶段。HarmonyOS 真机、签名与部分系统能力，以及跨端互传验收仍待完成。开发截图展示实际界面，不代表正式发布状态。',
+            en: 'The three native apps are still at the Alpha candidate stage. HarmonyOS device validation, signing, some system capabilities and cross-platform transfer acceptance remain pending. Development screenshots show the real interface, not a released build.',
+          }}
+        />
+      </p>
+    </section>
+    <section class="section">
+      <div class="callout">
+        <div>
+          <p class="eyebrow">WORK IN PROGRESS</p>
+          <h2>
+            <Text
+              text={{ zh: '正在一步步变得更好。', en: 'Getting better, a little at a time.' }}
+            />
+          </h2>
+          <p>
+            <Text
+              text={{
+                zh: '功能依据公开主分支记录；历史 Android APK 不代表当前主分支版本。下载与安装条件以对应发布说明为准。',
+                en: 'Features reflect the public main branch. Historical Android APKs do not represent the current branch; refer to each release for installation requirements.',
+              }}
+            />
+          </p>
+        </div>
+        <a class="btn" href="/updates/#flash-progress">
+          <Text text={{ zh: '查看项目进展', en: 'Follow the progress' }} />
+          <Icon />
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

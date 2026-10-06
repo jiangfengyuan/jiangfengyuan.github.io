@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+---
+
+<Base title="页面未找到 — Hayden" titleEn="Page not found — Hayden" noindex>
+  <div class="container">
+    <section class="page-hero">
+      <div class="error-number" aria-hidden="true">
+        404
+      </div>
+      <h1>
+        <Text text={{ zh: '这条路，暂时没有内容。', en: 'Nothing at this address, yet.' }} />
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: '页面可能已移动，或文章尚未发布。可以回到首页，或在写作页寻找内容。',
+            en: 'The page may have moved, or the article may not be published. Head home or browse the writing archive.',
+          }}
+        />
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="/">
+          <Text text={{ zh: '回到首页', en: 'Back home' }} />
+        </a>
+        <a class="btn" href="/blog/">
+          <Text text={{ zh: '寻找文章', en: 'Browse writing' }} />
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

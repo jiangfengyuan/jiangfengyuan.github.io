@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/content';
+---
+
+<Base title="作品 — Hayden" titleEn="Projects — Hayden" active="projects">
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">PROJECTS / EXPERIMENTS / COMMUNITY</p>
+      <h1>
+        <Text text={{ zh: '从一个念头开始。', en: 'It starts with a thought.' }} />
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: '让日常更轻一点的工具，可以反复探索的游戏，以及与朋友们分享的热爱。这里是我持续打磨的作品。',
+            en: 'Tools for a lighter everyday, games to explore, and a shared passion with friends. A collection of things I’m building and caring for.',
+          }}
+        />
+      </p>
+    </header>
+    <section class="section" style="padding-top:20px">
+      <div class="project-grid">
+        {projects.map((p) => (
+          <ProjectCard project={p} />
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

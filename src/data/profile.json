@@ -1,0 +1,33 @@
+{
+  "name": "Hayden",
+  "role": {
+    "zh": "学生 / 独立开发者",
+    "en": "Student / Independent developer"
+  },
+  "intro": {
+    "zh": "你好，我是 Hayden。\n把想法做成作品，\n也把过程写下来。",
+    "en": "Hello, I’m Hayden.\nI build things,\nand write along the way."
+  },
+  "description": {
+    "zh": "在代码、设计和日常之间，探索更有温度的数字体验。这里收藏我的作品、开发记录，以及对赛车和生活的热爱。",
+    "en": "Exploring thoughtful digital experiences through code, design and everyday life. A home for my projects, notes and love of motorsport."
+  },
+  "bio": [
+    {
+      "zh": "我是一名热爱技术的高中生，也是一名独立开发者。我相信好的代码不仅要能运行，更要优雅、可维护。",
+      "en": "I’m a high school student and independent developer who loves technology. I believe good code should work well and remain clear and maintainable."
+    },
+    {
+      "zh": "课余时间，我喜欢把想法变成现实。从原生应用到 Web 游戏，动手做项目是我学习和表达创意的方式。",
+      "en": "In my spare time, I turn ideas into working projects. From native apps to web games, building is how I learn and express my creativity."
+    },
+    {
+      "zh": "离开编辑器，我也会关注新的技术、画产品原型，或与 DHGT 的朋友们聊聊赛车。期待做出真正有价值的产品。",
+      "en": "Away from the editor, I explore new technology, sketch prototypes and share motorsport with friends at DHGT. I hope to build things that matter."
+    }
+  ],
+  "email": "2934785965@qq.com",
+  "github": "https://github.com/jiangfengyuan",
+  "bilibili": "https://space.bilibili.com/510753881",
+  "skills": ["Kotlin", "SwiftUI", "ArkTS", "TypeScript", "HTML / CSS", "Python", "C++", "Git"]
+}

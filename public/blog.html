@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="UTF-8" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  /><meta name="robots" content="noindex" /><link
+    rel="canonical"
+    href="https://jiangfengyuan.github.io/blog/"
+  /><title>页面已迁移 — Hayden</title
+  ><style>
+    body {
+      font: 16px/1.8 system-ui;
+      max-width: 720px;
+      margin: 80px auto;
+      padding: 24px;
+      background: #f6f4ef;
+      color: #282a27;
+    }
+    a {
+      color: #9b4935;
+    }
+  </style>
+  <main>
+    <h1>页面已迁移 / Page moved</h1>
+    <p><a href="/blog/">继续访问 / Continue →</a></p>
+    <noscript
+      ><p>
+        文章旧链接包含 ?p= 时，请从下方选择对应文章。 For an old article link, choose its ID below.
+      </p></noscript
+    >
+    <ul>
+      <li><a href="/blog/20260926-S5g3_V/">20260926-S5g3_V</a></li>
+      <li><a href="/blog/20260827-uzA9yg/">20260827-uzA9yg</a></li>
+      <li><a href="/blog/20260926-ukkgj5/">20260926-ukkgj5</a></li>
+      <li><a href="/blog/20260913-04kgrl/">20260913-04kgrl</a></li>
+      <li><a href="/blog/20260918-noUv45/">20260918-noUv45</a></li>
+      <li><a href="/blog/20260829-vFzG1c/">20260829-vFzG1c</a></li>
+      <li><a href="/blog/20260926-J7XyBw/">20260926-J7XyBw</a></li>
+    </ul>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get('p');
+    const known = [
+      '20260926-S5g3_V',
+      '20260827-uzA9yg',
+      '20260926-ukkgj5',
+      '20260913-04kgrl',
+      '20260918-noUv45',
+      '20260829-vFzG1c',
+      '20260926-J7XyBw',
+    ];
+    if (id) {
+      location.replace(
+        known.includes(id) ? '/blog/' + encodeURIComponent(id) + '/' + location.hash : '/404.html',
+      );
+    } else location.replace('/blog/' + location.search + location.hash);
+  </script>
+</html>

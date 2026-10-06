@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { projects } from '../data/content';
+const p = projects.find((p) => p.id === 'republica')!;
+const metrics = [
+  ['66', { zh: '张卡牌', en: 'cards' }],
+  ['20', { zh: '个环境事件', en: 'environmental events' }],
+  ['9', { zh: '个科技树节点', en: 'tech-tree nodes' }],
+  ['3 + 1', { zh: '档难度 + 沙盒', en: 'difficulties + sandbox' }],
+];
+---
+
+<Base
+  title="Cloud Republic — 云端共和国"
+  titleEn="Cloud Republic — A city above Venus"
+  description={p.description}
+  image="/assets/social/republica.png"
+  active="projects"
+>
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">
+        <Text text={p.category} />
+      </p>
+      <h1>
+        Cloud Republic<span class="wordmark-dot">.</span>
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: '在金星的云层之上，\n每一回合，都在决定城市的未来。',
+            en: 'Above the clouds of Venus,\nevery turn shapes a city’s future.',
+          }}
+          class="pre-line"
+        />
+      </p>
+      <div class="actions">
+        <a class="btn primary" href={p.action}>
+          <Text text={{ zh: '开始试玩', en: 'Play the game' }} />
+          <Icon name="external" />
+        </a>
+        <a class="btn" href={p.github}>
+          GitHub <Icon name="external" />
+        </a>
+      </div>
+    </header>
+    <figure class="game-cover ruled-grid">
+      <img
+        src={p.image}
+        alt={p.imageAlt.zh}
+        data-alt-zh={p.imageAlt.zh}
+        data-alt-en={p.imageAlt.en}
+        width="1440"
+        height="1080"
+        fetchpriority="high"
+      />
+      <figcaption>
+        <Text
+          text={{
+            zh: '游戏实际开始界面 · 可在线试玩或离线运行',
+            en: 'The actual game start screen · Play online or offline',
+          }}
+        />
+      </figcaption>
+    </figure>
+    <div class="metrics">
+      {metrics.map(([n, label]) => (
+        <div class="metric">
+          <strong>{n as string}</strong>
+          <Text text={label as { zh: string; en: string }} />
+        </div>
+      ))}
+    </div>
+    <section class="section">
+      <SectionHeading
+        eyebrow={{ zh: '卡牌与选择', en: 'CARDS & CHOICES' }}
+        title={{ zh: '城市会成为你的答案。', en: 'Your choices become a city.' }}
+      />
+      <div class="feature-grid">
+        {p.features.map((f, i) => (
+          <article class="feature">
+            <span class="feature-number">0{i + 1} /</span>
+            <h3>
+              <Text text={f.title} />
+            </h3>
+            <p>
+              <Text text={f.body} />
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <div class="callout">
+        <div>
+          <p class="eyebrow">BUILT TO EXPLORE</p>
+          <h2>
+            <Text
+              text={{
+                zh: '选一档难度，开始建设。',
+                en: 'Choose a difficulty. Build your republic.',
+              }}
+            />
+          </h2>
+          <p>
+            <Text
+              text={{
+                zh: '平台完整度归零会坠毁。用简单模式熟悉规则，再尝试更紧张的回合限制，或在沙盒中探索。代码与原创内容采用 MIT 许可证。',
+                en: 'Zero platform integrity means a crash. Learn on Easy, try tighter turn limits or experiment in the sandbox. Code and original content are MIT licensed.',
+              }}
+            />
+          </p>
+        </div>
+        <a class="btn" href="/updates/#republica-progress">
+          <Text text={{ zh: '项目进展', en: 'Project progress' }} />
+          <Icon />
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

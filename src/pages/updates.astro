@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import Text from '../components/Text.astro';
+import UpdateList from '../components/UpdateList.astro';
+const filters = [
+  ['all', { zh: '全部', en: 'All' }],
+  ['flash', { zh: 'Flash', en: 'Flash' }],
+  ['republica', { zh: 'Cloud Republic', en: 'Cloud Republic' }],
+  ['website', { zh: '网站', en: 'Website' }],
+  ['dhgt', { zh: 'DHGT', en: 'DHGT' }],
+] as const;
+---
+
+<Base
+  title="项目动态 — Hayden"
+  titleEn="Updates — Hayden"
+  image="/assets/social/updates.png"
+  active="updates"
+>
+  <div class="container">
+    <header class="page-hero">
+      <p class="eyebrow">A WORK IN PROGRESS</p>
+      <h1>
+        <Text text={{ zh: '把每一步，都留下来。', en: 'A record of the steps along the way.' }} />
+      </h1>
+      <p class="lead">
+        <Text
+          text={{
+            zh: 'Flash、Cloud Republic、这个网站，以及 DHGT 的持续记录。每条进展都保留日期和来源，慢慢积累。',
+            en: 'Ongoing notes from Flash, Cloud Republic, this website and DHGT. Progress with dates and sources, collected over time.',
+          }}
+        />
+      </p>
+    </header>
+    <section class="section" style="padding-top:16px" data-update-filter>
+      <div class="filter-bar">
+        <div
+          class="filter-chips"
+          role="group"
+          aria-label="按项目筛选"
+          data-label-zh="按项目筛选"
+          data-label-en="Filter by project"
+        >
+          {filters.map(([id, t]) => (
+            <button data-filter-project={id} aria-pressed={id === 'all'}>
+              <Text text={t} />
+            </button>
+          ))}
+        </div>
+      </div>
+      <p class="filter-count" data-result-count aria-live="polite"></p>
+      <UpdateList filtered />
+      <div class="empty-state" data-filter-empty hidden>
+        <Text
+          text={{
+            zh: '这个项目还没有记录，之后再来看看。',
+            en: 'No updates for this project yet. Check back soon.',
+          }}
+        />
+      </div>
+    </section>
+  </div>
+  <script>
+    import '../scripts/filters';
+  </script>
+</Base>
