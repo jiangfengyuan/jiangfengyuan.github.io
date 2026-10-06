@@ -462,6 +462,10 @@ window.addEventListener('scroll', () => {
                 if (text) el.textContent = text;
             });
 
+            document.querySelectorAll('img[data-alt-zh][data-alt-en]').forEach(el => {
+                el.alt = el.getAttribute('data-alt-' + lang);
+            });
+
             if (langToggle) {
                 langToggle.textContent = lang === 'zh' ? 'EN' : '中文';
             }
@@ -562,7 +566,7 @@ const danmakuData = {
         "这个函数命名好难",
         "明天一定要早起",
         "记录一个闪念...",
-        "长按录音，5 秒后保存",
+        "趁灵感还在，先写下来",
         "走廊里闪过竞赛思路",
         "睡前轻声复盘",
         "三句话记录今日"
@@ -589,7 +593,7 @@ const danmakuData = {
         "Naming functions is hard",
         "Must wake up early tomorrow",
         "Record a fleeting thought...",
-        "Long press to record, save in 5s",
+        "Capture the idea while it is fresh",
         "A contest idea in the hallway",
         "Bedtime whisper review",
         "Three sentences for today"

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="在金星云层建设浮空城市的单人卡牌策略游戏。66 张卡牌、20 个环境事件、9 节点科技树，支持中英双语、本地存档与离线游玩。">
+    <meta name="author" content="Hayden">
+    <title>Cloud Republic 云端共和国 — Hayden</title>
+    <link rel="canonical" href="https://jiangfengyuan.github.io/republica">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hayden">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:title" content="Cloud Republic 云端共和国 — Hayden">
+    <meta property="og:description" content="在金星云层建设浮空城市的单人卡牌策略游戏。66 张卡牌、20 个环境事件、9 节点科技树，支持中英双语、本地存档与离线游玩。">
+    <meta property="og:url" content="https://jiangfengyuan.github.io/republica">
+    <meta property="og:image" content="https://jiangfengyuan.github.io/assets/social/republica.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cloud Republic 云端共和国 — Hayden">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cloud Republic 云端共和国 — Hayden">
+    <meta name="twitter:description" content="在金星云层建设浮空城市的单人卡牌策略游戏。66 张卡牌、20 个环境事件、9 节点科技树，支持中英双语、本地存档与离线游玩。">
+    <meta name="twitter:image" content="https://jiangfengyuan.github.io/assets/social/republica.png">
+    <meta name="twitter:image:alt" content="Cloud Republic 云端共和国 — Hayden">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- 绘制前确定主题，避免首屏闪烁（FOUC）；localStorage 在隐私模式可能抛异常，需容错 -->
+    <script>
+        (function () {
+            var theme = 'dark';
+            try {
+                theme = localStorage.getItem('site-theme') ||
+                    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            } catch (e) {
+                try {
+                    theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                } catch (e2) { /* 保持默认 dark */ }
+            }
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-republica">
+    <a class="skip-link" href="#main-content"><span class="lang-text" data-en="Skip to main content" data-zh="跳至主要内容">跳至主要内容</span></a>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <nav aria-label="主导航" class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="nav-container">
+            <a href="./" class="nav-logo">
+                <span class="logo-bracket">&lt;</span>Hayden<span class="logo-bracket">/&gt;</span>
+            </a>
+            <ul class="nav-links" id="primary-navigation">
+                <li><a href="./" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
+                <li><a href="flash" class="nav-link">Flash</a></li>
+                <li><a href="republica.html" class="nav-link active">Republica</a></li>
+                <li><a href="dhgt" class="nav-link">DHGT</a></li>
+                <li><a href="blog" class="nav-link"><span class="lang-text" data-en="Blog" data-zh="博客">博客</span></a></li>
+                <li><a href="updates" class="nav-link"><span class="lang-text" data-en="Updates" data-zh="动态">动态</span></a></li>
+                <li><a href="./#contact" class="nav-link"><span class="lang-text" data-en="Contact" data-zh="联系">联系</span></a></li>
+            </ul>
+            <div class="nav-controls">
+                <button id="lang-toggle" class="control-btn" aria-label="切换语言">EN</button>
+                <button id="theme-toggle" class="control-btn" aria-label="切换主题">
+                    <svg aria-hidden="true" focusable="false" class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg aria-hidden="true" focusable="false" class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+            <button class="menu-toggle" aria-label="菜单" aria-controls="primary-navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <main id="main-content" tabindex="-1">
+        <section class="republica-hero"><div class="container"><span class="section-tag"><span class="lang-text" data-en="Browser card strategy · Offline play" data-zh="浏览器卡牌策略 · 离线可玩">浏览器卡牌策略 · 离线可玩</span></span><h1>Cloud Republic<span class="republica-subtitle"><span class="lang-text" data-en="Venus Floating City" data-zh="云端共和国">云端共和国</span></span></h1><p class="republica-lead"><span class="lang-text" data-en="A floating city, high in Venus’s clouds." data-zh="金星云层之上，一座浮空城市。">金星云层之上，一座浮空城市。</span><br><span class="lang-text" data-en="Where will your next card take you?" data-zh="下一张牌，会把你带向哪里？">下一张牌，会把你带向哪里？</span></p><p class="republica-desc"><span class="lang-text" data-en="Purify sulfuric-acid clouds, protect the platform and build at least six habitats before time runs out. Every resource and every choice shapes the city’s future." data-zh="在有限回合内净化硫酸云、保护平台并建设至少 6 个栖息地。每一份资源、每一次选择，都在改变这座城市的命运。">在有限回合内净化硫酸云、保护平台并建设至少 6 个栖息地。每一份资源、每一次选择，都在改变这座城市的命运。</span></p><div class="hero-buttons"><a href="https://jiangfengyuan.github.io/Cloud-Republica/" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><span class="lang-text" data-en="Play now" data-zh="开始游戏">开始游戏</span></a><a href="https://github.com/jiangfengyuan/Cloud-Republica" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><span class="lang-text" data-en="View source" data-zh="查看源码">查看源码</span></a></div><div class="republica-metrics"><div><strong>66</strong><span><span class="lang-text" data-en="cards" data-zh="张卡牌">张卡牌</span></span></div><div><strong>20</strong><span><span class="lang-text" data-en="events" data-zh="个环境事件">个环境事件</span></span></div><div><strong>9</strong><span><span class="lang-text" data-en="tech nodes" data-zh="个科技节点">个科技节点</span></span></div><div><strong>3</strong><span><span class="lang-text" data-en="difficulty levels" data-zh="档难度">档难度</span></span></div></div></div></section>
+        <section class="section republica-overview"><div class="container"><div class="section-header"><span class="section-tag"><span class="lang-text" data-en="INSIDE A RUN" data-zh="一局之中">一局之中</span></span><h2 class="section-title"><span class="lang-text" data-en="Build. Adapt. Keep the city afloat." data-zh="建设，与环境周旋">建设，与环境周旋</span></h2></div><div class="projects-grid"><article class="project-card"><h3><span class="lang-text" data-en="Your deck, your route" data-zh="你的牌库，你的路线">你的牌库，你的路线</span></h3><p class="project-card-desc"><span class="lang-text" data-en="Customize a deck and faction, then expand your options through a tech tree and progression between runs." data-zh="自定义牌库与阵营决定开局，再用科技树和局外传承拓展下一局的选择。">自定义牌库与阵营决定开局，再用科技树和局外传承拓展下一局的选择。</span></p></article><article class="project-card"><h3><span class="lang-text" data-en="Limited turns, meaningful choices" data-zh="有限回合，真实取舍">有限回合，真实取舍</span></h3><p class="project-card-desc"><span class="lang-text" data-en="Reveal an event each turn and play up to three cards, balancing repairs, construction and resource allocation." data-zh="每回合揭示环境事件，最多打出 3 张牌；修理、建设与资源分配，需要一起考虑。">每回合揭示环境事件，最多打出 3 张牌；修理、建设与资源分配，需要一起考虑。</span></p></article><article class="project-card"><h3><span class="lang-text" data-en="Continue offline" data-zh="离线也能继续">离线也能继续</span></h3><p class="project-card-desc"><span class="lang-text" data-en="Run the page offline, keep versioned local saves and continue after a refresh, with deterministic replay support." data-zh="支持直接打开页面离线运行、版本化本地存档与刷新后继续；还可用确定性重放检查一局的走向。">支持直接打开页面离线运行、版本化本地存档与刷新后继续；还可用确定性重放检查一局的走向。</span></p></article><article class="project-card"><h3><span class="lang-text" data-en="Play at your pace" data-zh="按自己的节奏玩">按自己的节奏玩</span></h3><p class="project-card-desc"><span class="lang-text" data-en="Choose Easy, Medium or Hard, or explore the sandbox. Chinese/English UI and three themes let you make it your own." data-zh="简单、中等、困难三档难度，另有沙盒；中英双语和三套主题，让同一局适应你的习惯。">简单、中等、困难三档难度，另有沙盒；中英双语和三套主题，让同一局适应你的习惯。</span></p></article></div><figure class="republica-preview"><img src="assets/republica/start-screen.png" alt="Cloud Republic 游戏开始界面：选择阵营、难度与主题" data-alt-zh="Cloud Republic 游戏开始界面：选择阵营、难度与主题" data-alt-en="Cloud Republic start screen with faction, difficulty and theme choices" loading="lazy" width="1440" height="1080"><figcaption><span class="lang-text" data-en="Current start screen · Screenshot from the project repository" data-zh="游戏当前开始界面 · 截图来自项目仓库">游戏当前开始界面 · 截图来自项目仓库</span></figcaption></figure></div></section>
+        <section class="section"><div class="container"><div class="section-header"><span class="section-tag"><span class="lang-text" data-en="GET STARTED" data-zh="上手路线">上手路线</span></span><h2 class="section-title"><span class="lang-text" data-en="Start with one choice" data-zh="从一次选择开始">从一次选择开始</span></h2></div><ol class="republica-steps"><li><h3><span class="lang-text" data-en="Pick a faction and difficulty" data-zh="选阵营与难度">选阵营与难度</span></h3><p><span class="lang-text" data-en="Learn the rules on Easy, try tighter turn limits or experiment in the sandbox." data-zh="用简单模式熟悉规则，再尝试更紧张的回合限制，或在沙盒中探索。">用简单模式熟悉规则，再尝试更紧张的回合限制，或在沙盒中探索。</span></p></li><li><h3><span class="lang-text" data-en="Reveal an event and plan your actions" data-zh="揭示事件，安排行动">揭示事件，安排行动</span></h3><p><span class="lang-text" data-en="Play up to three cards per turn while balancing platform repairs, habitats and resources." data-zh="每回合最多打 3 张牌，同时考虑修理平台、建造栖息地与资源收支。">每回合最多打 3 张牌，同时考虑修理平台、建造栖息地与资源收支。</span></p></li><li><h3><span class="lang-text" data-en="Reach 100% purification and at least six habitats" data-zh="净化到 100%，建成至少 6 个栖息地">净化到 100%，建成至少 6 个栖息地</span></h3><p><span class="lang-text" data-en="Meet both goals before the final turn while preserving platform integrity; zero integrity causes a crash." data-zh="在最终回合前达成目标，也要守住平台完整度；归零就会坠毁。">在最终回合前达成目标，也要守住平台完整度；归零就会坠毁。</span></p></li></ol></div></section>
+        <section class="section republica-status"><div class="container"><span class="section-tag"><span class="lang-text" data-en="PROJECT STATUS" data-zh="项目进展">项目进展</span></span><h2><span class="lang-text" data-en="Playable online and offline." data-zh="可在线试玩，也能离线运行。">可在线试玩，也能离线运行。</span></h2><p><span class="lang-text" data-en="The main branch has completed its TypeScript migration while retaining deck building, saves and replay support. The latest repository update is September 19, 2026. Code and original content are licensed under MIT." data-zh="主分支已完成 TypeScript 迁移，保留牌库、存档和重放能力；最近仓库更新于 2026 年 9 月 19 日。项目代码与原创内容采用 MIT 许可证。">主分支已完成 TypeScript 迁移，保留牌库、存档和重放能力；最近仓库更新于 2026 年 9 月 19 日。项目代码与原创内容采用 MIT 许可证。</span></p><div class="project-card-links"><a class="update-link" href="updates#republica-progress"><span class="lang-text" data-en="View project updates" data-zh="查看项目动态">查看项目动态</span></a><a class="update-link" href="https://github.com/jiangfengyuan/Cloud-Republica/blob/685cb2771052b4ff9c906aaa36318317e7405c76/README.md"><span class="lang-text" data-en="Project README" data-zh="项目说明">项目说明</span></a></div></div></section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>Designed & Built by Hayden In P.R. China <span class="heart">♥</span></p>
+            <p class="footer-sub">with love and Kimi</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -3424,3 +3424,33 @@ body {
 @media (min-width: 901px) {
     .nav-links { position: relative; z-index: 1; }
 }
+
+/* Current project content and Cloud Republic product page */
+.project-card-status { color: var(--text-secondary); font-size: .82rem; margin: 0 0 1.2rem; line-height: 1.6; }
+.platform-note, .release-note { color: var(--apple-text-secondary); max-width: 760px; margin: 1.5rem auto; line-height: 1.8; font-size: .9rem; }
+.source-meta { font-size: .8rem; }
+.source-meta a { color: var(--accent); text-decoration: underline; text-underline-offset: .2em; }
+.republica-hero { padding: 10rem 0 4rem; position: relative; text-align: center; }
+.republica-hero h1 { font-size: clamp(2.6rem, 6.5vw, 5.25rem); line-height: 1.1; margin-top: 1.5rem; letter-spacing: -.045em; }
+.republica-subtitle { display: block; margin-top: .8rem; font-size: .42em; letter-spacing: .04em; color: var(--text-secondary); }
+.republica-lead { font-size: clamp(1.25rem, 3vw, 1.75rem); margin: 2rem 0 1rem; }
+.republica-desc { max-width: 640px; margin: 0 auto 2rem; color: var(--text-secondary); line-height: 1.8; }
+.republica-hero .hero-buttons { justify-content: center; }
+.republica-metrics { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 4rem auto 0; gap: 1rem; }
+.republica-metrics div { padding: 1.25rem .75rem; border-top: 1px solid var(--border); }
+.republica-metrics strong { display: block; font-family: var(--font-mono); font-size: 2rem; color: var(--accent); }
+.republica-metrics span { color: var(--text-secondary); font-size: .85rem; }
+.republica-overview { background: var(--bg-secondary); }
+.republica-preview { margin: 3rem auto 0; max-width: 1000px; }
+.republica-preview img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 20px; }
+.republica-preview figcaption { color: var(--text-secondary); margin-top: .75rem; text-align: center; font-size: .8rem; }
+.republica-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; list-style: decimal; list-style-position: inside; }
+.republica-steps li::marker { color: var(--accent); font-family: var(--font-mono); font-weight: 600; }
+.republica-steps h3 { margin: .75rem 0; font-size: 1.1rem; }
+.republica-steps p { color: var(--text-secondary); line-height: 1.8; }
+.republica-status { background: var(--bg-secondary); }
+.republica-status h2 { margin: 1rem 0; font-size: clamp(1.6rem, 4vw, 2.4rem); }
+.republica-status p { max-width: 750px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.25rem; }
+@media (min-width: 901px) { .nav-links { gap: clamp(.8rem, 2vw, 1.75rem); } }
+@media (max-width: 900px) { .republica-steps { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .republica-metrics { grid-template-columns: repeat(2, 1fr); } .republica-hero { padding-top: 8rem; } }

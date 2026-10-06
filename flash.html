@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
+    <meta name="description" content="Flash Aero 一闪：Android、macOS 与 HarmonyOS 三端原生的本地记录应用，支持灵感、日志、情绪、任务提醒与多窗口回顾。当前处于 Alpha 与发布候选验收阶段。">
     <meta name="author" content="Hayden">
     <title>Flash — Hayden</title>
     <link rel="canonical" href="https://jiangfengyuan.github.io/flash">
@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="Hayden">
     <meta property="og:locale" content="zh_CN">
     <meta property="og:title" content="Flash — Hayden">
-    <meta property="og:description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
+    <meta property="og:description" content="Flash Aero 一闪：Android、macOS 与 HarmonyOS 三端原生的本地记录应用，支持灵感、日志、情绪、任务提醒与多窗口回顾。当前处于 Alpha 与发布候选验收阶段。">
     <meta property="og:url" content="https://jiangfengyuan.github.io/flash">
     <meta property="og:image" content="https://jiangfengyuan.github.io/assets/social/flash.png">
     <meta property="og:image:type" content="image/png">
@@ -24,7 +24,7 @@
     <meta property="og:image:alt" content="Flash — Hayden">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Flash — Hayden">
-    <meta name="twitter:description" content="Flash — 为快速记录而生的灵感捕捉工具。长按即录，松手成文，让每一条闪念都有处安放。">
+    <meta name="twitter:description" content="Flash Aero 一闪：Android、macOS 与 HarmonyOS 三端原生的本地记录应用，支持灵感、日志、情绪、任务提醒与多窗口回顾。当前处于 Alpha 与发布候选验收阶段。">
     <meta name="twitter:image" content="https://jiangfengyuan.github.io/assets/social/flash.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
 </head>
 <body class="page-flash">
     <a class="skip-link" href="#main-content"><span class="lang-text" data-en="Skip to main content" data-zh="跳至主要内容">跳至主要内容</span></a>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
     <!-- 导航 -->
     <nav aria-label="主导航" class="navbar navbar-apple">
@@ -45,6 +45,7 @@
             <ul class="nav-links" id="primary-navigation">
                 <li><a href="./" class="nav-link"><span class="lang-text" data-en="Home" data-zh="首页">首页</span></a></li>
                 <li><a href="flash" class="nav-link active">Flash</a></li>
+                <li><a href="republica.html" class="nav-link">Republica</a></li>
                 <li><a href="dhgt" class="nav-link">DHGT</a></li>
                 <li><a href="blog" class="nav-link"><span class="lang-text" data-en="Blog" data-zh="博客">博客</span></a></li>
                 <li><a href="updates" class="nav-link"><span class="lang-text" data-en="Updates" data-zh="动态">动态</span></a></li>
@@ -85,7 +86,7 @@
                 </a>
             </div>
             <div class="danmaku-stage">
-                <div class="danmaku-layer" id="danmaku-layer"></div>
+                <div class="danmaku-layer" id="danmaku-layer" aria-hidden="true"></div>
             </div>
         </div>
     </section>
@@ -96,10 +97,10 @@
             <h2 class="statement-headline fade-up">
                 <span class="lang-text" data-en="Born for quick capture." data-zh="为快速记录而生。">为快速记录而生。</span>
                 <br>
-                <span class="lang-text" data-en="Long press to record, release to save." data-zh="长按即录，松手成文。">长按即录，松手成文。</span>
+                <span class="lang-text" data-en="Capture with less friction. Review with more clarity." data-zh="记录轻一点，回顾清晰一点。">记录轻一点，回顾清晰一点。</span>
             </h2>
             <p class="statement-desc fade-up">
-                <span class="lang-text" data-en="Flash is a local-first app for ideas, logs, and moods — captured in a flash, clear at a glance. Your data lives entirely on your device: no backend, no network, nothing ever collected. Android and macOS speak through one unified JSON backup file, with merge or overwrite import — the choice is yours." data-zh="一闪是本地优先的灵感、日志与情绪记录应用——闪过即留，一目了然。数据完整存放在你的设备上：无需后端，不必联网，不收集任何信息。Android 与 macOS 双端借由统一的 JSON 备份文件互通，合并或覆盖导入，皆由你定。">一闪是本地优先的灵感、日志与情绪记录应用——闪过即留，一目了然。数据完整存放在你的设备上：无需后端，不必联网，不收集任何信息。Android 与 macOS 双端借由统一的 JSON 备份文件互通，合并或覆盖导入，皆由你定。</span>
+                <span class="lang-text" data-en="Flash Aero is a local-first app for ideas, journals, moods and tasks, built natively for Android, macOS and HarmonyOS. No account is required; everyday records stay on your device and you choose when to export them. Capture an idea, then find your rhythm through search, calendars and reviews." data-zh="Flash Aero 是本地优先的灵感、日志、情绪与任务记录应用。Android、macOS 与 HarmonyOS 均采用原生工程：不用注册账号，日常记录保存在设备上，需要迁移时再由你主动导出。快速记下闪念，再用搜索、日历和回顾看清自己的节奏。">Flash Aero 是本地优先的灵感、日志、情绪与任务记录应用。Android、macOS 与 HarmonyOS 均采用原生工程：不用注册账号，日常记录保存在设备上，需要迁移时再由你主动导出。快速记下闪念，再用搜索、日历和回顾看清自己的节奏。</span>
             </p>
         </div>
     </section>
@@ -116,7 +117,7 @@
                         <span class="lang-text" data-en="Quick Capture" data-zh="快速记录">快速记录</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="Text input plus voice transcription, saved by category — seize every spark of inspiration." data-zh="文本输入加语音转写，分类保存，抓住每一个灵感瞬间。">文本输入加语音转写，分类保存，抓住每一个灵感瞬间。</span>
+                        <span class="lang-text" data-en="Android and HarmonyOS provide quick-create entry points, while macOS supports menu-bar capture. Save text by category and mark importance with !!." data-zh="Android 和 HarmonyOS 提供快速创建入口，macOS 支持菜单栏记录；文字分类保存，并可用 !! 标记重要度。">Android 和 HarmonyOS 提供快速创建入口，macOS 支持菜单栏记录；文字分类保存，并可用 !! 标记重要度。</span>
                     </p>
                 </div>
                 <div class="feature-card-apple fade-up">
@@ -127,7 +128,7 @@
                         <span class="lang-text" data-en="Idea Flow" data-zh="灵感池 Idea Flow">灵感池 Idea Flow</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="Grouped by time with importance markers; turn any log into an idea with one tap." data-zh="按时间分组、重要性标记，日志可一键转移为灵感。">按时间分组、重要性标记，日志可一键转移为灵感。</span>
+                        <span class="lang-text" data-en="Organize journals and ideas by time; find them by keyword, tag or date, then edit, delete or mark importance." data-zh="按时间整理日志与灵感，用关键词、标签和日期筛选，支持编辑、删除和重要度标记。">按时间整理日志与灵感，用关键词、标签和日期筛选，支持编辑、删除和重要度标记。</span>
                     </p>
                 </div>
                 <div class="feature-card-apple fade-up">
@@ -135,10 +136,10 @@
                         <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </div>
                     <h3 class="feature-title-apple">
-                        <span class="lang-text" data-en="Calendar Aggregation" data-zh="日历聚合">日历聚合</span>
+                        <span class="lang-text" data-en="Calendar &amp; tasks" data-zh="日历与任务">日历与任务</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="Logs and moods aggregated by date — revisit any day at a glance." data-zh="日志与情绪按日期聚合，按天回顾每一天。">日志与情绪按日期聚合，按天回顾每一天。</span>
+                        <span class="lang-text" data-en="Bring journals, moods and tasks together by date, with due times, completion states and reminders to connect reflection with action." data-zh="按日期聚合日志、情绪与任务，记录截止时间、完成状态和提醒时间，让记录与行动衔接。">按日期聚合日志、情绪与任务，记录截止时间、完成状态和提醒时间，让记录与行动衔接。</span>
                     </p>
                 </div>
                 <div class="feature-card-apple fade-up">
@@ -149,7 +150,7 @@
                         <span class="lang-text" data-en="Mood Tracking & Trends" data-zh="情绪记录与趋势">情绪记录与趋势</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="Drag a level from -3 to +3, attach sub-mood tags, and see 7/30-day trend charts." data-zh="拖拽等级（-3 到 +3）、子情绪标签，近 7/30 天趋势图一目了然。">拖拽等级（-3 到 +3）、子情绪标签，近 7/30 天趋势图一目了然。</span>
+                        <span class="lang-text" data-en="Track seven mood levels (-3 to +3), sub-emotions and notes, using emoji selection on Android and sliders on macOS and HarmonyOS." data-zh="七级情绪（-3 到 +3）、子情绪与备注；Android 使用 emoji 选择，macOS 与 HarmonyOS 使用滑块。">七级情绪（-3 到 +3）、子情绪与备注；Android 使用 emoji 选择，macOS 与 HarmonyOS 使用滑块。</span>
                     </p>
                 </div>
                 <div class="feature-card-apple fade-up">
@@ -157,10 +158,10 @@
                         <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
-                        <span class="lang-text" data-en="Local-First · Privacy" data-zh="本地优先 · 隐私">本地优先 · 隐私</span>
+                        <span class="lang-text" data-en="Review across time" data-zh="多窗口回顾">多窗口回顾</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="Your data never leaves the device. No backend, no network, zero collection." data-zh="数据不出设备，无后端、不联网、不收集任何数据。">数据不出设备，无后端、不联网、不收集任何数据。</span>
+                        <span class="lang-text" data-en="Review the week, month, last 30 days or last 90 days, with daily activity, mood distributions and comparisons to the previous window." data-zh="按本周、本月、近 30 天或近 90 天回顾；结合每日活跃度、情绪分布和前一窗口对比，观察变化。">按本周、本月、近 30 天或近 90 天回顾；结合每日活跃度、情绪分布和前一窗口对比，观察变化。</span>
                     </p>
                 </div>
                 <div class="feature-card-apple fade-up">
@@ -168,10 +169,10 @@
                         <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                     </div>
                     <h3 class="feature-title-apple">
-                        <span class="lang-text" data-en="JSON Backup Sync" data-zh="JSON 备份互通">JSON 备份互通</span>
+                        <span class="lang-text" data-en="Backup &amp; migration" data-zh="三端备份与迁移">三端备份与迁移</span>
                     </h3>
                     <p class="feature-desc-apple">
-                        <span class="lang-text" data-en="One unified backup format shared across both platforms, with merge or overwrite import." data-zh="统一备份格式，双端互导，支持合并与覆盖。">统一备份格式，双端互导，支持合并与覆盖。</span>
+                        <span class="lang-text" data-en="All three platforms share v2 JSON backups, with difference previews, merge/replace import and legacy recovery. File sharing and LAN transfers are still undergoing real-device validation." data-zh="三端共用 v2 JSON 备份，导入前可预览差异、选择合并或覆盖，并支持旧版恢复。文件与局域网互传仍在真机验收中。">三端共用 v2 JSON 备份，导入前可预览差异、选择合并或覆盖，并支持旧版恢复。文件与局域网互传仍在真机验收中。</span>
                     </p>
                 </div>
             </div>
@@ -186,7 +187,7 @@
                     <span class="lang-text" data-en="Designed for young minds." data-zh="为年轻的头脑设计。">为年轻的头脑设计。</span>
                 </h2>
                 <p class="audience-desc fade-up">
-                    <span class="lang-text" data-en="Ages 16 to 24, students and creators. Countless thoughts cross your mind every day. Flash exists to catch them the moment they appear — no need to endure unsearchable voice memos, no burden of heavy traditional diary apps. A competition idea flashes in the hallway? Long press to record, saved in 5 seconds. A bedtime recap? Three sentences capture the day." data-zh="16 至 24 岁的学生与创作者，每天都有无数念头掠过。一闪要做的，就是在你开口的瞬间，把它留住。不必忍受语音备忘录的无法检索，不必背负传统日记应用的沉重。走廊里闪过竞赛思路，长按录音，5 秒后保存。睡前轻声复盘，三句话记录今日。">16 至 24 岁的学生与创作者，每天都有无数念头掠过。一闪要做的，就是在你开口的瞬间，把它留住。不必忍受语音备忘录的无法检索，不必背负传统日记应用的沉重。走廊里闪过竞赛思路，长按录音，5 秒后保存。睡前轻声复盘，三句话记录今日。</span>
+                    <span class="lang-text" data-en="For students and creators: write down an idea, reflect on the day in three sentences and set a reminder for an important task. Connect those small records over time through idea flow, search and reviews." data-zh="面向学生与创作者：想到一个点子就写下来，睡前用三句话复盘一天，给重要的任务设好提醒。再通过灵感流、搜索和回顾，把零散记录慢慢串成自己的线索。">面向学生与创作者：想到一个点子就写下来，睡前用三句话复盘一天，给重要的任务设好提醒。再通过灵感流、搜索和回顾，把零散记录慢慢串成自己的线索。</span>
                 </p>
             </div>
         </div>
@@ -196,20 +197,23 @@
     <section class="flash-section flash-platforms-apple">
         <div class="container">
             <h2 class="platforms-title fade-up">
-                <span class="lang-text" data-en="Available everywhere you are." data-zh="随时随地，触手可及。">随时随地，触手可及。</span>
+                <span class="lang-text" data-en="Three native apps. One recording habit." data-zh="三端原生，同一个记录习惯。">三端原生，同一个记录习惯。</span>
             </h2>
             <div class="platform-badges-apple fade-up">
                 <span class="platform-badge-apple">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
                     Android
-                    <small class="lang-text" data-en="Native Kotlin · Alpha available" data-zh="原生 Kotlin · Alpha 已发布">原生 Kotlin · Alpha 已发布</small>
+                    <small class="lang-text" data-en="Kotlin / Compose · Material & Glass" data-zh="Kotlin / Compose · Material 与玻璃双风格">Kotlin / Compose · Material 与玻璃双风格</small>
                 </span>
                 <span class="platform-badge-apple">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.96 1.07-3.11-1.05.05-2.31.72-3.06 1.64-.68.83-1.28 2.18-1.12 3.27 1.21.09 2.43-.78 3.11-1.8z"/></svg>
                     macOS
-                    <small class="lang-text" data-en="Native SwiftUI · Menu Bar Companion" data-zh="原生 SwiftUI · 含菜单栏伴侣">原生 SwiftUI · 含菜单栏伴侣</small>
+                    <small class="lang-text" data-en="SwiftUI / SwiftData · Menu-bar capture" data-zh="SwiftUI / SwiftData · 菜单栏记录">SwiftUI / SwiftData · 菜单栏记录</small>
                 </span>
+                <span class="platform-badge-apple"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M8 8v8m8-8v8M8 12h8"/></svg>HarmonyOS<small><span class="lang-text" data-en="ArkTS / ArkUI · Native encrypted RDB" data-zh="ArkTS / ArkUI · 原生加密 RDB">ArkTS / ArkUI · 原生加密 RDB</span></small></span>
             </div>
+            <p class="platform-note"><span class="lang-text" data-en="HarmonyOS includes phone, foldable and tablet layouts, a Today service card and notification reminders. Real-device validation, signing and approval for some system capabilities are still in progress." data-zh="鸿蒙端已接入手机、折叠屏和平板布局、今日概览服务卡片与通知提醒；真机验收、签名和部分系统能力准入仍在进行。">鸿蒙端已接入手机、折叠屏和平板布局、今日概览服务卡片与通知提醒；真机验收、签名和部分系统能力准入仍在进行。</span></p>
+
         </div>
     </section>
 
@@ -219,11 +223,12 @@
             <div class="cta-content fade-up">
                 <p class="cta-status">
                     <span class="status-dot-apple"></span>
-                    <span class="lang-text" data-en="Android Alpha is out · macOS Alpha ready" data-zh="Android Alpha 已发布 · macOS Alpha 已就绪">Android Alpha 已发布 · macOS Alpha 已就绪</span>
+                    <span class="lang-text" data-en="Flash Aero 0.1.0 · Alpha · Candidate validation in progress" data-zh="Flash Aero 0.1.0 · Alpha · 发布候选验收中">Flash Aero 0.1.0 · Alpha · 发布候选验收中</span>
                 </p>
-                <a href="https://github.com/jiangfengyuan/Project-FLASH/releases/tag/Android-v0.1.0-Alpha" target="_blank" rel="noopener noreferrer" class="apple-btn apple-btn-large">
+                <p class="release-note"><span class="lang-text" data-en="The current source includes three native apps. The historical Android package does not represent today’s code; see the repository instructions and release history for installation and build status." data-zh="当前源码已更新到三端原生工程；历史 Android 安装包不代表当前代码。安装与构建状态请以仓库说明和发布记录为准。">当前源码已更新到三端原生工程；历史 Android 安装包不代表当前代码。安装与构建状态请以仓库说明和发布记录为准。</span></p>
+                <a href="https://github.com/jiangfengyuan/Project-FLASH/releases" target="_blank" rel="noopener noreferrer" class="apple-btn apple-btn-large">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    <span class="lang-text" data-en="Download Android Alpha" data-zh="下载 Android Alpha">下载 Android Alpha</span>
+                    <span class="lang-text" data-en="View release history" data-zh="查看发布记录">查看发布记录</span>
                 </a>
                 <a href="https://github.com/jiangfengyuan/Project-FLASH" target="_blank" rel="noopener noreferrer" class="apple-btn">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -237,7 +242,7 @@
         </div>
     </section>
 
-    <div class="container project-update-cta"><a class="update-link" href="updates"><span class="lang-text" data-en="View project updates" data-zh="查看项目动态">查看项目动态</span> →</a></div>
+    <div class="container project-update-cta"><a class="update-link" href="updates#flash-progress"><span class="lang-text" data-en="View project updates" data-zh="查看项目动态">查看项目动态</span> →</a></div>
     </main>
 
     <footer class="footer footer-apple">

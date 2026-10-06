@@ -9,7 +9,9 @@
 | 页面 | 说明 |
 | --- | --- |
 | `index.html` | 主页：Hero（打字机效果）、关于我（数据滚动动画 + 代码窗口）、作品展示、技能栈、联系方式 |
-| `flash.html` | [Flash 一闪](https://github.com/jiangfengyuan/Project-FLASH) 产品页：本地优先的灵感 / 日志 / 情绪记录应用（Android · macOS），含弹幕舞台与下载入口 |
+| `flash.html` | [Flash 一闪](https://github.com/jiangfengyuan/Project-FLASH) 产品页：本地优先的灵感 / 日志 / 情绪记录应用（Android · macOS · HarmonyOS），含三端 Alpha 状态与发布记录入口 |
+| `republica.html` | Cloud Republic 云端共和国：卡牌策略、玩法介绍、离线存档与在线试玩入口 |
+| `updates.html` | 项目动态：仓库核对日期、提交来源与实现 / 发布边界 |
 | `dhgt.html` | DHGT 页面 |
 | `blog.html` | 个人博客：文章列表（搜索 / 标签筛选）+ 阅读页，数据来自 `posts.js` |
 | `blog-admin.html` | 站长投稿工具：粘贴公众号文章或 Markdown 写作，生成 `posts.js` 代码片段（`noindex`，不公开链接） |
@@ -73,3 +75,14 @@ Designed & Built by Hayden ♥ with love and Kimi
 - `updates.html` 是双语项目动态页：首页和 Flash / DHGT 页面链接到最新记录。条目以 `update-card` 为模板，按日期倒序维护；更新 `time` 日期、唯一锚点和 `data-zh` / `data-en` 文案。Sitemap 收录 `/updates`。
 - Flash 与 DHGT 首批条目是基于既有产品页面整理的概览，不代表版本发布或新活动；正式版本详情请链接到项目发布记录。
 - 手机菜单支持焦点管理、Tab 循环与 Escape；`prefers-reduced-motion` 控制粒子、弹幕和文字/计数动效。
+
+
+## 内容依据（2026-10-06 核对）
+
+| 仓库 | 参考提交 | 依据 |
+| --- | --- | --- |
+| [Project-FLASH](https://github.com/jiangfengyuan/Project-FLASH) | `b2249d7` · 2026-10-04 | README、ROADMAP、harmonyos/README 与设备品质 / 互传验收文档；三端原生工程仍为 Alpha，历史 APK 不代表当前主分支 |
+| [Cloud-Republica](https://github.com/jiangfengyuan/Cloud-Republica) | `685cb27` · 2026-09-19 | README、package.json 与 TypeScript 游戏内容；66 卡、20 事件、9 节点科技树、双语 / 主题 / 离线与本地存档 |
+| [个人网站](https://github.com/jiangfengyuan/jiangfengyuan.github.io) | `9651849` · 2026-10-06 | 已有博客搜索、目录、阅读进度、图片放大、代码高亮与本轮之前上线的分享 / 键盘 / 动效支持 |
+
+本轮同步中英双语的首页作品、Flash 产品页、Cloud Republic 产品页和动态页。Flash 的未推送本地开发不作为已上线功能；HarmonyOS 真机 / 签名、跨端互传及新版分发边界以仓库文档为准。Cloud Republic 截图来源与许可证见 `assets/republica/README.md`。
