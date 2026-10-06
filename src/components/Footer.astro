@@ -21,8 +21,26 @@ import { profile } from '../data/content';
   <div class="footer-bottom">
     <span>© {new Date().getFullYear()} Hayden</span>
     <div>
-      <a href={profile.github}>GitHub ↗</a>
-      <a href={profile.bilibili}>Bilibili ↗</a>
+      <a
+        href={profile.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub（在新标签页打开）"
+        data-label-zh="GitHub（在新标签页打开）"
+        data-label-en="GitHub (opens in a new tab)"
+      >
+        GitHub ↗
+      </a>
+      <a
+        href={profile.bilibili}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Bilibili（在新标签页打开）"
+        data-label-zh="Bilibili（在新标签页打开）"
+        data-label-en="Bilibili (opens in a new tab)"
+      >
+        Bilibili ↗
+      </a>
       <a href="/dhgt/">DHGT</a>
       <a href="/rss.xml">RSS</a>
     </div>

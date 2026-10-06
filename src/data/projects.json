@@ -86,7 +86,7 @@
     "href": "/republica/",
     "github": "https://github.com/jiangfengyuan/Cloud-Republica",
     "action": "https://jiangfengyuan.github.io/Cloud-Republica/",
-    "image": "/assets/republica/start-screen.png",
+    "image": "/assets/republica/start-screen.webp",
     "imageAlt": {
       "zh": "Cloud Republic 开始界面：新建共和国、难度选择与卡牌规则",
       "en": "Cloud Republic start screen with difficulty selection and card rules"
@@ -150,7 +150,7 @@
     "href": "/dhgt/",
     "github": "",
     "action": "/dhgt/#wechat",
-    "image": "/assets/dhgt/race.png",
+    "image": "/assets/dhgt/track.webp",
     "imageAlt": {
       "zh": "赛车在赛道上行驶的画面",
       "en": "A racing car on track"

@@ -15,6 +15,9 @@ document.addEventListener('astro:after-swap', () => {
     document.documentElement.dataset.lang = l === 'en' ? 'en' : 'zh';
     document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
   } catch {}
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (meta)
+    meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
 });
 
 let active: AbortController | undefined;
@@ -80,6 +83,9 @@ function init() {
     if (!nav || !toggle) return;
     nav.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', String(open));
+    toggle.dataset.labelZh = open ? '关闭菜单' : '打开菜单';
+    toggle.dataset.labelEn = open ? 'Close navigation' : 'Open navigation';
+    toggle.setAttribute('aria-label', localized(toggle.dataset.labelZh, toggle.dataset.labelEn));
     nav.inert = mobile.matches && !open;
     if (restore) toggle.focus();
     if (open) nav.querySelector<HTMLAnchorElement>('a')?.focus();

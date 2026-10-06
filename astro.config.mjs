@@ -7,6 +7,7 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 export default defineConfig({
   site: 'https://jiangfengyuan.github.io',
   output: 'static',
+  prefetch: true,
   integrations: [
     sitemap({ filter: (url) => !url.includes('/blog-admin') && !url.includes('/404') }),
   ],

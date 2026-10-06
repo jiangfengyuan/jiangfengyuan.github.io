@@ -30,7 +30,7 @@ import Text from '../components/Text.astro';
         needs JavaScript; you can also use Pages CMS or edit Markdown files.
       </p>
     </noscript>
-    <section class="section import-grid" style="padding-top:12px">
+    <section class="section import-grid section--flush">
       <form data-import-form>
         <div class="form-field">
           <label for="post-title">
@@ -38,7 +38,7 @@ import Text from '../components/Text.astro';
           </label>
           <input id="post-title" name="title" required />
         </div>
-        <div class="split" style="gap:20px">
+        <div class="split split--tight">
           <div class="form-field">
             <label for="post-date">
               <Text text={{ zh: '日期', en: 'Date' }} />
@@ -100,7 +100,7 @@ import Text from '../components/Text.astro';
             <Text text={{ zh: '载入正文', en: 'Load content' }} />
           </button>
         </details>
-        <label style="font-size:13px">
+        <label class="form-label">
           <input type="checkbox" name="draft" checked />{' '}
           <Text
             text={{
@@ -109,19 +109,14 @@ import Text from '../components/Text.astro';
             }}
           />
         </label>
-        <div class="actions" style="margin-top:24px">
+        <div class="actions form-actions">
           <button class="btn" type="button" data-preview-button>
             <Text text={{ zh: '预览', en: 'Preview' }} />
           </button>
           <button class="btn primary" type="submit">
             <Text text={{ zh: '导出文章', en: 'Export article' }} />
           </button>
-          <button
-            class="text-link"
-            type="button"
-            data-reset-import
-            style="background:none;border:0"
-          >
+          <button class="text-link" type="button" data-reset-import>
             <Text text={{ zh: '新文章', en: 'New article' }} />
           </button>
         </div>
@@ -146,7 +141,7 @@ import Text from '../components/Text.astro';
       </form>
       <div>
         <div class="import-preview">
-          <p class="eyebrow" style="margin-bottom:24px">
+          <p class="eyebrow">
             <Text text={{ zh: '正文预览', en: 'BODY PREVIEW' }} />
           </p>
           <div class="article-content" data-import-preview></div>

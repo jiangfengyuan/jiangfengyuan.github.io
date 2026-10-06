@@ -91,6 +91,11 @@ const canonical = new URL(Astro.url.pathname, site).href;
           ? 'dark'
           : 'light';
       }
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeColorMeta) {
+        themeColorMeta.content =
+          document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
+      }
     </script>
     <slot name="head" />
   </head>

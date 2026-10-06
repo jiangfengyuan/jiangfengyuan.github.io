@@ -1,3 +1,10 @@
+/*
+ * Breakpoint convention (CSS custom properties cannot be used in media queries):
+ * - small: 600px
+ * - medium: 760px
+ * - large: 1100px
+ * Use the nearest slot when migrating legacy values.
+ */
 :root {
   color-scheme: light;
   --paper: #f6f4ef;
@@ -11,16 +18,35 @@
   --grid: rgba(80, 89, 75, 0.12);
   --glass: rgba(255, 254, 251, 0.86);
   --shadow: 0 18px 50px -25px rgba(37, 42, 30, 0.22);
+  --shadow-elevated: 0 24px 45px -18px rgba(0, 0, 0, 0.35);
   --lavender: #e9e7f3;
   --sage: #e5eadf;
   --rose: #eee4df;
+  --flash-mark: #6d5f9d;
+  --media-note: #4c455f;
+  --qr-bg: #fff;
   --font:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --radius: 24px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 30px;
+  --radius-pill: 999px;
+  --space-card-sm: 24px;
+  --space-card-md: 32px;
+  --space-card-lg: 48px;
+  --leading-normal: 1.75;
+  --leading-relaxed: 1.9;
+  --text-display: clamp(42px, 6vw, 76px);
+  --text-hero: clamp(45px, 5.6vw, 72px);
+  --text-page-hero: clamp(48px, 6vw, 86px);
   --ease: cubic-bezier(0.22, 0.68, 0, 1.01);
   --duration: 180ms;
+  --z-header: 50;
+  --z-progress: 100;
+  --z-skip-link: 1000;
 }
 :root[data-theme='dark'] {
   color-scheme: dark;
@@ -35,7 +61,11 @@
   --grid: rgba(169, 184, 153, 0.14);
   --glass: rgba(35, 39, 35, 0.9);
   --shadow: 0 18px 50px -25px rgba(0, 0, 0, 0.8);
+  --shadow-elevated: 0 24px 45px -18px rgba(0, 0, 0, 0.7);
   --lavender: #30313d;
   --sage: #2a372e;
   --rose: #392d29;
+  --flash-mark: #b8aee0;
+  --media-note: #d0c8e0;
+  --qr-bg: #fff;
 }
