@@ -8,7 +8,7 @@ export async function GET() {
     items: (await publishedPosts()).map((p) => ({
       title: p.data.title,
       description: p.data.summary,
-      pubDate: new Date(p.data.date),
+      pubDate: new Date(p.data.publishedAt || p.data.date),
       link: '/blog/' + p.data.id + '/',
     })),
     customData: '<language>zh-CN</language>',

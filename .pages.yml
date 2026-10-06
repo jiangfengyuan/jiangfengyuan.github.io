@@ -23,6 +23,7 @@ content:
         pattern: { regex: '^[A-Za-z0-9_-]+$', message: 仅使用字母、数字、短横线与下划线 }
       - { name: title, label: 标题, type: string, required: true }
       - { name: date, label: 日期, type: date, required: true, options: { format: yyyy-MM-dd } }
+      - { name: publishedAt, label: 发表时间（ISO 8601，含时区，可选）, type: string }
       - { name: tags, label: 标签, type: string, list: true }
       - { name: summary, label: 摘要, type: text }
       - {
