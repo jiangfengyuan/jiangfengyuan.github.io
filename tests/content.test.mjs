@@ -42,3 +42,15 @@ test('frontmatter safely round-trips punctuation, dates and draft state', () => 
   assert.deepEqual(parse(head), meta);
   assert.ok(file.endsWith('## Body\n'));
 });
+
+test('Markdown pipeline preserves figures and theme-aware highlighting after sanitizing', async () => {
+  const { default: config } = await import('../astro.config.mjs');
+  const renderer = await config.markdown.processor.createRenderer(config.markdown);
+  const result = await renderer.render(
+    '## Section\n\n```ts\nconst answer = 42;\n```\n\n<figure><img src="/a.png" alt="A"><figcaption>Caption</figcaption></figure>\n\n<script>alert(1)</script>',
+  );
+  assert.match(result.code, /<figcaption>Caption<\/figcaption>/);
+  assert.match(result.code, /--shiki-dark/);
+  assert.ok(!result.code.includes('<script>'));
+  assert.equal(result.metadata.headings.length, 1);
+});
