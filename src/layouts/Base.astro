@@ -8,6 +8,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/pages.css';
+import '../styles/spatial.css';
 interface Props {
   title: string;
   titleEn?: string;
@@ -104,7 +105,7 @@ const canonical = new URL(Astro.url.pathname, site).href;
       <Text text={{ zh: '跳至正文', en: 'Skip to content' }} />
     </a>
     <Header active={active} />
-    <main id="main-content" tabindex="-1" transition:animate="fade">
+    <main id="main-content" tabindex="-1" transition:name="page-content">
       <slot />
     </main>
     <Footer />
@@ -136,7 +137,6 @@ const canonical = new URL(Astro.url.pathname, site).href;
     </noscript>
     <script>
       import '../scripts/site';
-      import '../scripts/reveal';
     </script>
   </body>
 </html>

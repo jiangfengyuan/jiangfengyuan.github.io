@@ -18,7 +18,13 @@ const cover = covers[p.id];
 ---
 
 <article class:list={['project-card', p.accent]}>
-  <a href={p.href} class:list={['project-media', p.id]} aria-label={p.name}>
+  <a
+    href={p.href}
+    class:list={['project-media', p.id]}
+    aria-label={p.name}
+    data-tilt
+    data-shared-link={cover ? p.id : undefined}
+  >
     <div class="media-grid" aria-hidden="true"></div>
     {p.id === 'flash' ? (
       <>

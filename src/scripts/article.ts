@@ -1,4 +1,5 @@
 import { localized } from './i18n';
+import { panel } from './motion';
 
 let active: AbortController | undefined;
 
@@ -69,6 +70,30 @@ function init() {
   const large = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
   const caption = document.querySelector<HTMLElement>('[data-lightbox-caption]');
   let opener: HTMLImageElement | null = null;
+  let closing = false;
+  let closeAnimation: Animation | undefined;
+  function close() {
+    if (!dialog?.open || closing) return;
+    closing = true;
+    closeAnimation = panel(dialog, false, () => {
+      if (closing) {
+        dialog.close();
+        closing = false;
+      }
+    });
+  }
+  dialog?.addEventListener(
+    'cancel',
+    (e) => {
+      e.preventDefault();
+      close();
+    },
+    { signal },
+  );
+  signal.addEventListener('abort', () => {
+    closeAnimation?.cancel();
+    dialog?.close();
+  });
   content.querySelectorAll<HTMLImageElement>('img').forEach((img, i) => {
     if (!img.alt) img.alt = localized('文章配图 ' + (i + 1), 'Article image ' + (i + 1));
     img.tabIndex = 0;
@@ -86,7 +111,10 @@ function init() {
       if (caption)
         caption.textContent =
           img.closest('figure')?.querySelector('figcaption')?.textContent || img.alt;
-      dialog.showModal();
+      closing = false;
+      closeAnimation?.cancel();
+      if (!dialog.open) dialog.showModal();
+      panel(dialog, true);
     }
     img.addEventListener('click', open, { signal });
     img.addEventListener(
@@ -97,16 +125,14 @@ function init() {
       { signal },
     );
   });
-  dialog
-    ?.querySelector('[data-lightbox-close]')
-    ?.addEventListener('click', () => dialog.close(), { signal });
+  dialog?.querySelector('[data-lightbox-close]')?.addEventListener('click', close, { signal });
   dialog?.addEventListener(
     'click',
     (e) => {
       if (e.target === dialog) {
         const b = dialog.getBoundingClientRect();
         if (e.clientX < b.left || e.clientX > b.right || e.clientY < b.top || e.clientY > b.bottom)
-          dialog.close();
+          close();
       }
     },
     { signal },

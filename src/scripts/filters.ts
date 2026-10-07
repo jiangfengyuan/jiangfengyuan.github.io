@@ -1,4 +1,5 @@
 import { localized } from './i18n';
+import { animate, animateResults } from './motion';
 
 let active: AbortController | undefined;
 
@@ -24,6 +25,43 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
   const status = root.querySelector<HTMLElement>('[data-result-count]');
   const empty = root.querySelector<HTMLElement>('[data-filter-empty]');
   let selected = 'all';
+  const chips = root.querySelector<HTMLElement>('.filter-chips');
+  const indicator = document.createElement('span');
+  indicator.className = 'filter-indicator';
+  indicator.setAttribute('aria-hidden', 'true');
+  chips?.prepend(indicator);
+  chips?.classList.add('enhanced-chips');
+  let indicatorBox: DOMRect | undefined;
+  function moveIndicator(effect = false) {
+    const button = buttons.find((b) => b.getAttribute('aria-pressed') === 'true');
+    if (!button || !chips) return;
+    indicator.getAnimations().forEach((a) => a.cancel());
+    const box = button.getBoundingClientRect(),
+      container = chips.getBoundingClientRect();
+    const x = box.left - container.left,
+      y = box.top - container.top;
+    Object.assign(indicator.style, {
+      width: box.width + 'px',
+      height: box.height + 'px',
+      left: x + 'px',
+      top: y + 'px',
+    });
+    if (effect && indicatorBox)
+      animate(
+        indicator,
+        Math.abs(indicatorBox.top - box.top) < 2
+          ? [{ transform: `translateX(${indicatorBox.left - box.left}px)` }, { transform: 'none' }]
+          : [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 220 },
+      );
+    indicatorBox = box;
+  }
+  const observer = new ResizeObserver(() => moveIndicator());
+  if (chips) observer.observe(chips);
+  signal.addEventListener('abort', () => {
+    observer.disconnect();
+    indicator.remove();
+  });
   function run(write = false) {
     const q = (input?.value || '').trim().toLocaleLowerCase();
     let count = 0;
@@ -48,6 +86,8 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
         `${count} ${kind === 'blog' ? 'articles' : 'updates'}`,
       );
     if (empty) empty.hidden = count !== 0;
+    moveIndicator(write);
+    if (write) animateResults(rows);
     if (write) {
       const url = new URL(location.href);
       const key = kind === 'blog' ? 'tag' : 'project';

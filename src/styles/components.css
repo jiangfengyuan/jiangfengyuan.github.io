@@ -18,18 +18,6 @@
   border-radius: var(--radius-pill);
   pointer-events: auto;
 }
-.glass {
-  background: var(--glass);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-@supports (backdrop-filter: blur(18px)) {
-  .glass {
-    background: color-mix(in srgb, var(--surface) 75%, transparent);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-  }
-}
 .wordmark {
   font-weight: 650;
   font-size: 25px;

@@ -1,4 +1,6 @@
 import { translate, language, localized } from './i18n';
+import { changeView, panel } from './motion';
+import { initSpatial } from './spatial';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme and language before paint.
@@ -15,6 +17,7 @@ document.addEventListener('astro:after-swap', () => {
     document.documentElement.dataset.lang = l === 'en' ? 'en' : 'zh';
     document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
   } catch {}
+  translate(language());
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   if (meta)
     meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
@@ -27,10 +30,20 @@ function init() {
   const { signal } = (active = new AbortController());
 
   translate(language());
+  initSpatial(signal);
+  let desiredLanguage = language();
 
-  document
-    .querySelector('[data-lang-toggle]')
-    ?.addEventListener('click', () => translate(language() === 'zh' ? 'en' : 'zh'), { signal });
+  document.querySelector('[data-lang-toggle]')?.addEventListener(
+    'click',
+    () => {
+      desiredLanguage = desiredLanguage === 'zh' ? 'en' : 'zh';
+      try {
+        localStorage.setItem('site-lang', desiredLanguage);
+      } catch {}
+      changeView('language', () => translate(desiredLanguage));
+    },
+    { signal },
+  );
 
   const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   function syncTheme() {
@@ -44,18 +57,22 @@ function init() {
     const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
     if (meta) meta.content = dark ? '#191c19' : '#f6f4ef';
   }
+  let desiredTheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   themeButton?.addEventListener(
     'click',
     () => {
-      const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.classList.add('changing-theme');
-      document.documentElement.dataset.theme = theme;
-      void document.documentElement.offsetHeight;
-      requestAnimationFrame(() => document.documentElement.classList.remove('changing-theme'));
+      desiredTheme = desiredTheme === 'dark' ? 'light' : 'dark';
       try {
-        localStorage.setItem('site-theme', theme);
+        localStorage.setItem('site-theme', desiredTheme);
       } catch {}
-      syncTheme();
+      changeView(
+        'theme',
+        () => {
+          document.documentElement.dataset.theme = desiredTheme;
+          syncTheme();
+        },
+        themeButton || undefined,
+      );
     },
     { signal },
   );
@@ -67,8 +84,11 @@ function init() {
         saved = localStorage.getItem('site-theme');
       } catch {}
       if (!saved) {
-        document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+        desiredTheme = e.matches ? 'dark' : 'light';
+        document.documentElement.classList.add('theme-fade');
+        document.documentElement.dataset.theme = desiredTheme;
         syncTheme();
+        setTimeout(() => document.documentElement.classList.remove('theme-fade'), 180);
       }
     },
     { signal },
@@ -79,22 +99,33 @@ function init() {
   const nav = document.querySelector<HTMLElement>('#site-nav');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const mobile = matchMedia('(max-width:760px)');
+  const compact = () => mobile.matches || document.documentElement.dataset.compactNav === 'true';
+  let menuRevision = 0;
+  let menuAnimation: Animation | undefined;
   function menu(open: boolean, restore = false) {
     if (!nav || !toggle) return;
-    nav.classList.toggle('is-open', open);
+    const serial = ++menuRevision;
+    menuAnimation?.cancel();
+    if (open) nav.classList.add('is-open');
+    if (compact())
+      menuAnimation = panel(nav, open, () => {
+        if (serial === menuRevision && !open) nav.classList.remove('is-open');
+      });
+    else nav.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', String(open));
     toggle.dataset.labelZh = open ? '关闭菜单' : '打开菜单';
     toggle.dataset.labelEn = open ? 'Close navigation' : 'Open navigation';
     toggle.setAttribute('aria-label', localized(toggle.dataset.labelZh, toggle.dataset.labelEn));
-    nav.inert = mobile.matches && !open;
+    nav.inert = compact() && !open;
     if (restore) toggle.focus();
     if (open) nav.querySelector<HTMLAnchorElement>('a')?.focus();
   }
   function reset() {
     menu(false, !!nav?.contains(document.activeElement));
-    if (nav && !mobile.matches) nav.inert = false;
+    if (nav && !compact()) nav.inert = false;
   }
   mobile.addEventListener('change', reset, { signal });
+  document.addEventListener('site:viewport', reset, { signal });
   reset();
   toggle?.addEventListener('click', () => menu(toggle.getAttribute('aria-expanded') !== 'true'), {
     signal,
@@ -154,8 +185,16 @@ function init() {
       note.textContent = language() === 'zh' ? note.dataset.zh : note.dataset.en;
       img.insertAdjacentElement('afterend', note);
       img.hidden = true;
+      panel(note, true);
     };
     img.addEventListener('error', fail, { signal });
+    img.addEventListener(
+      'load',
+      () => {
+        if (img.loading === 'lazy' && img.closest('.project-media')) panel(img, true);
+      },
+      { signal },
+    );
     if (img.complete && img.naturalWidth === 0) fail();
   });
 }

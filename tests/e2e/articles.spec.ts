@@ -14,6 +14,7 @@ test('nine articles reflow, maintain image proportions and theme contrast', asyn
     await page.goto('/blog/' + id + '/');
     for (const theme of ['light', 'dark']) {
       await page.evaluate((theme) => (document.documentElement.dataset.theme = theme), theme);
+      await page.waitForTimeout(250);
       for (const width of [360, 390, 768, 1440]) {
         await page.setViewportSize({ width, height: 950 });
         await expect(page.locator('.article-content')).toHaveCSS(

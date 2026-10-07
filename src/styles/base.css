@@ -235,7 +235,7 @@ main:focus-visible {
   flex-wrap: wrap;
 }
 .reveal {
-  animation: appear 500ms var(--ease) both;
+  animation: appear 400ms var(--ease) both;
 }
 @keyframes appear {
   from {
@@ -246,17 +246,6 @@ main:focus-visible {
     opacity: 1;
     transform: translateY(0);
   }
-}
-.js-reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 550ms var(--ease),
-    transform 550ms var(--ease);
-}
-.js-reveal.is-revealed {
-  opacity: 1;
-  transform: translateY(0);
 }
 .empty-state {
   padding: 48px;
@@ -317,9 +306,6 @@ main:focus-visible {
   }
 }
 
-.changing-theme * {
-  transition: none !important;
-}
 .article-aside {
   overflow-wrap: anywhere;
 }

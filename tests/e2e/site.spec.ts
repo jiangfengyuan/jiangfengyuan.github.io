@@ -33,7 +33,7 @@ test('all layouts, bilingual themes, static metadata and accessibility', async (
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     for (let theme = 0; theme < 2; theme++) {
       await page.locator('[data-theme-toggle]').click();
-      await page.waitForTimeout(220);
+      await page.waitForTimeout(650);
       const violations = (
         await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
       ).violations;

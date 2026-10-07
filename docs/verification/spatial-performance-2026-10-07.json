@@ -1,0 +1,61 @@
+{
+  "environment": "Chrome headless, 390x844 DPR2, CPU4x, 150ms RTT, 1.6Mbps down, gzip, 5 alternating cold contexts; remote article images mocked equally",
+  "results": [
+    {
+      "route": "/",
+      "baseline": {
+        "lcp": 668,
+        "cls": 0,
+        "dcl": 609.5999999996275
+      },
+      "current": {
+        "lcp": 696,
+        "cls": 0,
+        "dcl": 638.6999999992549
+      },
+      "lcpChange": 4.191616766467066
+    },
+    {
+      "route": "/flash/",
+      "baseline": {
+        "lcp": 612,
+        "cls": 0,
+        "dcl": 567.3999999985099
+      },
+      "current": {
+        "lcp": 640,
+        "cls": 0,
+        "dcl": 588.5999999996275
+      },
+      "lcpChange": 4.575163398692816
+    },
+    {
+      "route": "/dhgt/",
+      "baseline": {
+        "lcp": 624,
+        "cls": 0,
+        "dcl": 596
+      },
+      "current": {
+        "lcp": 588,
+        "cls": 0,
+        "dcl": 590.5999999996275
+      },
+      "lcpChange": -5.769230769230771
+    },
+    {
+      "route": "/blog/20261004-b45psV/",
+      "baseline": {
+        "lcp": 516,
+        "cls": 0.042000220725569436,
+        "dcl": 521.5999999996275
+      },
+      "current": {
+        "lcp": 536,
+        "cls": 0.04394217378834189,
+        "dcl": 565.4000000003725
+      },
+      "lcpChange": 3.875968992248069
+    }
+  ]
+}

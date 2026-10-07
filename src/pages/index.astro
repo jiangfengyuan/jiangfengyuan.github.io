@@ -46,7 +46,7 @@ const posts = await publishedPosts();
           />
         </div>
       </div>
-      <div class="hero-board dot-field reveal">
+      <div class="hero-board dot-field glass glass-strong reveal" data-tilt>
         <span class="board-note" aria-hidden="true">
           IDEAS → LITTLE THINGS THAT WORK
         </span>
@@ -57,7 +57,12 @@ const posts = await publishedPosts();
           <br />
           repeat.
         </span>
-        <a href="/republica/" class="board-game" aria-label="Cloud Republic">
+        <a
+          href="/republica/"
+          class="board-game"
+          data-shared-link="republica"
+          aria-label="Cloud Republic"
+        >
           <Picture
             fallbackFormat="webp"
             src={heroGame}
