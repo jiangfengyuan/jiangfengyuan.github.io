@@ -74,11 +74,11 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
   await input.fill('not-a-real-article');
   await expect(page.locator('[data-filter-empty]')).toBeVisible();
   await input.fill('');
-  await expect(page.locator('[data-post]:visible')).toHaveCount(7);
+  await expect(page.locator('[data-post]:visible')).toHaveCount(9);
   await page.locator('[data-post] h3 a').first().click();
   await expect(page.locator('.article-content')).toBeVisible();
   await page.goBack();
-  await expect(page.locator('[data-post]:visible')).toHaveCount(7);
+  await expect(page.locator('[data-post]:visible')).toHaveCount(9);
   await page.goto('/updates/');
   await page.locator('[data-filter-project="flash"]').click();
   await expect(page.locator('[data-update]:visible')).toHaveCount(1);
@@ -97,7 +97,9 @@ test('old article links and content without scripts', async ({ page, browser }) 
   await expect(nojs.locator('#site-nav a').first()).toBeVisible();
   await nojs.goto('/blog/20260926-S5g3_V/');
   await expect(nojs.locator('.article-content p').first()).toBeVisible();
-  await expect(nojs.locator('.toc a').first()).toBeVisible();
+  await expect(nojs.locator('.article-aside')).toHaveCount(0);
+  await nojs.goto('/blog/20260926-ukkgj5/');
+  await expect(nojs.locator('.toc a')).toHaveCount(8);
   await nojs.goto('/blog.html?p=20260926-S5g3_V');
   await expect(nojs.locator('a[href="/blog/20260926-S5g3_V/"]')).toBeVisible();
   await context.close();

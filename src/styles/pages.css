@@ -432,24 +432,26 @@ figure {
   margin: 0;
 }
 .article-content {
-  font-size: 17px;
-  line-height: var(--leading-relaxed);
+  font-size: 18px;
+  line-height: 1.85;
   overflow-wrap: anywhere;
 }
 .article-content > :first-child {
   margin-top: 0;
 }
 .article-content p {
-  margin: 0 0 1.4em;
+  margin: 0 0 1.2em;
 }
 .article-content h2 {
-  font-size: 29px;
-  margin: 2.2em 0 0.9em;
+  font-size: 26px;
+  line-height: 1.45;
+  margin: 1.8em 0 0.75em;
   scroll-margin-top: 120px;
 }
 .article-content h3 {
-  font-size: 23px;
-  margin: 1.7em 0 0.8em;
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 1.6em 0 0.7em;
   scroll-margin-top: 120px;
 }
 .article-content h4 {
@@ -476,7 +478,10 @@ figure {
 }
 .article-content img {
   border-radius: var(--radius-md);
-  max-height: 900px;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
   margin: 24px auto;
   cursor: zoom-in;
@@ -486,10 +491,17 @@ figure {
   transform: scale(1.015);
 }
 .article-content figure {
-  margin: 28px 0;
+  margin: 1.5em 0;
+}
+.article-content figure img {
+  margin: 0 auto;
+}
+.article-content figure p {
+  margin: 0;
 }
 .article-content figcaption {
-  font-size: 12px;
+  margin-top: 10px;
+  font-size: 14px;
   text-align: center;
   color: var(--muted);
   line-height: 1.5;
@@ -951,13 +963,13 @@ figure {
     font-size: 31px;
   }
   .article-content {
-    font-size: 16px;
+    font-size: 17px;
   }
   .article-content h2 {
-    font-size: 25px;
+    font-size: 23px;
   }
   .article-content h3 {
-    font-size: 21px;
+    font-size: 20px;
   }
   .article-nav {
     grid-template-columns: 1fr;
@@ -978,4 +990,49 @@ figure {
   .page-hero h1 {
     overflow-wrap: anywhere;
   }
+}
+
+.article-shell.article-shell-no-toc {
+  max-width: 720px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Editorial roles retain the source emphasis without importing its inline styles. */
+.article-content .article-lead {
+  font-weight: 600;
+}
+.article-content .article-centered {
+  text-align: center;
+}
+.article-content .article-closing {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 700;
+  margin-block: 1.5em 1em;
+}
+.article-content .article-blue {
+  color: var(--article-blue);
+  font-weight: 700;
+}
+.article-content .article-warm {
+  color: var(--article-warm);
+  font-weight: 700;
+}
+.article-content .article-credits {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+  text-align: center;
+}
+.article-content .article-credits p {
+  margin-bottom: 0.35em;
+}
+.article-content .article-credits p:last-child {
+  margin-bottom: 0;
+}
+.article-header .post-meta time {
+  line-height: 1.75;
 }

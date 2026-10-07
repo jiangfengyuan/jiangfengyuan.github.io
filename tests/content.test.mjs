@@ -54,3 +54,24 @@ test('Markdown pipeline preserves figures and theme-aware highlighting after san
   assert.ok(!result.code.includes('<script>'));
   assert.equal(result.metadata.headings.length, 1);
 });
+
+test('editorial roles are allowlisted and raw HTML sections have static unique anchors', async () => {
+  const { default: config } = await import('../astro.config.mjs');
+  const renderer = await config.markdown.processor.createRenderer(config.markdown);
+  const result = await renderer.render(
+    '<p class="article-lead injected" style="color:red" onclick="bad()">Intro</p><h2 class="article-centered article-blue">Section</h2><h2>Section</h2><div class="article-credits"><p>Credit</p></div><strong class="article-warm">Emphasis</strong>',
+  );
+  const doc = new JSDOM(result.code).window.document;
+  assert.equal(doc.querySelector('p').className, 'article-lead');
+  assert.equal(doc.querySelectorAll('[style],[onclick],.injected').length, 0);
+  assert.equal(doc.querySelector('h2').className, 'article-centered article-blue');
+  assert.ok(doc.querySelector('.article-credits'));
+  assert.ok(doc.querySelector('strong.article-warm'));
+  assert.equal(result.metadata.headings.length, 2);
+  assert.deepEqual(
+    result.metadata.headings.map((h) => h.slug),
+    ['section-1', 'section-2'],
+  );
+  for (const h of result.metadata.headings)
+    assert.equal(doc.getElementById(h.slug).textContent, h.text);
+});

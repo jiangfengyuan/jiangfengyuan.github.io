@@ -25,6 +25,8 @@
   --flash-mark: #6d5f9d;
   --media-note: #4c455f;
   --qr-bg: #fff;
+  --article-blue: #245d9a;
+  --article-warm: #a34721;
   --font:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -49,6 +51,8 @@
   --z-skip-link: 1000;
 }
 :root[data-theme='dark'] {
+  --article-blue: #9ec5ff;
+  --article-warm: #f0b18d;
   color-scheme: dark;
   --paper: #191c19;
   --surface: #232723;
