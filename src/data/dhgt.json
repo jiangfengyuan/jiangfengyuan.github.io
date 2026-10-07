@@ -55,28 +55,6 @@
       "height": 383
     },
     {
-      "image": "all-nighter",
-      "title": {
-        "zh": "不眠之夜大奖赛",
-        "en": "All-Nighter Grand Prix"
-      },
-      "category": {
-        "zh": "社团视觉 · 主题海报",
-        "en": "CLUB VISUALS · THEME POSTER"
-      },
-      "body": {
-        "zh": "蓝色 GT 标志与 All-Nighter Grand Prix 字样组成的主题视觉。",
-        "en": "A blue GT mark and All-Nighter Grand Prix lettering form this theme poster."
-      },
-      "alt": {
-        "zh": "不眠之夜大奖赛海报：蓝色 GT 标志、All-Nighter Grand Prix 标题与社团署名",
-        "en": "All-Nighter Grand Prix poster with a blue GT mark and club credit"
-      },
-      "href": null,
-      "width": 1600,
-      "height": 1131
-    },
-    {
       "image": "baku",
       "title": {
         "zh": "只差 0.196s",
@@ -116,7 +94,7 @@
         "zh": "维斯塔潘专题封面：日落赛车、庆祝姿态与人物肖像拼贴",
         "en": "Verstappen feature cover combining a sunset racing scene, a celebration and a portrait"
       },
-      "href": null,
+      "href": "/blog/20261004-b45psV/",
       "width": 1600,
       "height": 683
     }

@@ -18,7 +18,11 @@
       "zh": "Aero0.1.0 · Alpha",
       "en": "Aero0.1.0 · Alpha"
     },
-    "tags": ["Android", "macOS", "HarmonyOS"],
+    "tags": [
+      "Android",
+      "macOS",
+      "HarmonyOS"
+    ],
     "href": "/flash/",
     "github": "https://github.com/jiangfengyuan/Project-FLASH",
     "action": "https://github.com/jiangfengyuan/Project-FLASH/releases",
@@ -82,7 +86,11 @@
       "zh": "可在线试玩 · MIT",
       "en": "Playable online · MIT"
     },
-    "tags": ["TypeScript", "Vite", "Offline"],
+    "tags": [
+      "TypeScript",
+      "Vite",
+      "Offline"
+    ],
     "href": "/republica/",
     "github": "https://github.com/jiangfengyuan/Cloud-Republica",
     "action": "https://jiangfengyuan.github.io/Cloud-Republica/",
@@ -139,14 +147,18 @@
       "en": "Community · Motorsport"
     },
     "description": {
-      "zh": "东华 DHGT 汽车运动社（东城），延续生态园的汽车运动文化。一起认识赛事与工程，体验模拟赛车，分享汽车文化与影像创作。",
-      "en": "DHGT Motorsport Club in Dongcheng carries forward Ecology Park’s racing culture. Discover racing and engineering, explore sim racing, and share car culture and visual stories."
+      "zh": "东华 DHGT 汽车运动社（东城），让热爱赛车的同学在这里相遇。一起看懂赛事、体验模拟驾驶，用文字与影像记录汽车文化。",
+      "en": "DHGT Motorsport Club in Dongcheng brings students together through a shared love of racing. Understand the races, explore sim racing, and tell stories about car culture through words and images."
     },
     "status": {
       "zh": "关注公众号获取活动消息",
       "en": "Follow the club for activity news"
     },
-    "tags": ["Sim racing", "Formula 1", "Community"],
+    "tags": [
+      "Sim racing",
+      "Formula 1",
+      "Community"
+    ],
     "href": "/dhgt/",
     "github": "",
     "action": "/dhgt/#wechat",

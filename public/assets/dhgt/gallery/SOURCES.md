@@ -5,7 +5,6 @@ Source: user-provided `DHGT/`, reviewed on 2026-10-07.
 | Website file | Original source |
 | --- | --- |
 | intro.webp | Publica/DHGT，向速度与热爱出发.png |
-| all-nighter.webp | NGT/NGT-Poster.PNG |
 | baku.webp | DHGT｜巴库赛后｜只差0.196s.png |
 | verstappen.webp | 维斯塔潘-雪邦首胜-公众号封面-v2.png |
 
