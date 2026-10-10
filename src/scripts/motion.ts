@@ -56,33 +56,55 @@ export function changeView(kind: 'theme' | 'language', update: () => void, origi
   cancel();
   const serial = revision;
   const root = document.documentElement;
-  const elements = kind === 'language' ? zones() : [];
-  const oldRects = elements.map((el) => el.getBoundingClientRect());
-  const fallback = () => {
-    if (kind === 'theme') root.classList.add('theme-fade');
-    update();
-    if (kind === 'language')
+  // Language changes never snapshot the document or animate layout dimensions.
+  if (kind === 'language') {
+    const elements = zones();
+    const before = elements.map((el) => el.getBoundingClientRect());
+    const anchor =
+      scrollY > 80
+        ? elements.find((el, i) => !el.matches('.nav-shell') && before[i].top >= 0)
+        : undefined;
+    const anchorTop = anchor?.getBoundingClientRect().top;
+    if (!motionAllowed()) {
+      update();
+      return;
+    }
+    const commit = () => {
+      update();
+      if (!motionAllowed()) return;
+      const after = elements.map((el) => el.getBoundingClientRect());
+      if (anchor && anchorTop !== undefined) {
+        const shift = after[elements.indexOf(anchor)].top - anchorTop;
+        if (Math.abs(shift) > 1) scrollBy({ top: shift, behavior: 'instant' });
+      }
       elements.forEach((el, i) => {
-        const next = el.getBoundingClientRect();
-        animate(el, [
-          {
-            opacity: 0.15,
-            transform: `translateY(${Math.max(-24, Math.min(24, oldRects[i].top - next.top))}px)`,
-          },
-          { opacity: 1, transform: 'none' },
-        ]);
-        if (
-          next.height < 500 &&
-          Math.abs(oldRects[i].height - next.height) < 160 &&
-          oldRects[i].height !== next.height
-        )
-          animate(el, [{ height: oldRects[i].height + 'px' }, { height: next.height + 'px' }]);
+        const offset = Math.max(-12, Math.min(12, before[i].top - after[i].top));
+        animate(
+          el,
+          [
+            { opacity: 0.2, transform: `translateY(${offset}px)` },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: 170, delay: Math.min(i * 8, 32) },
+        );
       });
+    };
+    pendingUpdate = commit;
+    elements.forEach((el) => animate(el, [{ opacity: 1 }, { opacity: 0.2 }], { duration: 70 }));
+    setTimeout(() => {
+      if (serial !== revision) return;
+      pendingUpdate = undefined;
+      commit();
+    }, 70);
+    return;
+  }
+  const fallback = () => {
+    root.classList.add('theme-fade');
+    update();
     setTimeout(() => {
       if (serial === revision) root.classList.remove('theme-fade');
-    }, 240);
+    }, 180);
   };
-  root.classList.remove('theme-fade');
   if (!motionAllowed()) {
     update();
     return;
@@ -94,10 +116,6 @@ export function changeView(kind: 'theme' | 'language', update: () => void, origi
   root.dataset.motion = kind;
   named = [...document.querySelectorAll<HTMLElement>('#main-content,.site-header')];
   named.forEach((el) => (el.style.viewTransitionName = 'none'));
-  if (kind === 'language') {
-    named.push(...elements);
-    elements.forEach((el, i) => (el.style.viewTransitionName = 'language-' + i));
-  }
   const rect = origin?.getBoundingClientRect();
   const x = rect ? rect.left + rect.width / 2 : innerWidth / 2;
   const y = rect ? rect.top + rect.height / 2 : innerHeight / 2;

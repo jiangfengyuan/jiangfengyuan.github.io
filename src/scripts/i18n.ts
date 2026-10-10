@@ -5,11 +5,17 @@ export function language(): Language {
 export function localized(zh: string, en: string) {
   return language() === 'en' ? en : zh;
 }
+let translatedBody: HTMLElement | undefined;
+let translatedLanguage: Language | undefined;
 export function translate(lang: Language) {
+  if (translatedBody === document.body && translatedLanguage === lang) return;
+  translatedBody = document.body;
+  translatedLanguage = lang;
   document.documentElement.dataset.lang = lang;
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    el.textContent = el.dataset[lang] || '';
+    const text = el.dataset[lang] || '';
+    if (el.textContent !== text) el.textContent = text;
   });
   document.querySelectorAll<HTMLImageElement>('img[data-alt-zh]').forEach((el) => {
     el.alt = el.dataset[lang === 'zh' ? 'altZh' : 'altEn'] || el.dataset.altZh || '';

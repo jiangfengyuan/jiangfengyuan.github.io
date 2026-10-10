@@ -36,35 +36,59 @@ function init() {
     if (aside) aside.hidden = false;
   }
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
-  let pending = false;
+  let pending = 0;
+  let dirty = true;
+  let top = 0,
+    height = 1,
+    positions: number[] = [],
+    currentIndex = -2;
   function update() {
-    pending = false;
-    if (!article) return;
-    const box = article.getBoundingClientRect();
+    pending = 0;
+    if (dirty && article) {
+      const box = article.getBoundingClientRect();
+      top = box.top + scrollY;
+      height = box.height;
+      positions = headings.map((h) => h.getBoundingClientRect().top + scrollY);
+      dirty = false;
+    }
     const ratio = Math.min(
       1,
-      Math.max(0, (120 - box.top) / Math.max(1, box.height - window.innerHeight + 120)),
+      Math.max(0, (scrollY + 120 - top) / Math.max(1, height - innerHeight + 120)),
     );
     if (progress) progress.style.transform = `scaleX(${ratio})`;
-    let current = headings[0];
-    for (const h of headings) {
-      if (h.getBoundingClientRect().top <= 155) current = h;
-      else break;
+    let lo = 0,
+      hi = positions.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >>> 1;
+      if (positions[mid] <= scrollY + 155) lo = mid + 1;
+      else hi = mid;
     }
-    links.forEach((a) => {
-      if (current && a.hash === '#' + current.id) a.setAttribute('aria-current', 'true');
-      else a.removeAttribute('aria-current');
-    });
+    const index = headings.length ? Math.max(0, lo - 1) : -1;
+    if (index !== currentIndex) {
+      if (currentIndex >= 0) links[currentIndex]?.removeAttribute('aria-current');
+      if (index >= 0) links[index]?.setAttribute('aria-current', 'true');
+      currentIndex = index;
+    }
   }
   function queue() {
-    if (!pending) {
-      pending = true;
-      requestAnimationFrame(update);
-    }
+    if (!pending) pending = requestAnimationFrame(update);
+  }
+  function invalidate() {
+    dirty = true;
+    queue();
   }
   addEventListener('scroll', queue, { passive: true, signal });
-  addEventListener('resize', queue, { signal });
-  content.querySelectorAll('img').forEach((i) => i.addEventListener('load', queue, { signal }));
+  addEventListener('resize', invalidate, { passive: true, signal });
+  document.addEventListener('site:language', invalidate, { signal });
+  const observer = new ResizeObserver(invalidate);
+  observer.observe(article);
+  signal.addEventListener('abort', () => {
+    cancelAnimationFrame(pending);
+    observer.disconnect();
+  });
+  content
+    .querySelectorAll('img')
+    .forEach((i) => i.addEventListener('load', invalidate, { signal }));
   queue();
   const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
   const large = document.querySelector<HTMLImageElement>('[data-lightbox-image]');

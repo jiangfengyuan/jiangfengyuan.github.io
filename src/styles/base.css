@@ -234,19 +234,6 @@ main:focus-visible {
   gap: 6px;
   flex-wrap: wrap;
 }
-.reveal {
-  animation: appear 400ms var(--ease) both;
-}
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 .empty-state {
   padding: 48px;
   text-align: center;

@@ -25,6 +25,8 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
   const status = root.querySelector<HTMLElement>('[data-result-count]');
   const empty = root.querySelector<HTMLElement>('[data-filter-empty]');
   let selected = 'all';
+  let previousCount = -1;
+  const tagSets = rows.map((row) => new Set<string>(JSON.parse(row.dataset.tags || '[]')));
   const chips = root.querySelector<HTMLElement>('.filter-chips');
   const indicator = document.createElement('span');
   indicator.className = 'filter-indicator';
@@ -65,11 +67,11 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
   function run(write = false) {
     const q = (input?.value || '').trim().toLocaleLowerCase();
     let count = 0;
-    rows.forEach((row) => {
+    rows.forEach((row, i) => {
       const match =
         kind === 'blog'
           ? (!q || (row.dataset.search || '').includes(q)) &&
-            (selected === 'all' || JSON.parse(row.dataset.tags || '[]').includes(selected))
+            (selected === 'all' || tagSets[i].has(selected))
           : selected === 'all' || row.dataset.project === selected;
       row.hidden = !match;
       if (match) count++;
@@ -85,7 +87,19 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
         `${count} ${kind === 'blog' ? '篇文章' : '条记录'}`,
         `${count} ${kind === 'blog' ? 'articles' : 'updates'}`,
       );
-    if (empty) empty.hidden = count !== 0;
+    if (empty) {
+      empty.hidden = count !== 0;
+      if (write && count === 0 && previousCount !== 0)
+        animate(
+          empty,
+          [
+            { opacity: 0, transform: 'translateY(6px)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: 180 },
+        );
+    }
+    previousCount = count;
     moveIndicator(write);
     if (write) animateResults(rows);
     if (write) {

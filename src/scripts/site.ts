@@ -121,7 +121,12 @@ function init() {
     if (open) nav.querySelector<HTMLAnchorElement>('a')?.focus();
   }
   function reset() {
-    menu(false, !!nav?.contains(document.activeElement));
+    const wasOpen = toggle?.getAttribute('aria-expanded') === 'true';
+    if (wasOpen) menu(false, !!nav?.contains(document.activeElement));
+    else {
+      nav?.classList.remove('is-open');
+      if (nav) nav.inert = compact();
+    }
     if (nav && !compact()) nav.inert = false;
   }
   mobile.addEventListener('change', reset, { signal });

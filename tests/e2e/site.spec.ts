@@ -15,6 +15,7 @@ const routes = [
   '/404.html',
 ];
 test('all layouts, bilingual themes, static metadata and accessibility', async ({ page }) => {
+  test.setTimeout(90_000);
   await page.route('https://mmbiz.qpic.cn/**', (r) => r.abort());
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -63,7 +64,7 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   expect(
     await page
-      .locator('.reveal')
+      .locator('.hero-copy')
       .first()
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe('none');

@@ -192,9 +192,10 @@ test('segment geometry, resizing, touch and high-density windows', async ({ brow
       { x: 0, y: 422, width: 824, height: 478 },
     ],
   ]) {
-    await page.evaluate((segments) => {
+    await page.evaluate(async (segments) => {
       (window as any).viewport.segments = segments;
       dispatchEvent(new Event('resize'));
+      await new Promise(requestAnimationFrame);
     }, segments);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(
       true,
@@ -296,4 +297,38 @@ test('large text, script-free content and keyboard viewport keep controls reacha
     );
   }
   await context.close();
+});
+
+test('language stays local and viewport events do not replay menu animation', async ({ page }) => {
+  await page.goto('/');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    (window as any).snapshots = 0;
+    const start = document.startViewTransition?.bind(document);
+    if (start)
+      document.startViewTransition = ((...args: any[]) => {
+        (window as any).snapshots++;
+        return (start as any)(...args);
+      }) as any;
+  });
+  await page.locator('[data-lang-toggle]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await page.waitForTimeout(320);
+  expect(await page.evaluate(() => (window as any).snapshots)).toBe(0);
+  await page.locator('[data-menu-toggle]').click();
+  await page.evaluate(() => {
+    for (let i = 0; i < 40; i++) window.visualViewport?.dispatchEvent(new Event('scroll'));
+  });
+  await expect(page.locator('[data-menu-toggle]')).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-menu-toggle]')).toBeFocused();
+  await page.locator('[data-lang-toggle]').click();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
+  await page.waitForTimeout(100);
+  expect(
+    await page.evaluate(
+      () => document.getAnimations().filter((a) => a.playState === 'running').length,
+    ),
+  ).toBe(0);
 });

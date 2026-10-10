@@ -8,12 +8,13 @@ interface Segment {
 export function initSpatial(signal: AbortSignal) {
   const root = document.documentElement;
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  let geometryFrame = 0;
+  const set = (key: string, value: string) => {
+    if (root.style.getPropertyValue(key) !== value) root.style.setProperty(key, value);
+  };
   function geometry() {
-    root.style.setProperty(
-      '--usable-height',
-      (window.visualViewport?.height || innerHeight) + 'px',
-    );
-    root.style.setProperty('--visual-top', (window.visualViewport?.offsetTop || 0) + 'px');
+    set('--usable-height', (window.visualViewport?.height || innerHeight) + 'px');
+    set('--visual-top', (window.visualViewport?.offsetTop || 0) + 'px');
     const viewport = window as Window & { viewport?: { segments?: Segment[] } };
     const segments = viewport.viewport?.segments;
     let lane: Segment | undefined;
@@ -28,18 +29,30 @@ export function initSpatial(signal: AbortSignal) {
       );
       if (gap) lane = [...segments].sort((a, b) => b.width * b.height - a.width * a.height)[0];
     }
-    root.toggleAttribute('data-segmented', !!lane);
-    root.style.setProperty('--segment-left', (lane?.x || 0) + 'px');
-    root.style.setProperty('--segment-width', (lane?.width || innerWidth) + 'px');
-    root.style.setProperty('--segment-top', (lane?.y || 0) + 'px');
-    root.style.setProperty('--segment-height', (lane?.height || innerHeight) + 'px');
-    root.dataset.compactNav = String((lane?.width || innerWidth) <= 760);
-    document.dispatchEvent(new Event('site:viewport'));
+    if (root.hasAttribute('data-segmented') !== !!lane)
+      root.toggleAttribute('data-segmented', !!lane);
+    set('--segment-left', (lane?.x || 0) + 'px');
+    set('--segment-width', (lane?.width || innerWidth) + 'px');
+    set('--segment-top', (lane?.y || 0) + 'px');
+    set('--segment-height', (lane?.height || innerHeight) + 'px');
+    const compact = String((lane?.width || innerWidth) <= 760);
+    if (root.dataset.compactNav !== compact) {
+      root.dataset.compactNav = compact;
+      document.dispatchEvent(new Event('site:viewport'));
+    }
   }
   geometry();
-  addEventListener('resize', geometry, { passive: true, signal });
-  window.visualViewport?.addEventListener('resize', geometry, { passive: true, signal });
-  window.visualViewport?.addEventListener('scroll', geometry, { passive: true, signal });
+  const queueGeometry = () => {
+    if (!geometryFrame)
+      geometryFrame = requestAnimationFrame(() => {
+        geometryFrame = 0;
+        geometry();
+      });
+  };
+  addEventListener('resize', queueGeometry, { passive: true, signal });
+  window.visualViewport?.addEventListener('resize', queueGeometry, { passive: true, signal });
+  window.visualViewport?.addEventListener('scroll', queueGeometry, { passive: true, signal });
+  signal.addEventListener('abort', () => cancelAnimationFrame(geometryFrame));
   const tilted = [...document.querySelectorAll<HTMLElement>('[data-tilt]')];
   const reset = (el: HTMLElement) => {
     el.style.removeProperty('--tilt-x');
@@ -49,19 +62,34 @@ export function initSpatial(signal: AbortSignal) {
   };
   tilted.forEach((el) => {
     let frame = 0;
+    let bounds: DOMRect | undefined;
+    el.addEventListener(
+      'pointerenter',
+      () => {
+        bounds = el.getBoundingClientRect();
+      },
+      { signal },
+    );
+    addEventListener(
+      'resize',
+      () => {
+        bounds = undefined;
+      },
+      { passive: true, signal },
+    );
     el.addEventListener(
       'pointermove',
       (e) => {
         if (!fine.matches || !motionAllowed() || e.pointerType === 'touch' || frame) return;
         frame = requestAnimationFrame(() => {
           frame = 0;
-          const b = el.getBoundingClientRect();
+          const b = bounds || (bounds = el.getBoundingClientRect());
           const x = Math.max(0, Math.min(1, (e.clientX - b.left) / b.width));
           const y = Math.max(0, Math.min(1, (e.clientY - b.top) / b.height));
           el.style.setProperty('--tilt-x', 1.5 - y * 3 + 'deg');
           el.style.setProperty('--tilt-y', x * 3 - 1.5 + 'deg');
-          el.style.setProperty('--glow-x', x * 100 + '%');
-          el.style.setProperty('--glow-y', y * 100 + '%');
+          el.style.setProperty('--glow-x', (x - 0.5) * 16 + 'px');
+          el.style.setProperty('--glow-y', (y - 0.5) * 16 + 'px');
         });
       },
       { signal },
@@ -69,6 +97,7 @@ export function initSpatial(signal: AbortSignal) {
     const leave = () => {
       cancelAnimationFrame(frame);
       frame = 0;
+      bounds = undefined;
       reset(el);
     };
     el.addEventListener('pointerleave', leave, { signal });
