@@ -254,7 +254,7 @@ test('large text, script-free content and keyboard viewport keep controls reacha
   page,
 }) => {
   await mockImages(page);
-  for (const route of ['/', '/projects/', '/blog/', '/blog/20261004-b45psV/']) {
+  for (const route of ['/', '/projects/', '/about/', '/blog/', '/blog/20261004-b45psV/']) {
     await page.goto(route);
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
@@ -331,4 +331,85 @@ test('language stays local and viewport events do not replay menu animation', as
       () => document.getAnimations().filter((a) => a.playState === 'running').length,
     ),
   ).toBe(0);
+});
+
+test('contact copy feedback survives language changes and router cleanup', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as any).copies = [];
+    (window as any).copyFails = false;
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          (window as any).copies.push(text);
+          if ((window as any).copyFails) throw new Error('denied');
+        },
+      },
+    });
+  });
+  await page.goto('/about/');
+  const contact = page.locator('#contact');
+  const button = contact.locator('[data-copy-email]');
+  await button.click();
+  await expect(button).toHaveAttribute('data-copy-state', 'success');
+  await expect(contact.getByRole('status')).toHaveText('已复制，可以粘贴了。');
+  expect(await page.evaluate(() => (window as any).copies)).toEqual([
+    await button.getAttribute('data-copy-email'),
+  ]);
+  await page.locator('[data-lang-toggle]').click();
+  await expect(contact.getByRole('status')).toHaveText('Copied. Ready to paste.');
+  await page.evaluate(() => {
+    (window as any).copyFails = true;
+  });
+  await button.click();
+  await expect(contact.getByRole('status')).toContainText('Could not copy');
+  await expect(button).not.toHaveAttribute('aria-busy', 'true');
+  await page.evaluate(() => {
+    (window as any).copyFails = false;
+  });
+  await page.locator('#site-nav a[href="/projects/"]').click();
+  await expect(page).toHaveURL(/\/projects\//);
+  await page.locator('#site-nav a[href="/about/"]').click();
+  await button.click();
+  expect(await page.evaluate(() => (window as any).copies.length)).toBe(3);
+  await expect(contact.getByRole('status')).toHaveText('Copied. Ready to paste.');
+});
+
+test('detail feedback keeps keyboard, reduced-motion and script-free fallbacks', async ({
+  page,
+  browser,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/about/');
+  await page.locator('[data-menu-toggle]').click();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.waitForTimeout(100);
+  expect(
+    await page.evaluate(
+      () => document.getAnimations().filter((a) => a.playState === 'running').length,
+    ),
+  ).toBe(0);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-menu-toggle]')).toBeFocused();
+  const top = page.locator('[data-back-top]');
+  await top.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
+  expect(await page.evaluate(() => scrollY)).toBe(0);
+  await page.waitForTimeout(300);
+  expect(
+    await page.evaluate(
+      () => document.getAnimations().filter((a) => a.playState === 'running').length,
+    ),
+  ).toBe(0);
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 360, height: 800 },
+  });
+  const plain = await context.newPage();
+  await plain.goto('/about/');
+  await expect(plain.locator('[data-copy-email]').first()).toBeHidden();
+  await expect(plain.locator('#contact a[href^="mailto:"]')).toBeVisible();
+  await expect(plain.locator('[data-back-top]')).toHaveAttribute('href', '#main-content');
+  await context.close();
 });

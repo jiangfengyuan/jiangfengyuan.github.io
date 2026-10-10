@@ -1,5 +1,6 @@
 ---
 import Text from './Text.astro';
+import CopyEmail from './CopyEmail.astro';
 import { profile } from '../data/content';
 ---
 
@@ -14,9 +15,12 @@ import { profile } from '../data/content';
     <p>
       <Text text={{ zh: '保持好奇，慢慢创造。', en: 'Stay curious. Make something thoughtful.' }} />
     </p>
-    <a class="text-link" href={'mailto:' + profile.email}>
-      {profile.email} ↗
-    </a>
+    <div class="footer-contact">
+      <a class="text-link" href={'mailto:' + profile.email}>
+        {profile.email} ↗
+      </a>
+      <CopyEmail />
+    </div>
   </div>
   <div class="footer-bottom">
     <span>© {new Date().getFullYear()} Hayden</span>
@@ -43,6 +47,10 @@ import { profile } from '../data/content';
       </a>
       <a href="/dhgt/">DHGT</a>
       <a href="/rss.xml">RSS</a>
+      <a class="back-top" href="#main-content" data-back-top>
+        <Text text={{ zh: '返回页首', en: 'Back to top' }} />
+        <span aria-hidden="true">↑</span>
+      </a>
     </div>
     <span>
       <Text text={{ zh: '用心设计，持续生长。', en: 'Made with care. Always growing.' }} />

@@ -1,6 +1,7 @@
 import { translate, language, localized } from './i18n';
-import { changeView, panel } from './motion';
+import { animate, changeView, panel } from './motion';
 import { initSpatial } from './spatial';
+import { initDetails } from './details';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme and language before paint.
@@ -31,6 +32,7 @@ function init() {
 
   translate(language());
   initSpatial(signal);
+  initDetails(signal);
   let desiredLanguage = language();
 
   document.querySelector('[data-lang-toggle]')?.addEventListener(
@@ -102,16 +104,36 @@ function init() {
   const compact = () => mobile.matches || document.documentElement.dataset.compactNav === 'true';
   let menuRevision = 0;
   let menuAnimation: Animation | undefined;
+  let menuItems: Animation[] = [];
+  const clearMenuItems = () => {
+    menuItems.forEach((animation) => animation.cancel());
+    menuItems = [];
+  };
+  signal.addEventListener('abort', clearMenuItems, { once: true });
   function menu(open: boolean, restore = false) {
     if (!nav || !toggle) return;
     const serial = ++menuRevision;
     menuAnimation?.cancel();
+    clearMenuItems();
     if (open) nav.classList.add('is-open');
     if (compact())
       menuAnimation = panel(nav, open, () => {
         if (serial === menuRevision && !open) nav.classList.remove('is-open');
       });
     else nav.classList.remove('is-open');
+    if (open && compact()) {
+      menuItems = [...nav.querySelectorAll('a')].flatMap((link, index) => {
+        const animation = animate(
+          link,
+          [
+            { opacity: 0, transform: 'translateY(6px)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: 180, delay: index * 16, fill: 'backwards' },
+        );
+        return animation ? [animation] : [];
+      });
+    }
     toggle.setAttribute('aria-expanded', String(open));
     toggle.dataset.labelZh = open ? '关闭菜单' : '打开菜单';
     toggle.dataset.labelEn = open ? 'Close navigation' : 'Open navigation';

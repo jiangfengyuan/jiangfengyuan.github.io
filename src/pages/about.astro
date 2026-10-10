@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Text from '../components/Text.astro';
+import CopyEmail from '../components/CopyEmail.astro';
 import Icon from '../components/Icon.astro';
 import { profile } from '../data/content';
 ---
@@ -89,10 +90,13 @@ import { profile } from '../data/content';
           </h2>
           <p>{profile.email}</p>
         </div>
-        <a class="btn primary" href={'mailto:' + profile.email}>
-          <Text text={{ zh: '联系我', en: 'Get in touch' }} />
-          <Icon name="mail" />
-        </a>
+        <div class="contact-actions">
+          <a class="btn primary" href={'mailto:' + profile.email}>
+            <Text text={{ zh: '联系我', en: 'Get in touch' }} />
+            <Icon name="mail" />
+          </a>
+          <CopyEmail />
+        </div>
       </div>
     </section>
   </div>

@@ -1,0 +1,22 @@
+---
+import Text from './Text.astro';
+import { profile } from '../data/content';
+---
+
+<div class="copy-email" data-copy-region>
+  <button class="btn copy-email-button" type="button" data-copy-email={profile.email} hidden>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      aria-hidden="true"
+    >
+      <rect class="copy-outline" x="8" y="8" width="12" height="12" rx="3" />
+      <path class="copy-outline" d="M15 4H7a3 3 0 0 0-3 3v8" />
+      <path class="copy-check" d="m6 12 4 4 8-8" />
+    </svg>
+    <Text text={{ zh: '复制邮箱', en: 'Copy email' }} />
+  </button>
+  <span class="copy-feedback" role="status" aria-live="polite" aria-atomic="true"></span>
+</div>
