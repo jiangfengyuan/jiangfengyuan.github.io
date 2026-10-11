@@ -1,7 +1,8 @@
 import { translate, language, localized } from './i18n';
-import { animate, changeView, panel } from './motion';
+import { changeView, panel } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
+import { initNavigation } from './navigation';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme and language before paint.
@@ -98,106 +99,7 @@ function init() {
   document.addEventListener('site:language', syncTheme, { signal });
   syncTheme();
 
-  const nav = document.querySelector<HTMLElement>('#site-nav');
-  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-  const mobile = matchMedia('(max-width:760px)');
-  const compact = () => mobile.matches || document.documentElement.dataset.compactNav === 'true';
-  let menuRevision = 0;
-  let menuAnimation: Animation | undefined;
-  let menuItems: Animation[] = [];
-  const clearMenuItems = () => {
-    menuItems.forEach((animation) => animation.cancel());
-    menuItems = [];
-  };
-  signal.addEventListener('abort', clearMenuItems, { once: true });
-  function menu(open: boolean, restore = false) {
-    if (!nav || !toggle) return;
-    const serial = ++menuRevision;
-    menuAnimation?.cancel();
-    clearMenuItems();
-    if (open) nav.classList.add('is-open');
-    if (compact())
-      menuAnimation = panel(nav, open, () => {
-        if (serial === menuRevision && !open) nav.classList.remove('is-open');
-      });
-    else nav.classList.remove('is-open');
-    if (open && compact()) {
-      menuItems = [...nav.querySelectorAll('a')].flatMap((link, index) => {
-        const animation = animate(
-          link,
-          [
-            { opacity: 0, transform: 'translateY(6px)' },
-            { opacity: 1, transform: 'none' },
-          ],
-          { duration: 180, delay: index * 16, fill: 'backwards' },
-        );
-        return animation ? [animation] : [];
-      });
-    }
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.dataset.labelZh = open ? '关闭菜单' : '打开菜单';
-    toggle.dataset.labelEn = open ? 'Close navigation' : 'Open navigation';
-    toggle.setAttribute('aria-label', localized(toggle.dataset.labelZh, toggle.dataset.labelEn));
-    nav.inert = compact() && !open;
-    if (restore) toggle.focus();
-    if (open) nav.querySelector<HTMLAnchorElement>('a')?.focus();
-  }
-  function reset() {
-    const wasOpen = toggle?.getAttribute('aria-expanded') === 'true';
-    if (wasOpen) menu(false, !!nav?.contains(document.activeElement));
-    else {
-      nav?.classList.remove('is-open');
-      if (nav) nav.inert = compact();
-    }
-    if (nav && !compact()) nav.inert = false;
-  }
-  mobile.addEventListener('change', reset, { signal });
-  document.addEventListener('site:viewport', reset, { signal });
-  reset();
-  toggle?.addEventListener('click', () => menu(toggle.getAttribute('aria-expanded') !== 'true'), {
-    signal,
-  });
-  nav
-    ?.querySelectorAll('a')
-    .forEach((a) => a.addEventListener('click', () => menu(false), { signal }));
-  document.addEventListener(
-    'pointerdown',
-    (e) => {
-      if (
-        toggle?.getAttribute('aria-expanded') === 'true' &&
-        e.target instanceof Node &&
-        !document.querySelector('.nav-shell')?.contains(e.target)
-      )
-        menu(false, !!nav?.contains(document.activeElement));
-    },
-    { signal },
-  );
-  document.addEventListener(
-    'keydown',
-    (e) => {
-      if (toggle?.getAttribute('aria-expanded') !== 'true') return;
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        menu(false, true);
-      }
-      if (e.key === 'Tab') {
-        const items = [
-          ...nav!.querySelectorAll<HTMLAnchorElement>('a'),
-          ...document.querySelectorAll<HTMLButtonElement>('.nav-tools button'),
-        ];
-        const first = items[0],
-          last = items.at(-1);
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last?.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first?.focus();
-        }
-      }
-    },
-    { signal },
-  );
+  initNavigation(signal);
 
   // Give failed remote article images an explicit, readable fallback.
   document.querySelectorAll<HTMLImageElement>('img[src]').forEach((img) => {

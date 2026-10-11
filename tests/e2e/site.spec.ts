@@ -55,7 +55,7 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 850 });
   await page.goto('/');
   await page.locator('[data-menu-toggle]').click();
-  await expect(page.locator('#site-nav a').first()).toBeFocused();
+  await expect(page.locator('#site-nav [data-nav-trigger]').first()).toBeFocused();
   await page.keyboard.press('Shift+Tab');
   await expect(page.locator('[data-menu-toggle]')).toBeFocused();
   await page.keyboard.press('Escape');
@@ -69,17 +69,18 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe('none');
   await page.goto('/blog/');
+  const articleCount = await page.locator('[data-post]').count();
   const input = page.locator('[data-search-input]');
   await input.fill('DHGT');
   await expect(page.locator('[data-post]:visible')).toHaveCount(1);
   await input.fill('not-a-real-article');
   await expect(page.locator('[data-filter-empty]')).toBeVisible();
   await input.fill('');
-  await expect(page.locator('[data-post]:visible')).toHaveCount(9);
+  await expect(page.locator('[data-post]:visible')).toHaveCount(articleCount);
   await page.locator('[data-post] h3 a').first().click();
   await expect(page.locator('.article-content')).toBeVisible();
   await page.goBack();
-  await expect(page.locator('[data-post]:visible')).toHaveCount(9);
+  await expect(page.locator('[data-post]:visible')).toHaveCount(articleCount);
   await page.goto('/updates/');
   await page.locator('[data-filter-project="flash"]').click();
   await expect(page.locator('[data-update]:visible')).toHaveCount(1);

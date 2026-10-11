@@ -147,7 +147,7 @@ test('reduced motion mid-transition, unavailable API and solid surfaces remain u
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('[data-menu-toggle]').click();
-  await expect(page.locator('#site-nav a').first()).toBeFocused();
+  await expect(page.locator('#site-nav [data-nav-trigger]').first()).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-menu-toggle]')).toBeFocused();
 });
@@ -367,9 +367,11 @@ test('contact copy feedback survives language changes and router cleanup', async
   await page.evaluate(() => {
     (window as any).copyFails = false;
   });
-  await page.locator('#site-nav a[href="/projects/"]').click();
+  await page.locator('[data-nav-trigger="projects"]').click();
+  await page.locator('#nav-panel-projects a[href="/projects/"]').click();
   await expect(page).toHaveURL(/\/projects\//);
-  await page.locator('#site-nav a[href="/about/"]').click();
+  await page.locator('[data-nav-trigger="about"]').click();
+  await page.locator('#nav-panel-about a[href="/about/"]').click();
   await button.click();
   expect(await page.evaluate(() => (window as any).copies.length)).toBe(3);
   await expect(contact.getByRole('status')).toHaveText('Copied. Ready to paste.');

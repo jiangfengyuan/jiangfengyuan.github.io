@@ -16,10 +16,14 @@ export default defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium', channel: process.env.CI ? undefined : 'chrome' },
     },
-    { name: 'webkit', testMatch: /spatial\.spec\.ts$/, use: { browserName: 'webkit' } },
+    {
+      name: 'webkit',
+      testMatch: /(?:spatial|navigation)\.spec\.ts$/,
+      use: { browserName: 'webkit' },
+    },
     {
       name: 'firefox',
-      testMatch: /spatial\.spec\.ts$/,
+      testMatch: /(?:spatial|navigation)\.spec\.ts$/,
       use: {
         browserName: 'firefox',
         launchOptions: { executablePath: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE },

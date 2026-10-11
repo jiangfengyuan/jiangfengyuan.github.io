@@ -10,6 +10,7 @@ import '../styles/components.css';
 import '../styles/pages.css';
 import '../styles/spatial.css';
 import '../styles/details.css';
+import '../styles/navigation.css';
 interface Props {
   title: string;
   titleEn?: string;
@@ -112,6 +113,11 @@ const canonical = new URL(Astro.url.pathname, site).href;
     <Footer />
     <noscript>
       <style>
+        .nav-trigger,
+        .nav-dropdown,
+        .nav-backdrop {
+          display: none !important;
+        }
         .menu-toggle {
           display: none !important;
         }

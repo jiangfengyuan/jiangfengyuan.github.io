@@ -1,6 +1,7 @@
 ---
 import Text from './Text.astro';
 import Icon from './Icon.astro';
+import { publishedPosts } from '../data/content';
 const { active = '' } = Astro.props;
 const links = [
   ['home', '/', { zh: '首页', en: 'Home' }],
@@ -9,10 +10,97 @@ const links = [
   ['updates', '/updates/', { zh: '动态', en: 'Updates' }],
   ['about', '/about/', { zh: '关于', en: 'About' }],
 ] as const;
+const latest = (await publishedPosts()).slice(0, 3);
+type Entry = [string, string, string];
+type Group = { title: { zh: string; en: string }; items: Entry[] };
+const group = (zh: string, en: string, items: Entry[]): Group => ({ title: { zh, en }, items });
+const menus: Record<string, Group[]> = {
+  home: [
+    group('探索这个空间', 'Explore this space', [
+      ['/', '从首页开始', 'Start here'],
+      ['/projects/', '作品与项目', 'Projects'],
+      ['/blog/', '阅读文章', 'Read the journal'],
+    ]),
+    group('正在做的事', 'In the making', [
+      ['/flash/', 'Flash 一闪', 'Flash'],
+      ['/republica/', 'Cloud Republic', 'Cloud Republic'],
+      ['/dhgt/', 'DHGT 社团', 'DHGT'],
+    ]),
+    group('认识 Hayden', 'Meet Hayden', [
+      ['/about/', '关于我', 'About me'],
+      ['/updates/', '最近动态', 'Recent updates'],
+      ['/about/#contact', '联系我', 'Get in touch'],
+    ]),
+  ],
+  projects: [
+    group('探索作品', 'Explore projects', [
+      ['/projects/', '全部作品', 'All projects'],
+      ['/flash/', 'Flash 一闪', 'Flash'],
+      ['/republica/', 'Cloud Republic', 'Cloud Republic'],
+      ['/dhgt/', 'DHGT', 'DHGT'],
+    ]),
+    group('进一步了解', 'Take a closer look', [
+      ['/updates/', '项目动态', 'Project updates'],
+      ['/dhgt/#activities', '社团活动', 'Club activities'],
+      ['/dhgt/#visuals', '视觉作品', 'Visual work'],
+    ]),
+    group('交流与合作', 'Connect', [
+      ['/about/#skills', '技能与工具', 'Skills & tools'],
+      ['/about/#contact', '联系我', 'Get in touch'],
+    ]),
+  ],
+  blog: [
+    group('写作与记录', 'Writing & notes', [
+      ['/blog/', '阅读全部文章', 'All articles'],
+      ['/rss.xml', '订阅 RSS', 'Subscribe via RSS'],
+    ]),
+    group(
+      '最近的文章',
+      'Latest articles',
+      latest.map(({ data }) => [`/blog/${data.id}/`, data.title, data.title]),
+    ),
+    group('继续探索', 'Keep exploring', [
+      ['/dhgt/#stories', 'DHGT 的故事', 'DHGT stories'],
+      ['/updates/', '项目动态', 'Project updates'],
+      ['/about/', '关于作者', 'About the author'],
+    ]),
+  ],
+  updates: [
+    group('保持关注', 'Stay up to date', [
+      ['/updates/', '全部动态', 'All updates'],
+      ['/projects/', '探索项目', 'Explore projects'],
+    ]),
+    group('项目入口', 'Project shortcuts', [
+      ['/flash/', 'Flash 一闪', 'Flash'],
+      ['/republica/', 'Cloud Republic', 'Cloud Republic'],
+      ['/dhgt/', 'DHGT 社团', 'DHGT'],
+    ]),
+    group('更多内容', 'More to explore', [
+      ['/blog/', '最新写作', 'Writing'],
+      ['/about/#contact', '交流与反馈', 'Get in touch'],
+    ]),
+  ],
+  about: [
+    group('认识 Hayden', 'Meet Hayden', [
+      ['/about/', '关于我', 'About me'],
+      ['/about/#skills', '技能与工具', 'Skills & tools'],
+      ['/about/#contact', '联系我', 'Get in touch'],
+    ]),
+    group('我的日常', 'Around here', [
+      ['/blog/', '写作与记录', 'Writing & notes'],
+      ['/dhgt/', 'DHGT 社团', 'DHGT'],
+      ['/projects/', '作品与项目', 'Projects'],
+    ]),
+    group('保持联系', 'Stay connected', [
+      ['/rss.xml', '订阅文章', 'Subscribe via RSS'],
+      ['/updates/', '最近动态', 'Recent updates'],
+    ]),
+  ],
+};
 ---
 
 <header class="site-header" transition:name="site-navigation">
-  <div class="nav-shell glass">
+  <div class="nav-shell">
     <a
       class="wordmark"
       href="/"
@@ -33,9 +121,21 @@ const links = [
       data-label-en="Main navigation"
     >
       {links.map(([id, href, label]) => (
-        <a href={href} aria-current={active === id ? 'page' : undefined}>
-          <Text text={label} />
-        </a>
+        <div class="nav-entry" data-nav-entry={id}>
+          <a class="nav-fallback" href={href} aria-current={active === id ? 'page' : undefined}>
+            <Text text={label} />
+          </a>
+          <button
+            type="button"
+            class="nav-trigger"
+            data-nav-trigger={id}
+            aria-current={active === id ? 'page' : undefined}
+            aria-expanded="false"
+            aria-controls={`nav-panel-${id}`}
+          >
+            <Text text={label} />
+          </button>
+        </div>
       ))}
     </nav>
     <div class="nav-tools">
@@ -63,14 +163,54 @@ const links = [
         class="icon-button menu-toggle"
         type="button"
         data-menu-toggle
-        aria-controls="site-nav"
+        aria-controls="site-nav nav-guides"
         aria-expanded="false"
         aria-label="打开菜单"
         data-label-zh="打开菜单"
         data-label-en="Open navigation"
       >
-        <Icon name="menu" />
+        <span class="menu-lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
       </button>
     </div>
   </div>
+  <div class="nav-dropdown" id="nav-guides" data-nav-dropdown inert>
+    {links.map(([id, , label]) => (
+      <section
+        class="nav-panel"
+        id={`nav-panel-${id}`}
+        data-nav-panel={id}
+        hidden
+        aria-label={`${label.zh}导览`}
+        data-label-zh={`${label.zh}导览`}
+        data-label-en={`${label.en} navigation`}
+      >
+        <div class="nav-panel-inner">
+          <button class="nav-back" type="button" data-nav-back>
+            <span aria-hidden="true">‹</span>
+            <Text text={{ zh: '返回主菜单', en: 'Back to navigation' }} />
+          </button>
+          {menus[id].map((column, index) => (
+            <div class:list={['nav-column', { 'nav-column-primary': index === 0 }]}>
+              <p class="nav-column-label">
+                <Text text={column.title} />
+              </p>
+              <ul>
+                {column.items.map(([href, zh, en]) => (
+                  <li>
+                    <a href={href}>
+                      <Text text={{ zh, en }} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
 </header>
+<div class="nav-backdrop" data-nav-backdrop aria-hidden="true"></div>
