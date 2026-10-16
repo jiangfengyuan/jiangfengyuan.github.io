@@ -2,7 +2,13 @@
 import Text from './Text.astro';
 import Icon from './Icon.astro';
 import { publishedPosts } from '../data/content';
+import { hrefFor, pathForLocale, postSlug, type Locale } from '../i18n';
 const { active = '' } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const currentPath = Astro.url.pathname + Astro.url.search + Astro.url.hash;
+const langTarget: Locale = locale === 'zh' ? 'en' : 'zh';
+const langHref = pathForLocale(currentPath, langTarget);
+const langLabel = locale === 'zh' ? 'EN' : '中文';
 const links = [
   ['home', '/', { zh: '首页', en: 'Home' }],
   ['projects', '/projects/', { zh: '作品', en: 'Projects' }],
@@ -10,7 +16,7 @@ const links = [
   ['updates', '/updates/', { zh: '动态', en: 'Updates' }],
   ['about', '/about/', { zh: '关于', en: 'About' }],
 ] as const;
-const latest = (await publishedPosts()).slice(0, 3);
+const latest = (await publishedPosts(locale)).slice(0, 3);
 type Entry = [string, string, string];
 type Group = { title: { zh: string; en: string }; items: Entry[] };
 const group = (zh: string, en: string, items: Entry[]): Group => ({ title: { zh, en }, items });
@@ -57,7 +63,7 @@ const menus: Record<string, Group[]> = {
     group(
       '最近的文章',
       'Latest articles',
-      latest.map(({ data }) => [`/blog/${data.id}/`, data.title, data.title]),
+      latest.map((post) => [`/blog/${postSlug(post)}/`, post.data.title, post.data.title]),
     ),
     group('继续探索', 'Keep exploring', [
       ['/dhgt/#stories', 'DHGT 的故事', 'DHGT stories'],
@@ -103,26 +109,22 @@ const menus: Record<string, Group[]> = {
   <div class="nav-shell">
     <a
       class="wordmark"
-      href="/"
-      aria-label="Hayden — 首页"
-      data-label-zh="Hayden — 首页"
-      data-label-en="Hayden — Home"
+      href={hrefFor('/', locale)}
+      aria-label={locale === 'zh' ? 'Hayden — 首页' : 'Hayden — Home'}
     >
       hayden
       <span class="wordmark-dot" aria-hidden="true">
         .
       </span>
     </a>
-    <nav
-      id="site-nav"
-      class="site-nav"
-      aria-label="主导航"
-      data-label-zh="主导航"
-      data-label-en="Main navigation"
-    >
+    <nav id="site-nav" class="site-nav" aria-label={locale === 'zh' ? '主导航' : 'Main navigation'}>
       {links.map(([id, href, label]) => (
         <div class="nav-entry" data-nav-entry={id}>
-          <a class="nav-fallback" href={href} aria-current={active === id ? 'page' : undefined}>
+          <a
+            class="nav-fallback"
+            href={hrefFor(href, locale)}
+            aria-current={active === id ? 'page' : undefined}
+          >
             <Text text={label} />
           </a>
           <button
@@ -139,23 +141,20 @@ const menus: Record<string, Group[]> = {
       ))}
     </nav>
     <div class="nav-tools">
-      <button
+      <a
         class="icon-button lang-toggle"
-        type="button"
+        href={langHref}
+        data-lang-link
         data-lang-toggle
-        aria-label="切换到英文"
-        data-label-zh="切换到英文"
-        data-label-en="Switch to Chinese"
+        aria-label={locale === 'zh' ? '切换到英文' : 'Switch to Chinese'}
       >
-        EN
-      </button>
+        {langLabel}
+      </a>
       <button
         class="icon-button"
         type="button"
         data-theme-toggle
-        aria-label="切换主题"
-        data-label-zh="切换主题"
-        data-label-en="Change color theme"
+        aria-label={locale === 'zh' ? '切换主题' : 'Change color theme'}
       >
         <Icon name="sun" />
       </button>
@@ -165,9 +164,7 @@ const menus: Record<string, Group[]> = {
         data-menu-toggle
         aria-controls="site-nav nav-guides"
         aria-expanded="false"
-        aria-label="打开菜单"
-        data-label-zh="打开菜单"
-        data-label-en="Open navigation"
+        aria-label={locale === 'zh' ? '打开菜单' : 'Open navigation'}
       >
         <span class="menu-lines" aria-hidden="true">
           <span></span>
@@ -183,9 +180,7 @@ const menus: Record<string, Group[]> = {
         id={`nav-panel-${id}`}
         data-nav-panel={id}
         hidden
-        aria-label={`${label.zh}导览`}
-        data-label-zh={`${label.zh}导览`}
-        data-label-en={`${label.en} navigation`}
+        aria-label={locale === 'zh' ? `${label.zh}导览` : `${label.en} navigation`}
       >
         <div class="nav-panel-inner">
           <button class="nav-back" type="button" data-nav-back>
@@ -200,7 +195,7 @@ const menus: Record<string, Group[]> = {
               <ul>
                 {column.items.map(([href, zh, en]) => (
                   <li>
-                    <a href={href}>
+                    <a href={hrefFor(href, locale)}>
                       <Text text={{ zh, en }} />
                     </a>
                   </li>

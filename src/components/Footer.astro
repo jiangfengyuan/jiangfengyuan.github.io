@@ -2,11 +2,15 @@
 import Text from './Text.astro';
 import CopyEmail from './CopyEmail.astro';
 import { profile } from '../data/content';
+import { hrefFor, type Locale } from '../i18n';
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const newTab = (name: string) =>
+  locale === 'zh' ? `${name}（在新标签页打开）` : `${name} (opens in a new tab)`;
 ---
 
 <footer class="site-footer container">
   <div class="footer-top">
-    <a class="wordmark" href="/">
+    <a class="wordmark" href={hrefFor('/', locale)}>
       hayden
       <span class="wordmark-dot" aria-hidden="true">
         .
@@ -29,9 +33,7 @@ import { profile } from '../data/content';
         href={profile.github}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="GitHub（在新标签页打开）"
-        data-label-zh="GitHub（在新标签页打开）"
-        data-label-en="GitHub (opens in a new tab)"
+        aria-label={newTab('GitHub')}
       >
         GitHub ↗
       </a>
@@ -39,13 +41,11 @@ import { profile } from '../data/content';
         href={profile.bilibili}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Bilibili（在新标签页打开）"
-        data-label-zh="Bilibili（在新标签页打开）"
-        data-label-en="Bilibili (opens in a new tab)"
+        aria-label={newTab('Bilibili')}
       >
         Bilibili ↗
       </a>
-      <a href="/dhgt/">DHGT</a>
+      <a href={hrefFor('/dhgt/', locale)}>DHGT</a>
       <a href="/rss.xml">RSS</a>
       <a class="back-top" href="#main-content" data-back-top>
         <Text text={{ zh: '返回页首', en: 'Back to top' }} />

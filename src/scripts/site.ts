@@ -1,11 +1,11 @@
-import { translate, language, localized } from './i18n';
+import { language, localized } from './i18n';
 import { changeView, panel } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
 import { initNavigation } from './navigation';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
-// navigation; restore the user's stored theme and language before paint.
+// navigation; restore the user's stored theme before paint.
 document.addEventListener('astro:after-swap', () => {
   try {
     const t = localStorage.getItem('site-theme');
@@ -15,11 +15,7 @@ document.addEventListener('astro:after-swap', () => {
         : matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
           : 'light';
-    const l = localStorage.getItem('site-lang');
-    document.documentElement.dataset.lang = l === 'en' ? 'en' : 'zh';
-    document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
   } catch {}
-  translate(language());
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   if (meta)
     meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
@@ -31,22 +27,8 @@ function init() {
   active?.abort();
   const { signal } = (active = new AbortController());
 
-  translate(language());
   initSpatial(signal);
   initDetails(signal);
-  let desiredLanguage = language();
-
-  document.querySelector('[data-lang-toggle]')?.addEventListener(
-    'click',
-    () => {
-      desiredLanguage = desiredLanguage === 'zh' ? 'en' : 'zh';
-      try {
-        localStorage.setItem('site-lang', desiredLanguage);
-      } catch {}
-      changeView('language', () => translate(desiredLanguage));
-    },
-    { signal },
-  );
 
   const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   function syncTheme() {
@@ -108,10 +90,10 @@ function init() {
       img.dataset.failed = 'true';
       const note = document.createElement('p');
       note.className = 'image-error';
-      note.dataset.i18n = '';
-      note.dataset.zh = '图片暂时无法加载' + (img.alt ? '：' + img.alt : '');
-      note.dataset.en = 'Image unavailable' + (img.alt ? ': ' + img.alt : '');
-      note.textContent = language() === 'zh' ? note.dataset.zh : note.dataset.en;
+      note.textContent =
+        language() === 'zh'
+          ? '图片暂时无法加载' + (img.alt ? '：' + img.alt : '')
+          : 'Image unavailable' + (img.alt ? ': ' + img.alt : '');
       img.insertAdjacentElement('afterend', note);
       img.hidden = true;
       panel(note, true);

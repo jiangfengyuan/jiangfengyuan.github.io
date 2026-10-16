@@ -197,11 +197,12 @@ export function initNavigation(signal: AbortSignal) {
     nav!.classList.toggle('is-open', mobileOpen);
     nav!.inert = compact() && (!mobileOpen || !!current);
     toggle!.setAttribute('aria-expanded', String(mobileOpen));
-    toggle!.dataset.labelZh = mobileOpen ? '关闭菜单' : '打开菜单';
-    toggle!.dataset.labelEn = mobileOpen ? 'Close navigation' : 'Open navigation';
     toggle!.setAttribute(
       'aria-label',
-      localized(toggle!.dataset.labelZh!, toggle!.dataset.labelEn!),
+      localized(
+        mobileOpen ? '关闭菜单' : '打开菜单',
+        mobileOpen ? 'Close navigation' : 'Open navigation',
+      ),
     );
     triggers.forEach((button) => {
       button.setAttribute('aria-expanded', String(button.dataset.navTrigger === current));

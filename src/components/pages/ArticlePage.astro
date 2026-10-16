@@ -1,0 +1,149 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Text from '../Text.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../data/content';
+import { hrefFor, postSlug, type Locale } from '../../i18n';
+interface Props {
+  post: CollectionEntry<'posts'>;
+  previous?: CollectionEntry<'posts'>;
+  next?: CollectionEntry<'posts'>;
+}
+const { post, previous, next } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const postHref = (p: CollectionEntry<'posts'>) => hrefFor(`/blog/${postSlug(p)}/`, locale);
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const publishedLabel = post.data.publishedAt
+  ? post.data.publishedAt.slice(0, 10).replaceAll('-', '.') +
+    ' ' +
+    post.data.publishedAt.slice(11, 16)
+  : post.data.date.replaceAll('-', '.');
+const minutes = Math.max(1, Math.ceil((post.body || '').replace(/<[^>]*>/g, '').length / 450));
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.summary,
+  datePublished: post.data.publishedAt || post.data.date,
+  author: { '@type': 'Person', name: 'Hayden', url: site + hrefFor('/about/', locale) },
+  inLanguage: post.data.language === 'zh' ? 'zh-CN' : 'en',
+  mainEntityOfPage: site + postHref(post),
+  image: new URL(post.data.cover || '/assets/social/blog.png', site).href,
+};
+---
+
+<Base
+  title={post.data.title + ' — Hayden'}
+  description={{ zh: post.data.summary, en: post.data.summary }}
+  image={post.data.cover || '/assets/social/blog.png'}
+  active="blog"
+  type="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+    <meta property="article:published_time" content={post.data.publishedAt || post.data.date} />
+  </Fragment>
+  <div class="reading-progress" aria-hidden="true">
+    <span data-reading-progress></span>
+  </div>
+  <div class:list={['article-shell', { 'article-shell-no-toc': tocHeadings.length === 0 }]}>
+    <article class="article-main" lang={post.data.language === 'zh' ? 'zh-CN' : 'en'}>
+      <header class="article-header">
+        <a class="text-link" href={hrefFor('/blog/', locale)}>
+          ← <Text text={{ zh: '所有文章', en: 'All writing' }} />
+        </a>
+        <h1>{post.data.title}</h1>
+        <p class="article-summary">{post.data.summary}</p>
+        <div class="post-meta">
+          <time datetime={post.data.publishedAt || post.data.date}>
+            {publishedLabel}
+            {post.data.publishedAt && (
+              <Text
+                text={{ zh: ' · 新加坡时间（UTC+08:00）', en: ' · Singapore time (UTC+08:00)' }}
+              />
+            )}
+          </time>
+          <span>{post.data.tags.join(' / ')}</span>
+          <span>
+            <Text
+              text={{
+                zh: `约 ${minutes} 分钟 · ${post.data.language === 'zh' ? '中文原文' : '英文原文'}`,
+                en: `${minutes} min read · ${post.data.language === 'zh' ? 'In Chinese' : 'In English'}`,
+              }}
+            />
+          </span>
+        </div>
+      </header>
+      {post.data.cover && (
+        <img
+          src={post.data.cover}
+          alt={post.data.coverAlt || post.data.title}
+          width="1200"
+          height="630"
+          decoding="async"
+        />
+      )}
+      <div class="article-content" data-article-content>
+        <Content />
+      </div>
+      <nav class="article-nav" aria-label={locale === 'zh' ? '文章导航' : 'Article navigation'}>
+        {previous && (
+          <a href={postHref(previous)}>
+            <span class="eyebrow">
+              <Text text={{ zh: '上一篇', en: 'Previous' }} />
+            </span>
+            {previous.data.title} ↙
+          </a>
+        )}
+        {next && (
+          <a href={postHref(next)}>
+            <span class="eyebrow">
+              <Text text={{ zh: '下一篇', en: 'Next' }} />
+            </span>
+            {next.data.title} ↗
+          </a>
+        )}
+      </nav>
+    </article>
+    {tocHeadings.length > 0 && (
+      <aside class="article-aside" data-article-aside>
+        <h2>
+          <Text text={{ zh: '文章目录', en: 'ON THIS PAGE' }} />
+        </h2>
+        <nav aria-label={locale === 'zh' ? '文章目录' : 'Table of contents'}>
+          <ul class="toc">
+            {tocHeadings.map((h) => (
+              <li class={'depth-' + h.depth}>
+                <a href={'#' + h.slug}>{h.text.length > 50 ? h.text.slice(0, 50) + '…' : h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <a class="text-link mt-lg" href="#main-content">
+          <Text text={{ zh: '回到顶部', en: 'Back to top' }} /> ↑
+        </a>
+      </aside>
+    )}
+  </div>
+  <dialog
+    class="lightbox"
+    data-lightbox
+    aria-label={locale === 'zh' ? '图片预览' : 'Image preview'}
+  >
+    <button
+      class="icon-button"
+      data-lightbox-close
+      aria-label={locale === 'zh' ? '关闭预览' : 'Close preview'}
+    >
+      <Icon name="close" />
+    </button>
+    <img data-lightbox-image alt="" />
+    <p data-lightbox-caption class="muted mt-sm text-center"></p>
+  </dialog>
+  <script>
+    import '../../scripts/article';
+  </script>
+</Base>

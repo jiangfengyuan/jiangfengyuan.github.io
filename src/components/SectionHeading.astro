@@ -1,6 +1,8 @@
 ---
 import Text from './Text.astro';
+import { hrefFor, type Locale } from '../i18n';
 const { eyebrow, title, href, label } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
 ---
 
 <div class="section-heading">
@@ -13,7 +15,7 @@ const { eyebrow, title, href, label } = Astro.props;
     </h2>
   </div>
   {href && (
-    <a class="text-link" href={href}>
+    <a class="text-link" href={hrefFor(href, locale)}>
       <Text text={label} /> <span aria-hidden="true">↗</span>
     </a>
   )}
