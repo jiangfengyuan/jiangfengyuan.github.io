@@ -26,7 +26,7 @@ export function pathForLocale(path: string, locale: Locale): string {
 
   if (locale === 'en') {
     if (pathname === '' || pathname === '/') return `/en${search}${hash}`;
-    if (pathname.startsWith('/en')) return path;
+    if (pathname === '/en' || pathname.startsWith('/en/')) return path;
     return `/en${pathname}${search}${hash}`;
   }
 
@@ -89,6 +89,9 @@ export function hrefFor(href: string, locale: Locale): string {
   return pathForLocale(href, locale);
 }
 
-export function postSlug(post: { data: { id: string; translationOf?: string } }): string {
-  return post.data.translationOf ?? post.data.id;
+export function postSlug(post: {
+  data: { id: string; language?: string; translationOf?: string };
+}): string {
+  if (post.data.language === 'en' && post.data.translationOf) return post.data.translationOf;
+  return post.data.id;
 }

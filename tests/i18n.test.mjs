@@ -52,6 +52,11 @@ test('pathForLocale collapses /en to root for Chinese locale', () => {
   assert.equal(pathForLocale('/en/', 'zh'), '/');
 });
 
+test('pathForLocale does not confuse /english/ with /en/', () => {
+  assert.equal(pathForLocale('/english/', 'en'), '/en/english/');
+  assert.equal(pathForLocale('/en/english/', 'zh'), '/english/');
+});
+
 test('hrefFor only rewrites site-internal absolute page paths', () => {
   assert.equal(hrefFor('/about/', 'en'), '/en/about/');
   assert.equal(hrefFor('/en/about/', 'zh'), '/about/');
@@ -89,8 +94,18 @@ test('hrefFor treats /en/assets/... as a resource and does not force rewrites', 
   assert.equal(hrefFor('/en/assets/photo.jpg', 'zh'), '/en/assets/photo.jpg');
 });
 
-test('postSlug returns translationOf for English translations and id otherwise', () => {
-  assert.equal(postSlug({ data: { id: 'abc123' } }), 'abc123');
-  assert.equal(postSlug({ data: { id: 'def456', translationOf: 'abc123' } }), 'abc123');
-  assert.equal(postSlug({ data: { id: 'ghi789', translationOf: 'abc123' } }), 'abc123');
+test('postSlug returns translationOf only for English translations', () => {
+  assert.equal(postSlug({ data: { id: 'abc123', language: 'zh' } }), 'abc123');
+  assert.equal(postSlug({ data: { id: 'def456', language: 'en' } }), 'def456');
+  assert.equal(
+    postSlug({ data: { id: 'ghi789', language: 'en', translationOf: 'abc123' } }),
+    'abc123',
+  );
+});
+
+test('postSlug ignores translationOf on Chinese articles', () => {
+  assert.equal(
+    postSlug({ data: { id: 'own-id', language: 'zh', translationOf: 'other-id' } }),
+    'own-id',
+  );
 });
