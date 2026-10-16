@@ -1,4 +1,5 @@
 import { language, localized } from './i18n';
+import { pathForLocale } from '../i18n';
 import { changeView, panel } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
@@ -29,6 +30,17 @@ function init() {
 
   initSpatial(signal);
   initDetails(signal);
+
+  // The server-rendered language link only knows the pathname (query/hash are
+  // empty during static builds); rewrite it client-side so they are preserved.
+  const langLink = document.querySelector<HTMLAnchorElement>('a[data-lang-link]');
+  if (langLink) {
+    const target = document.documentElement.dataset.lang === 'en' ? 'zh' : 'en';
+    langLink.href = pathForLocale(
+      location.pathname + location.search + location.hash,
+      target,
+    );
+  }
 
   const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   function syncTheme() {
@@ -78,7 +90,6 @@ function init() {
     },
     { signal },
   );
-  document.addEventListener('site:language', syncTheme, { signal });
   syncTheme();
 
   initNavigation(signal);
