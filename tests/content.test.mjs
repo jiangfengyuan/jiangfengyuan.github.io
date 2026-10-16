@@ -75,3 +75,38 @@ test('editorial roles are allowlisted and raw HTML sections have static unique a
   for (const h of result.metadata.headings)
     assert.equal(doc.getElementById(h.slug).textContent, h.text);
 });
+
+test('Markdown pipeline strips dangerous link protocols, obfuscated URLs and executable tags', async () => {
+  const { default: config } = await import('../astro.config.mjs');
+  const renderer = await config.markdown.processor.createRenderer(config.markdown);
+  const result = await renderer.render(
+    '[xss](javascript:alert(1))\n' +
+      '[obf](java&#x09;script:alert(1))\n' +
+      '<a href="data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;">data link</a>\n' +
+      '![x](javascript:alert(1))\n' +
+      '<script>alert(1)</script>\n' +
+      '<iframe src="https://example.org"></iframe>\n' +
+      '<img src="data:image/svg+xml;base64,abcd" onerror="alert(1)">\n' +
+      '<p onclick="alert(1)">click</p>',
+  );
+  const doc = new JSDOM(result.code).window.document;
+  assert.equal(doc.querySelectorAll('script, iframe').length, 0);
+  assert.equal(doc.querySelectorAll('[onclick], [onerror]').length, 0);
+  const html = result.code.toLowerCase();
+  assert.ok(!html.includes('javascript:'));
+  assert.ok(!html.includes('data:text/html'));
+  const links = [...doc.querySelectorAll('a')];
+  assert.ok(
+    links.every((a) => {
+      const href = a.getAttribute('href');
+      return !href || !/javascript/i.test(href);
+    }),
+  );
+  const images = [...doc.querySelectorAll('img')];
+  assert.ok(
+    images.every((img) => {
+      const src = img.getAttribute('src');
+      return !src || !/javascript/i.test(src);
+    }),
+  );
+});

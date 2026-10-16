@@ -37,6 +37,11 @@ export default defineConfig({
               strong: [['className', /^(article-warm|article-blue)$/]],
               div: [['className', /^article-credits$/]],
             },
+            protocols: {
+              ...defaultSchema.protocols,
+              href: ['http', 'https', 'mailto', 'tel'],
+              src: ['http', 'https'],
+            },
           },
         ],
         articleHeadings,
