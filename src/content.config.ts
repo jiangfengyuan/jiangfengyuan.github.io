@@ -5,6 +5,7 @@ const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
   schema: z.object({
     id: z.string().regex(/^[A-Za-z0-9_-]+$/),
+    translationOf: z.string().regex(/^[A-Za-z0-9_-]+$/).optional(),
     title: z.string(),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     publishedAt: z.iso.datetime({ offset: true }).optional(),

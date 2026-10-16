@@ -9,6 +9,11 @@ export default defineConfig({
   site: 'https://jiangfengyuan.github.io',
   output: 'static',
   prefetch: true,
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [
     sitemap({ filter: (url) => !url.includes('/blog-admin') && !url.includes('/404') }),
   ],
