@@ -80,7 +80,7 @@
 .site-nav > a::after {
   content: '';
   position: absolute;
-  inset-inline: 35%;
+  inset-inline: 14px;
   bottom: 3px;
   height: 2px;
   background: var(--accent);
@@ -98,11 +98,51 @@
 .wordmark:is(:hover, :focus-visible) .wordmark-dot {
   transform: translateY(-3px);
 }
-[data-theme-toggle] svg {
-  transition: transform 260ms var(--ease);
+[data-theme-toggle] {
+  position: relative;
 }
-:root[data-theme='dark'] [data-theme-toggle] svg {
-  transform: rotate(90deg);
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 180ms var(--ease),
+    transform 180ms var(--ease);
+}
+.theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-icon-moon {
+  opacity: 0;
+  transform: rotate(-30deg) scale(0.85);
+}
+:root[data-theme='dark'] .theme-icon-sun {
+  opacity: 0;
+  transform: rotate(30deg) scale(0.85);
+}
+:root[data-theme='dark'] .theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.lang-toggle {
+  position: relative;
+}
+.lang-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(-50%) scale(0);
+  transition: transform 180ms var(--ease);
+}
+.lang-toggle[data-current-lang]::after {
+  transform: translateX(-50%) scale(1);
 }
 .project-info h3 a {
   transition: color 180ms;
@@ -118,7 +158,7 @@
 }
 .project-info h3 a:is(:hover, :focus-visible) > span:last-child,
 .project-media:is(:hover, :focus-visible) .media-arrow {
-  transform: translate(3px, -3px);
+  transform: translate3d(2px, -2px, 0);
 }
 .project-media:focus-visible {
   outline-offset: 5px;
@@ -129,7 +169,7 @@
     transform 180ms var(--ease);
 }
 .post-row:focus-within .post-row-arrow {
-  transform: translate(4px, -4px);
+  transform: translate3d(2px, -2px, 0);
 }
 .post-row:focus-within .post-row-index {
   color: var(--accent);
@@ -162,7 +202,7 @@
   .media-arrow,
   .project-info h3 a > span:last-child,
   .post-row-index,
-  [data-theme-toggle] svg {
+  .theme-icon {
     transition: none;
     transform: none !important;
   }

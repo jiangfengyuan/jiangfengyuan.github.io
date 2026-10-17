@@ -9,8 +9,16 @@ export default defineConfig({
   site: 'https://jiangfengyuan.github.io',
   output: 'static',
   prefetch: true,
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [
-    sitemap({ filter: (url) => !url.includes('/blog-admin') && !url.includes('/404') }),
+    sitemap({
+      filter: (url) => !url.includes('/blog-admin') && !url.includes('/404'),
+      i18n: { defaultLocale: 'zh', locales: { zh: 'zh-CN', en: 'en-US' } },
+    }),
   ],
   markdown: {
     processor: unified({
@@ -36,6 +44,11 @@ export default defineConfig({
               h2: [['className', /^(article-centered|article-blue)$/]],
               strong: [['className', /^(article-warm|article-blue)$/]],
               div: [['className', /^article-credits$/]],
+            },
+            protocols: {
+              ...defaultSchema.protocols,
+              href: ['http', 'https', 'mailto', 'tel'],
+              src: ['http', 'https'],
             },
           },
         ],

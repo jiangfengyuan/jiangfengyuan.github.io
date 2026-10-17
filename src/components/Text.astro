@@ -1,12 +1,12 @@
 ---
 import type { Localized } from '../data/content';
+import type { Locale } from '../i18n';
 interface Props {
   text: Localized;
   class?: string;
 }
 const { text, class: className } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
 ---
 
-<span class={className} data-i18n data-zh={text.zh} data-en={text.en}>
-  {text.zh}
-</span>
+<span class={className}>{locale === 'en' ? text.en : text.zh}</span>

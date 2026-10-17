@@ -1,11 +1,14 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Text from './Text.astro';
+import { hrefFor, postSlug, type Locale } from '../i18n';
 interface Props {
   posts: CollectionEntry<'posts'>[];
   searchable?: boolean;
 }
 const { posts, searchable = false } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const postHref = (post: CollectionEntry<'posts'>) => hrefFor(`/blog/${postSlug(post)}/`, locale);
 ---
 
 <div class="post-list">
@@ -39,11 +42,11 @@ const { posts, searchable = false } = Astro.props;
           </span>
         </div>
         <h3>
-          <a href={'/blog/' + post.data.id + '/'}>{post.data.title}</a>
+          <a href={postHref(post)}>{post.data.title}</a>
         </h3>
         <p>{post.data.summary}</p>
       </div>
-      <a class="post-row-arrow" href={'/blog/' + post.data.id + '/'} aria-label={post.data.title}>
+      <a class="post-row-arrow" href={postHref(post)} aria-label={post.data.title}>
         <span aria-hidden="true">↗</span>
       </a>
     </article>

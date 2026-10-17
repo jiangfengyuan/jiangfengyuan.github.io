@@ -133,7 +133,6 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
   );
   input?.addEventListener('input', () => run(true), { signal });
   window.addEventListener('popstate', read, { signal });
-  document.addEventListener('site:language', () => run(), { signal });
   read();
 }
 document.addEventListener('astro:page-load', init);

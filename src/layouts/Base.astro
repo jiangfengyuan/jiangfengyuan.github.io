@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Text from '../components/Text.astro';
 import { profile, site } from '../data/content';
+import { pathForLocale } from '../i18n';
+import type { Locale } from '../i18n';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -29,52 +31,53 @@ const {
   noindex = false,
   type = 'website',
 } = Astro.props;
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const pageTitle = locale === 'en' ? titleEn : title;
+const pageDescription = locale === 'en' ? description.en : description.zh;
 const canonical = new URL(Astro.url.pathname, site).href;
+const zhPath = pathForLocale(Astro.url.pathname, 'zh');
+const enPath = pathForLocale(Astro.url.pathname, 'en');
+const zhHref = new URL(zhPath, site).href;
+const enHref = new URL(enPath, site).href;
+const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-lang="zh">
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title data-title-zh={title} data-title-en={titleEn}>{title}</title>
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
-      name="description"
-      content={description.zh}
-      data-meta-zh={description.zh}
-      data-meta-en={description.en}
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://mmbiz.qpic.cn data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
     <meta name="author" content="Hayden" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
+    <link rel="alternate" hreflang="en-US" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={zhHref} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/assets/favicon.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
-    <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href={rssHref} />
     <meta name="theme-color" content="#f6f4ef" />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="Hayden" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={title} data-meta-zh={title} data-meta-en={titleEn} />
-    <meta
-      property="og:description"
-      content={description.zh}
-      data-meta-zh={description.zh}
-      data-meta-en={description.en}
-    />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={new URL(image, site).href} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={pageTitle} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} data-meta-zh={title} data-meta-en={titleEn} />
-    <meta
-      name="twitter:description"
-      content={description.zh}
-      data-meta-zh={description.zh}
-      data-meta-en={description.en}
-    />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={new URL(image, site).href} />
     <ClientRouter />
     <script is:inline>
@@ -86,9 +89,6 @@ const canonical = new URL(Astro.url.pathname, site).href;
             : matchMedia('(prefers-color-scheme: dark)').matches
               ? 'dark'
               : 'light';
-        const l = localStorage.getItem('site-lang');
-        document.documentElement.dataset.lang = l === 'en' ? 'en' : 'zh';
-        document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
       } catch {
         document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
@@ -119,6 +119,9 @@ const canonical = new URL(Astro.url.pathname, site).href;
           display: none !important;
         }
         .menu-toggle {
+          display: none !important;
+        }
+        [data-theme-toggle] {
           display: none !important;
         }
         @media (max-width: 760px) {

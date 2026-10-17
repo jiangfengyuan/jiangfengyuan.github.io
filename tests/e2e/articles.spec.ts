@@ -1,17 +1,22 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
-const ids = fs.readdirSync('src/content/posts').map((name) => name.replace(/\.md$/, ''));
+// Chinese originals; each has an English translation served at /en/blog/<same id>/.
+const ids = fs
+  .readdirSync('src/content/posts')
+  .map((name) => name.replace(/\.md$/, ''))
+  .filter((id) => !id.endsWith('-en'));
+const articleRoutes = ids.flatMap((id) => ['/blog/' + id + '/', '/en/blog/' + id + '/']);
 test('nine articles reflow, maintain image proportions and theme contrast', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(360_000);
   await page.route('https://mmbiz.qpic.cn/**', (route) =>
     route.fulfill({
       contentType: 'image/svg+xml',
       body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"><rect width="1600" height="900" fill="gray"/></svg>',
     }),
   );
-  for (const id of ids) {
-    await page.goto('/blog/' + id + '/');
+  for (const id of articleRoutes) {
+    await page.goto(id);
     for (const theme of ['light', 'dark']) {
       await page.evaluate((theme) => (document.documentElement.dataset.theme = theme), theme);
       await page.waitForTimeout(250);

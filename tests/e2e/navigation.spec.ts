@@ -57,7 +57,10 @@ test('mobile two-level sheet, focus cycle, resize and language', async ({ page }
   await page.locator('#nav-panel-projects [data-nav-back]').click();
   await expect(page.locator('[data-nav-trigger="projects"]')).toBeFocused();
   await page.locator('[data-lang-toggle]').click();
+  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('[data-nav-trigger="projects"]')).toHaveText('Projects');
+  await page.locator('[data-menu-toggle]').click();
   await page.locator('[data-nav-trigger="about"]').click();
   await expect(page.locator('#nav-panel-about')).toContainText('Get in touch');
   await page.keyboard.press('Escape');
@@ -117,13 +120,15 @@ test('open sheets remain accessible with large text, touch and language changes'
       })
       .toBe(true);
     await page.locator('[data-lang-toggle]').click();
-    await expect(page.locator('#nav-panel-projects a').first()).toHaveText(/All projects|全部作品/);
+    await expect(page).toHaveURL(/\/en\/$/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    if (width <= 760) await page.locator('[data-menu-toggle]').click();
+    await page.locator('[data-nav-trigger="projects"]').click();
+    await expect(page.locator('#nav-panel-projects a').first()).toHaveText('All projects');
     await page.keyboard.press('Escape');
-    await page.evaluate(() =>
-      document
-        .querySelectorAll<HTMLElement>('.site-header [style]')
-        .forEach((el) => el.style.removeProperty('font-size')),
-    );
+    await page.locator('[data-lang-toggle]').click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
   }
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });

@@ -1,0 +1,15 @@
+---
+import ArticlePage from '../../../components/pages/ArticlePage.astro';
+import { publishedPosts } from '../../../data/content';
+import { postSlug } from '../../../i18n';
+export async function getStaticPaths() {
+  const posts = await publishedPosts('en');
+  return posts.map((post, i) => ({
+    params: { id: postSlug(post) },
+    props: { post, previous: posts[i + 1], next: posts[i - 1] },
+  }));
+}
+const { post, previous, next } = Astro.props;
+---
+
+<ArticlePage post={post} previous={previous} next={next} />

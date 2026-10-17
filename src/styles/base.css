@@ -83,7 +83,7 @@ ol {
   display: none !important;
 }
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: var(--focus-ring);
   outline-offset: 5px;
 }
 ::selection {
@@ -152,8 +152,8 @@ ol {
   gap: 12px;
   padding: 12px 23px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: var(--surface);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
   font-size: 14px;
   font-weight: 550;
   line-height: 1.4;
@@ -164,7 +164,7 @@ ol {
     filter var(--duration);
 }
 .btn:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: var(--focus-ring);
   outline-offset: 5px;
 }
 .btn.primary {
@@ -185,6 +185,10 @@ ol {
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow);
+}
+.btn:not(.primary):hover {
+  background: var(--control-bg-hover);
+  border-color: var(--control-border);
 }
 .btn:active {
   transform: translateY(0);
@@ -282,6 +286,10 @@ main:focus-visible {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+  .icon-button:hover,
+  .filter-chips button:hover {
+    transform: none;
   }
 }
 @supports (view-transition-name: none) {

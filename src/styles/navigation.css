@@ -26,7 +26,12 @@
   flex-wrap: wrap;
   transition:
     border-radius 380ms cubic-bezier(0.22, 0.8, 0.25, 1),
-    background-color 320ms ease;
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+.site-header[data-scrolled]:not([data-navigation-open]) .nav-shell {
+  background: var(--nav-bg-scrolled);
+  box-shadow: var(--glass-inner), var(--nav-shadow-scrolled);
 }
 .site-header[data-navigation-open] .nav-shell {
   border-radius: 24px 24px 0 0;
@@ -71,7 +76,7 @@
   transition: transform 200ms ease;
 }
 .nav-entry > :is(a, button)[aria-current='page']::after {
-  transform: scaleX(0.5);
+  transform: scaleX(1);
 }
 .nav-entry:is(:hover, :focus-within, [data-active-menu]) > :is(a, button) {
   color: var(--ink);
@@ -294,6 +299,9 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+  .site-header[data-scrolled]:not([data-navigation-open]) .nav-shell {
+    background: var(--surface);
+  }
   .nav-backdrop {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -315,6 +323,9 @@
     backdrop-filter: none;
     background: Canvas;
     border-color: CanvasText;
+  }
+  .site-header[data-scrolled]:not([data-navigation-open]) .nav-shell {
+    background: Canvas;
   }
   .nav-dropdown {
     border-bottom: 1px solid CanvasText;

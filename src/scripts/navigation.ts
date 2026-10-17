@@ -197,11 +197,12 @@ export function initNavigation(signal: AbortSignal) {
     nav!.classList.toggle('is-open', mobileOpen);
     nav!.inert = compact() && (!mobileOpen || !!current);
     toggle!.setAttribute('aria-expanded', String(mobileOpen));
-    toggle!.dataset.labelZh = mobileOpen ? '关闭菜单' : '打开菜单';
-    toggle!.dataset.labelEn = mobileOpen ? 'Close navigation' : 'Open navigation';
     toggle!.setAttribute(
       'aria-label',
-      localized(toggle!.dataset.labelZh!, toggle!.dataset.labelEn!),
+      localized(
+        mobileOpen ? '关闭菜单' : '打开菜单',
+        mobileOpen ? 'Close navigation' : 'Open navigation',
+      ),
     );
     triggers.forEach((button) => {
       button.setAttribute('aria-expanded', String(button.dataset.navTrigger === current));
@@ -407,7 +408,6 @@ export function initNavigation(signal: AbortSignal) {
     close(nav.contains(document.activeElement) || dropdown.contains(document.activeElement), true);
   small.addEventListener('change', reset, { signal });
   document.addEventListener('site:viewport', reset, { signal });
-  document.addEventListener('site:language', () => sync(), { signal });
   document.addEventListener(
     'site:motion',
     () => {
@@ -417,6 +417,9 @@ export function initNavigation(signal: AbortSignal) {
   );
   window.addEventListener('resize', measure, { signal, passive: true });
   window.visualViewport?.addEventListener('resize', measure, { signal, passive: true });
+  const syncScrolled = () => header.toggleAttribute('data-scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', syncScrolled, { signal, passive: true });
+  syncScrolled();
   document.addEventListener('astro:before-preparation', () => close(false, true), { signal });
   signal.addEventListener(
     'abort',
