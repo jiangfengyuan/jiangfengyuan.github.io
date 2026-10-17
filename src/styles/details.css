@@ -80,7 +80,7 @@
 .site-nav > a::after {
   content: '';
   position: absolute;
-  inset-inline: 35%;
+  inset-inline: 14px;
   bottom: 3px;
   height: 2px;
   background: var(--accent);
@@ -158,7 +158,7 @@
 }
 .project-info h3 a:is(:hover, :focus-visible) > span:last-child,
 .project-media:is(:hover, :focus-visible) .media-arrow {
-  transform: translate(3px, -3px);
+  transform: translate3d(2px, -2px, 0);
 }
 .project-media:focus-visible {
   outline-offset: 5px;
@@ -169,7 +169,7 @@
     transform 180ms var(--ease);
 }
 .post-row:focus-within .post-row-arrow {
-  transform: translate(4px, -4px);
+  transform: translate3d(2px, -2px, 0);
 }
 .post-row:focus-within .post-row-index {
   color: var(--accent);

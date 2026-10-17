@@ -132,10 +132,19 @@
 .project-card {
   padding: 14px;
   border-radius: 32px;
-  background: var(--glass-light);
-  border: 1px solid var(--line);
-  box-shadow: var(--glass-inner), var(--glass-depth);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
   container-type: inline-size;
+  transition:
+    transform var(--motion-state) var(--ease),
+    box-shadow var(--motion-state) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glass-inner), var(--shadow);
+  }
 }
 .project-info {
   padding: 20px 8px 8px;
@@ -202,6 +211,7 @@
 }
 .enhanced-chips button:hover {
   background: color-mix(in srgb, var(--soft) 70%, transparent);
+  transform: none;
 }
 .enhanced-chips button[aria-pressed='true']:hover {
   background: transparent;

@@ -1,6 +1,6 @@
 import { language, localized } from './i18n';
 import { pathForLocale } from '../i18n';
-import { changeView, panel } from './motion';
+import { changeView, panel, animate, motionAllowed } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
 import { initNavigation } from './navigation';
@@ -23,6 +23,7 @@ document.addEventListener('astro:after-swap', () => {
 });
 
 let active: AbortController | undefined;
+let heroBoardPlayed = false;
 
 function init() {
   active?.abort();
@@ -30,6 +31,27 @@ function init() {
 
   initSpatial(signal);
   initDetails(signal);
+
+  // One-time staggered entrance for the hero board pieces; never replays when
+  // navigating back to the home page within the session.
+  const board = document.querySelector<HTMLElement>('.hero-board');
+  if (board && !heroBoardPlayed) {
+    heroBoardPlayed = true;
+    if (motionAllowed()) {
+      board
+        .querySelectorAll<HTMLElement>('.board-game, .board-phone, .board-label, .board-stamp')
+        .forEach((el, i) => {
+          animate(
+            el,
+            [
+              { opacity: 0, translate: '0 10px' },
+              { opacity: 1, translate: '0 0' },
+            ],
+            { duration: 220, delay: i * 60, fill: 'backwards' },
+          );
+        });
+    }
+  }
 
   // The server-rendered language link only knows the pathname (query/hash are
   // empty during static builds); rewrite it client-side so they are preserved.

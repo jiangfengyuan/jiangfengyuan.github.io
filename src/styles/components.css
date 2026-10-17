@@ -55,17 +55,22 @@
 .icon-button {
   width: 44px;
   height: 44px;
-  border: 0;
+  border: 1px solid transparent;
   background: transparent;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-size: 12px;
   font-weight: 600;
-  transition: background var(--duration);
+  transition:
+    background var(--duration),
+    border-color var(--duration),
+    transform var(--duration) var(--ease);
 }
 .icon-button:hover {
-  background: var(--soft);
+  background: var(--control-bg-hover);
+  border-color: var(--control-border);
+  transform: translateY(-1px);
 }
 .menu-toggle {
   display: none;
@@ -283,7 +288,7 @@
   transition: transform var(--duration) var(--ease);
 }
 .post-row:hover .post-row-arrow {
-  transform: translate(4px, -4px);
+  transform: translate3d(2px, -2px, 0);
 }
 .updates-list {
   border-top: 1px solid var(--line);
@@ -385,7 +390,7 @@
   min-width: 0;
 }
 .search-field:focus-within {
-  outline: 3px solid var(--accent);
+  outline: var(--focus-ring);
   outline-offset: 5px;
 }
 .filter-chips {
@@ -394,23 +399,25 @@
   flex-wrap: wrap;
 }
 .filter-chips button {
-  border: 1px solid var(--line);
+  border: 1px solid var(--control-border);
   background: transparent;
   border-radius: var(--radius-pill);
-  min-height: 38px;
+  min-height: 44px;
   padding: 7px 13px;
   font-size: 12px;
   transition:
     background var(--duration),
     color var(--duration),
-    border-color var(--duration);
+    border-color var(--duration),
+    transform var(--duration) var(--ease);
 }
 .filter-chips button:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: var(--focus-ring);
   outline-offset: 5px;
 }
 .filter-chips button:hover {
-  background: var(--soft);
+  background: var(--control-bg-hover);
+  transform: translateY(-1px);
 }
 .filter-chips button[aria-pressed='true'] {
   background: var(--ink);

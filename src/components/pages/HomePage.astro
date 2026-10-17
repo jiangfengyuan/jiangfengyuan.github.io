@@ -79,7 +79,12 @@ const posts = await publishedPosts(locale);
             decoding="async"
           />
         </a>
-        <a href={hrefFor('/flash/', locale)} class="board-phone" aria-label="Flash">
+        <a
+          href={hrefFor('/flash/', locale)}
+          class="board-phone"
+          data-shared-link="flash"
+          aria-label="Flash"
+        >
           <img
             src="/assets/flash/home.webp"
             alt={

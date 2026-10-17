@@ -417,6 +417,9 @@ export function initNavigation(signal: AbortSignal) {
   );
   window.addEventListener('resize', measure, { signal, passive: true });
   window.visualViewport?.addEventListener('resize', measure, { signal, passive: true });
+  const syncScrolled = () => header.toggleAttribute('data-scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', syncScrolled, { signal, passive: true });
+  syncScrolled();
   document.addEventListener('astro:before-preparation', () => close(false, true), { signal });
   signal.addEventListener(
     'abort',
