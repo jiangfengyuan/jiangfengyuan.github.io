@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Text from '../components/Text.astro';
 import { profile, site } from '../data/content';
+import { pathForLocale } from '../i18n';
 import type { Locale } from '../i18n';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -34,6 +35,12 @@ const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const pageTitle = locale === 'en' ? titleEn : title;
 const pageDescription = locale === 'en' ? description.en : description.zh;
 const canonical = new URL(Astro.url.pathname, site).href;
+const zhPath = pathForLocale(Astro.url.pathname, 'zh');
+const enPath = pathForLocale(Astro.url.pathname, 'en');
+const normalizedEnPath = enPath === '/en' ? '/en/' : enPath;
+const zhHref = new URL(zhPath, site).href;
+const enHref = new URL(normalizedEnPath, site).href;
+const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
 ---
 
 <!doctype html>
@@ -51,10 +58,13 @@ const canonical = new URL(Astro.url.pathname, site).href;
     <meta name="author" content="Hayden" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
+    <link rel="alternate" hreflang="en-US" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={zhHref} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/assets/favicon.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
-    <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href={rssHref} />
     <meta name="theme-color" content="#f6f4ef" />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="Hayden" />

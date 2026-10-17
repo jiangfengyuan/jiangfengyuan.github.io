@@ -9,6 +9,7 @@ const currentPath = Astro.url.pathname + Astro.url.search + Astro.url.hash;
 const langTarget: Locale = locale === 'zh' ? 'en' : 'zh';
 const langHref = pathForLocale(currentPath, langTarget);
 const langLabel = locale === 'zh' ? 'EN' : '中文';
+const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
 const links = [
   ['home', '/', { zh: '首页', en: 'Home' }],
   ['projects', '/projects/', { zh: '作品', en: 'Projects' }],
@@ -58,7 +59,7 @@ const menus: Record<string, Group[]> = {
   blog: [
     group('写作与记录', 'Writing & notes', [
       ['/blog/', '阅读全部文章', 'All articles'],
-      ['/rss.xml', '订阅 RSS', 'Subscribe via RSS'],
+      [rssHref, '订阅 RSS', 'Subscribe via RSS'],
     ]),
     group(
       '最近的文章',
@@ -98,7 +99,7 @@ const menus: Record<string, Group[]> = {
       ['/projects/', '作品与项目', 'Projects'],
     ]),
     group('保持联系', 'Stay connected', [
-      ['/rss.xml', '订阅文章', 'Subscribe via RSS'],
+      [rssHref, '订阅文章', 'Subscribe via RSS'],
       ['/updates/', '最近动态', 'Recent updates'],
     ]),
   ],

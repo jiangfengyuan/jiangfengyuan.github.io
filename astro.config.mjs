@@ -15,7 +15,10 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
-    sitemap({ filter: (url) => !url.includes('/blog-admin') && !url.includes('/404') }),
+    sitemap({
+      filter: (url) => !url.includes('/blog-admin') && !url.includes('/404'),
+      i18n: { defaultLocale: 'zh', locales: { zh: 'zh-CN', en: 'en-US' } },
+    }),
   ],
   markdown: {
     processor: unified({

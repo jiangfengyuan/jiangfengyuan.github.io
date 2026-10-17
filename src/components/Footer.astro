@@ -46,7 +46,7 @@ const newTab = (name: string) =>
         Bilibili ↗
       </a>
       <a href={hrefFor('/dhgt/', locale)}>DHGT</a>
-      <a href="/rss.xml">RSS</a>
+      <a href={locale === 'en' ? '/en/rss.xml' : '/rss.xml'}>RSS</a>
       <a class="back-top" href="#main-content" data-back-top>
         <Text text={{ zh: '返回页首', en: 'Back to top' }} />
         <span aria-hidden="true">↑</span>
