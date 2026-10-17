@@ -4,6 +4,7 @@ import { changeView, panel, animate, motionAllowed } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
 import { initNavigation } from './navigation';
+import { hapticTap } from './haptics';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme before paint.
@@ -93,6 +94,7 @@ function init() {
         },
         themeButton || undefined,
       );
+      hapticTap();
     },
     { signal },
   );

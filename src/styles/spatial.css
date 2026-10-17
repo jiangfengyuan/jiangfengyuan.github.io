@@ -656,3 +656,50 @@
     transform: none !important;
   }
 }
+
+/* CSS-only foldable fallback: browsers exposing viewport segment media queries
+   and env(viewport-segment-*) without the JS window.viewport.segments API still
+   keep navigation, main content and the lightbox on the largest lane. When JS
+   has already chosen a lane (data-segmented), its measurements win. */
+@media (horizontal-viewport-segments: 2) {
+  :root:not([data-segmented]) .container,
+  :root:not([data-segmented]) .article-shell,
+  :root:not([data-segmented]) .nav-shell {
+    width: calc(env(viewport-segment-width 0 0, 100vw) - 32px);
+    max-width: calc(env(viewport-segment-width 0 0, 100vw) - 32px);
+    margin-inline: calc(env(viewport-segment-left 0 0, 0px) + 16px) auto;
+  }
+  :root:not([data-segmented]) .site-header {
+    padding-inline: 0;
+  }
+  :root:not([data-segmented]) .lightbox {
+    max-width: calc(env(viewport-segment-width 0 0, 100vw) - 32px);
+    left: calc(env(viewport-segment-left 0 0, 0px) + 16px);
+    right: auto;
+  }
+}
+@media (vertical-viewport-segments: 2) {
+  :root:not([data-segmented]) .lightbox {
+    top: calc(env(viewport-segment-top 0 0, 0px) + 16px);
+    max-height: calc(env(viewport-segment-height 0 0, 100svh) - 32px);
+  }
+  :root:not([data-segmented]) .site-header {
+    top: calc(env(viewport-segment-top 0 0, 0px) + max(12px, env(safe-area-inset-top)));
+  }
+}
+
+/* Ultra-wide viewports: ambient background spans the full width while text
+   columns and cards keep a readable measure instead of stretching. */
+@media (min-aspect-ratio: 21/9) {
+  .home-hero,
+  .product-hero {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 420px));
+    justify-content: center;
+  }
+  .article-shell {
+    max-width: 990px;
+  }
+}

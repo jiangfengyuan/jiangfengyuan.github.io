@@ -1,5 +1,6 @@
 import { animate, motionAllowed } from './motion';
 import { localized } from './i18n';
+import { hapticSuccess } from './haptics';
 
 export function initDetails(signal: AbortSignal) {
   document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach((button) => {
@@ -33,6 +34,7 @@ export function initDetails(signal: AbortSignal) {
         try {
           await navigator.clipboard.writeText(button.dataset.copyEmail!);
           state = 'success';
+          hapticSuccess();
         } catch {
           state = 'error';
         } finally {
