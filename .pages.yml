@@ -17,10 +17,16 @@ content:
     view: { primary: title, sort: date, order: desc }
     fields:
       - name: id
-        label: 文章 ID（发布后保持不变）
+        label: 文章 ID（发布后保持不变；英文翻译的 ID = 中文原 ID + -en）
         type: string
         required: true
         pattern: { regex: '^[A-Za-z0-9_-]+$', message: 仅使用字母、数字、短横线与下划线 }
+      - {
+          name: translationOf,
+          label: 翻译自（仅英文翻译填写，值为中文原文章 ID）,
+          type: string,
+          pattern: { regex: '^[A-Za-z0-9_-]+$', message: 仅使用字母、数字、短横线与下划线 },
+        }
       - { name: title, label: 标题, type: string, required: true }
       - { name: date, label: 日期, type: date, required: true, options: { format: yyyy-MM-dd } }
       - { name: publishedAt, label: 发表时间（ISO 8601，含时区，可选）, type: string }
