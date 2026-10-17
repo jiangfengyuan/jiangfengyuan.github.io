@@ -25,7 +25,8 @@ export default defineConfig({
       ],
       // Shiki colours and transition names live in style="" attributes; those cannot run code.
       // Astro does not hash its own transition:name scope <style> blocks, so list them here;
-      // tests/e2e/csp.spec.ts fails if they change (e.g. after renaming a transition).
+      // scripts/check-csp-hashes.mjs (runs at the end of npm run build) and tests/e2e/csp.spec.ts
+      // fail if they change (e.g. after renaming a transition).
       styleDirective: {
         resources: ["'self'", { resource: "'unsafe-inline'", kind: 'attribute' }],
         hashes: [

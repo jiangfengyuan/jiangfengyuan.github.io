@@ -7,12 +7,18 @@ import club from '../../data/dhgt.json';
 import { Picture } from 'astro:assets';
 import banner from '../../assets/dhgt/track.jpg';
 import { projects, publishedPosts } from '../../data/content';
-import { hrefFor, type Locale } from '../../i18n';
+import { hrefFor, postSlug, type Locale } from '../../i18n';
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const p = projects.find((p) => p.id === 'dhgt')!;
-const posts = (await publishedPosts(locale)).filter((post) =>
-  post.data.tags.some((tag) => ['DHGT', '赛车', 'F1', '赛事', 'F1周报'].includes(tag)),
+// Chinese originals carry the canonical tags; match related posts in any locale
+// by their shared slug so English tag wording never has to be mirrored here.
+const dhgtTagSet = new Set(['DHGT', '赛车', 'F1', '赛事', 'F1周报']);
+const dhgtSlugs = new Set(
+  (await publishedPosts('zh'))
+    .filter((post) => post.data.tags.some((tag) => dhgtTagSet.has(tag)))
+    .map((post) => post.data.id),
 );
+const posts = (await publishedPosts(locale)).filter((post) => dhgtSlugs.has(postSlug(post)));
 const { activities, gallery } = club;
 ---
 
