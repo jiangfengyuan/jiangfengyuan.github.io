@@ -15,7 +15,7 @@ npm run preview
 npm run test:e2e
 ```
 
-本地端到端测试使用已安装的 Chrome。Linux CI 可先运行 `npx playwright install --with-deps chromium`，再以 `CI=1 npm run test:e2e` 验证。`ASTRO_TELEMETRY_DISABLED=1` 可关闭构建工具遥测。
+本地端到端测试使用已安装的 Chrome。本机 macOS 运行 Playwright Firefox 时，自带 Firefox 可能因系统应用数据目录保护无法启动（`Could not find profile folder.`），需通过 `PLAYWRIGHT_FIREFOX_EXECUTABLE` 指定独立 Firefox 二进制，或在 Linux CI 中运行；Chromium 与 WebKit 测试不受影响。Linux CI 可先运行 `npx playwright install --with-deps chromium`，再以 `CI=1 npm run test:e2e` 验证。`ASTRO_TELEMETRY_DISABLED=1` 可关闭构建工具遥测。
 
 ## 页面和内容
 
@@ -27,7 +27,7 @@ npm run test:e2e
 - `src/content/posts/*.md` 文章；`src/data/` 中的项目、动态和个人资料为 CMS 内容源。
 - `src/components/` 与 `src/layouts/` 共享 UI；`src/styles/` 包含设计变量、基础、组件及页面样式；`src/scripts/` 按交互划分。
 
-中文为默认语言（`/`），英文为独立静态页面（`/en/`）；语言由 URL 决定，语言切换按钮跳转到对应语言的同一页面，并保留 query 与 hash，禁用 JavaScript 时同样可用。页面输出 `hreflang` 与 canonical，sitemap 含语言互链。`site-theme` 保存主题偏好，首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。
+中文为默认语言（`/`），英文为独立静态页面（`/en/`）；语言由 URL 决定，语言切换按钮跳转到对应语言的同一页面，并保留 query 与 hash，禁用 JavaScript 时同样可用。页面输出 `hreflang` 与 canonical，sitemap 含语言互链。`site-theme` 保存主题偏好，首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。部分交互（如主题切换、复制邮箱成功）在支持 `navigator.vibrate` 的设备上提供短振动反馈，属于渐进增强；iOS 与鸿蒙等环境待真机验证，视觉与文本反馈始终保留。非中文浏览器首次访问时显示 English hint，可一键前往英文首页或关闭，不影响默认中文内容。
 
 ## Pages CMS
 
@@ -51,7 +51,7 @@ npm run test:e2e
 
 ## 兼容与部署
 
-旧 `/flash.html` 等页面兼容到新地址，保留查询参数与锚点；`/blog?p=ID` 和 `/blog.html?p=ID` 跳转到对应文章。无脚本访问旧文章链接时仍可从文章目录选择 ID。
+`/*.html` 是迁移用的 noindex 双语跳转桩，保留旧扁平链接的查询参数与锚点，不是旧页面内容；`/blog?p=ID` 和 `/blog.html?p=ID` 跳转到对应文章。无脚本访问旧文章链接时仍可从文章目录选择 ID。
 
 GitHub 仓库 **Settings → Pages → Build and deployment → Source** 使用 **GitHub Actions**。推送 `main` 后运行 `.github/workflows/pages.yml`，执行依赖安装、内容测试、类型检查和静态构建，再发布 `dist/`。PR 仅构建，不部署。
 

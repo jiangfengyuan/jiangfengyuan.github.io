@@ -25,8 +25,8 @@ jobs:
       - run: npm audit --audit-level=moderate
       - run: npm run build
       # Browser tests gate deployment; they run against the built dist/ via scripts/serve.mjs.
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --project=chromium
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npx playwright test --project=chromium --project=webkit
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
