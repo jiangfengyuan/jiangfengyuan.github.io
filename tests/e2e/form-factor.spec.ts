@@ -16,9 +16,7 @@ const mockCopy = (page: import('@playwright/test').Page) =>
     });
   });
 
-test('aspect ratios: 16:10, 21:9 and low-height landscape keep layout usable', async ({
-  page,
-}) => {
+test('aspect ratios: 16:10, 21:9 and low-height landscape keep layout usable', async ({ page }) => {
   await page.goto('/');
   for (const [width, height] of [
     [1280, 800],
@@ -85,9 +83,7 @@ test('seamless wide screens do not constrain lanes; real hinges do', async ({ pa
   expect(nav!.x + nav!.width).toBeLessThanOrEqual(1744);
 });
 
-test('haptics fire only on explicit actions, never on load, scroll or hover', async ({
-  page,
-}) => {
+test('haptics fire only on explicit actions, never on load, scroll or hover', async ({ page }) => {
   await mockCopy(page);
   await page.goto('/');
   await page.evaluate(() => scrollTo(0, 400));

@@ -31,8 +31,7 @@ test('theme toggle is hidden without javascript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const nojs = await context.newPage();
   await nojs.goto('/');
-  const html = await nojs.content();
-  expect(html).toContain('[data-theme-toggle]');
-  expect(html).toContain('display: none');
+  await expect(nojs.locator('[data-theme-toggle]')).toBeHidden();
+  await expect(nojs.locator('[data-lang-toggle]')).toBeVisible();
   await context.close();
 });

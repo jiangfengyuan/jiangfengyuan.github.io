@@ -321,3 +321,35 @@ main:focus-visible {
   color: var(--muted);
   opacity: 1;
 }
+
+/* Script-free fallback: the head script sets data-js, so these apply only without JavaScript. */
+:root:not([data-js]) .nav-trigger,
+:root:not([data-js]) .nav-dropdown,
+:root:not([data-js]) .nav-backdrop {
+  display: none !important;
+}
+:root:not([data-js]) .menu-toggle {
+  display: none !important;
+}
+:root:not([data-js]) [data-theme-toggle] {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  :root:not([data-js]) .site-header {
+    position: relative;
+  }
+  :root:not([data-js]) .nav-shell {
+    flex-wrap: wrap;
+  }
+  :root:not([data-js]) .site-nav {
+    display: flex !important;
+    position: static !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    flex-wrap: wrap;
+    width: 100%;
+    order: 3;
+    box-shadow: none !important;
+  }
+}

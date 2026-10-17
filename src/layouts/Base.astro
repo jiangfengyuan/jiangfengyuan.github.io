@@ -48,10 +48,6 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://mmbiz.qpic.cn data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
-    />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <meta name="author" content="Hayden" />
@@ -94,6 +90,7 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
           ? 'dark'
           : 'light';
       }
+      document.documentElement.dataset.js = '';
       const themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (themeColorMeta) {
         themeColorMeta.content =
@@ -108,43 +105,20 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
     </a>
     <Header active={active} />
     <main id="main-content" tabindex="-1" transition:name="page-content">
+      {locale === 'zh' && (
+        <aside class="lang-hint container" data-lang-hint lang="en" hidden>
+          <p>This page is also available in English.</p>
+          <a class="text-link" href={enPath} data-lang-hint-link>
+            Read in English →
+          </a>
+          <button class="icon-button" type="button" data-lang-hint-close aria-label="Dismiss">
+            ×
+          </button>
+        </aside>
+      )}
       <slot />
     </main>
     <Footer />
-    <noscript>
-      <style>
-        .nav-trigger,
-        .nav-dropdown,
-        .nav-backdrop {
-          display: none !important;
-        }
-        .menu-toggle {
-          display: none !important;
-        }
-        [data-theme-toggle] {
-          display: none !important;
-        }
-        @media (max-width: 760px) {
-          .site-header {
-            position: relative;
-          }
-          .nav-shell {
-            flex-wrap: wrap;
-          }
-          .site-nav {
-            display: flex !important;
-            position: static !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: none !important;
-            flex-wrap: wrap;
-            width: 100%;
-            order: 3;
-            box-shadow: none !important;
-          }
-        }
-      </style>
-    </noscript>
     <script>
       import '../scripts/site';
     </script>

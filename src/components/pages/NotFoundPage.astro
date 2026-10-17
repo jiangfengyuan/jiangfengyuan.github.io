@@ -6,6 +6,10 @@ const locale = (Astro.currentLocale ?? 'zh') as Locale;
 ---
 
 <Base title="页面未找到 — Hayden" titleEn="Page not found — Hayden" noindex>
+  {locale === 'zh' && <script is:inline slot="head">
+    // GitHub Pages serves the root 404.html for every missing URL; send missing /en/ paths to the English 404.
+    if (/^\/en(\/|$)/.test(location.pathname)) location.replace('/en/404/');
+  </script>}
   <div class="container">
     <section class="page-hero">
       <div class="error-number" aria-hidden="true">

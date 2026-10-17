@@ -187,6 +187,30 @@
     transform: translateY(2px);
   }
 }
+.lang-hint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding: 6px 6px 6px 20px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-pill);
+  background: var(--control-bg);
+  color: var(--muted);
+  font-size: 14px;
+}
+.lang-hint[hidden] {
+  display: none;
+}
+.lang-hint p {
+  margin: 0;
+}
+.lang-hint .icon-button {
+  margin-left: auto;
+  font-size: 20px;
+  line-height: 1;
+}
 @media (max-width: 600px) {
   .footer-contact {
     align-items: flex-start;
