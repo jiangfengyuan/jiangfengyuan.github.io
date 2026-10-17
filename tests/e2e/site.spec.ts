@@ -1,37 +1,41 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = [
-  '/',
-  '/projects/',
-  '/flash/',
-  '/republica/',
-  '/dhgt/',
-  '/blog/',
-  '/updates/',
-  '/about/',
-  '/blog-admin/',
-  '/blog/20260926-S5g3_V/',
-  '/blog/20260913-04kgrl/',
-  '/404.html',
+// [zh route, en route, zh URL after switching back when it differs]
+const routes: Array<[string, string, string?]> = [
+  ['/', '/en/'],
+  ['/projects/', '/en/projects/'],
+  ['/flash/', '/en/flash/'],
+  ['/republica/', '/en/republica/'],
+  ['/dhgt/', '/en/dhgt/'],
+  ['/blog/', '/en/blog/'],
+  ['/updates/', '/en/updates/'],
+  ['/about/', '/en/about/'],
+  ['/blog-admin/', '/en/blog-admin/'],
+  ['/blog/20260926-S5g3_V/', '/en/blog/20260926-S5g3_V/'],
+  ['/blog/20260913-04kgrl/', '/en/blog/20260913-04kgrl/'],
+  ['/404.html', '/en/404/'],
 ];
 test('all layouts, bilingual themes, static metadata and accessibility', async ({ page }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(180_000);
   await page.route('https://mmbiz.qpic.cn/**', (r) => r.abort());
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  for (const route of routes) {
-    await page.goto(route);
+  for (const [zh, en, zhReturn] of routes) {
+    await page.goto(zh);
     await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /.+/);
     for (const width of [360, 390, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 950 });
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
-        route + ' ' + width,
+        zh + ' ' + width,
       ).toBe(true);
     }
     await page.locator('[data-lang-toggle]').click();
+    await expect(page).toHaveURL(new RegExp(en.replace(/[/.]/g, '\\$&') + '$'));
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('main')).toBeVisible();
     for (let theme = 0; theme < 2; theme++) {
       await page.locator('[data-theme-toggle]').click();
       await page.waitForTimeout(650);
@@ -43,11 +47,12 @@ test('all layouts, bilingual themes, static metadata and accessibility', async (
           id: v.id,
           nodes: v.nodes.map((n) => ({ target: n.target, summary: n.failureSummary })),
         })),
-        route,
+        en,
       ).toEqual([]);
     }
     await page.locator('[data-lang-toggle]').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
+    await expect(page).toHaveURL(new RegExp((zhReturn ?? zh).replace(/[/.]/g, '\\$&') + '$'));
   }
   expect(errors).toEqual([]);
 });
@@ -86,10 +91,11 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
   await expect(page.locator('[data-update]:visible')).toHaveCount(1);
 });
 test('old article links and content without scripts', async ({ page, browser }) => {
-  await page.goto('/blog.html?p=20260926-S5g3_V#test');
-  await expect(page).toHaveURL(/\/blog\/20260926-S5g3_V\/#test/);
   await page.goto('/blog/?p=20260913-04kgrl');
   await expect(page).toHaveURL(/\/blog\/20260913-04kgrl\//);
+  const retired = await page.goto('/blog.html?p=20260926-S5g3_V#test');
+  expect(retired!.status()).toBe(404);
+  await expect(page.locator('h1')).toContainText('这条路，暂时没有内容。');
   const context = await browser.newContext({
     javaScriptEnabled: false,
     viewport: { width: 390, height: 900 },
@@ -102,11 +108,18 @@ test('old article links and content without scripts', async ({ page, browser }) 
   await expect(nojs.locator('.article-aside')).toHaveCount(0);
   await nojs.goto('/blog/20260926-ukkgj5/');
   await expect(nojs.locator('.toc a')).toHaveCount(8);
-  await nojs.goto('/blog.html?p=20260926-S5g3_V');
-  await expect(nojs.locator('a[href="/blog/20260926-S5g3_V/"]')).toBeVisible();
+  const retiredNojs = await nojs.goto('/blog.html?p=20260926-S5g3_V');
+  expect(retiredNojs!.status()).toBe(404);
+  await expect(nojs.locator('main a[href="/blog/"]').first()).toBeVisible();
+  await nojs.goto('/en/about/');
+  await expect(nojs.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(nojs.locator('#site-nav a[href="/en/blog/"]')).toBeVisible();
+  await nojs.goto('/en/blog/20260926-S5g3_V/');
+  await expect(nojs.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(nojs.locator('.article-content p').first()).toBeVisible();
   await context.close();
 });
-test('lightbox keyboard and importer export', async ({ page }) => {
+test('lightbox keyboard and production admin page', async ({ page }) => {
   await page.route('https://mmbiz.qpic.cn/**', (r) =>
     r.fulfill({
       contentType: 'image/svg+xml',
@@ -121,19 +134,17 @@ test('lightbox keyboard and importer export', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(image).toBeFocused();
   await page.goto('/blog-admin/');
-  await page.locator('[name="title"]').fill('Import test');
-  await page.locator('details summary').click();
-  await page
-    .locator('[name="htmlsource"]')
-    .fill(
-      '<h2>Heading</h2><p>Hello</p><script>alert(1)</script><table><tr><th>A</th></tr><tr><td>B</td></tr></table>',
-    );
-  await page.locator('[data-load-html]').click();
-  await page.locator('[data-preview-button]').click();
-  await expect(page.locator('[data-import-preview] table')).toBeVisible();
-  expect(await page.locator('[data-import-preview] script').count()).toBe(0);
-  const download = page.waitForEvent('download');
-  await page.locator('button[type="submit"]').click();
-  expect((await download).suggestedFilename()).toMatch(/\.md$/);
-  await expect(page.locator('[data-import-output]')).toHaveValue(/draft: true/);
+  await expect(page.locator('main')).toBeVisible();
+  await expect(page.locator('.notice')).toContainText('导入工具仅在本地开发环境可用');
+  await expect(page.locator('[data-load-html]')).toHaveCount(0);
+  await expect(page.locator('[name="htmlsource"]')).toHaveCount(0);
+  await expect(page.locator('[data-preview-button]')).toHaveCount(0);
+  const html = await page.content();
+  expect(html).not.toContain('data-import-preview');
+  expect(html).not.toContain('data-import-output');
+  for (const src of await page.locator('script[src]').evaluateAll((els) =>
+    els.map((el) => el.getAttribute('src') ?? ''),
+  )) {
+    expect(src).not.toMatch(/import/i);
+  }
 });

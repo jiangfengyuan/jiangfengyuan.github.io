@@ -37,9 +37,8 @@ const pageDescription = locale === 'en' ? description.en : description.zh;
 const canonical = new URL(Astro.url.pathname, site).href;
 const zhPath = pathForLocale(Astro.url.pathname, 'zh');
 const enPath = pathForLocale(Astro.url.pathname, 'en');
-const normalizedEnPath = enPath === '/en' ? '/en/' : enPath;
 const zhHref = new URL(zhPath, site).href;
-const enHref = new URL(normalizedEnPath, site).href;
+const enHref = new URL(enPath, site).href;
 const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
 ---
 

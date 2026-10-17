@@ -57,7 +57,7 @@ function init() {
   // The server-rendered language link only knows the pathname (query/hash are
   // empty during static builds); rewrite it client-side so they are preserved.
   const langLink = document.querySelector<HTMLAnchorElement>('a[data-lang-link]');
-  if (langLink) {
+  if (langLink && !langLink.hasAttribute('data-lang-static')) {
     const target = document.documentElement.dataset.lang === 'en' ? 'zh' : 'en';
     langLink.href = pathForLocale(
       location.pathname + location.search + location.hash,

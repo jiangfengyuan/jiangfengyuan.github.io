@@ -25,8 +25,8 @@ export function pathForLocale(path: string, locale: Locale): string {
   const { pathname, search, hash } = splitPath(path);
 
   if (locale === 'en') {
-    if (pathname === '' || pathname === '/') return `/en${search}${hash}`;
-    if (pathname === '/en' || pathname.startsWith('/en/')) return path;
+    if (pathname === '' || pathname === '/' || pathname === '/en') return `/en/${search}${hash}`;
+    if (pathname.startsWith('/en/')) return path;
     return `/en${pathname}${search}${hash}`;
   }
 

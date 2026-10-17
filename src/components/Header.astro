@@ -7,7 +7,13 @@ const { active = '' } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const currentPath = Astro.url.pathname + Astro.url.search + Astro.url.hash;
 const langTarget: Locale = locale === 'zh' ? 'en' : 'zh';
-const langHref = pathForLocale(currentPath, langTarget);
+// A 404 can be served for any missing URL, so link to the other locale's 404 page instead.
+const isNotFound = /^\/(en\/)?404(\.html|\/)?$/.test(Astro.url.pathname);
+const langHref = isNotFound
+  ? langTarget === 'en'
+    ? '/en/404/'
+    : '/404.html'
+  : pathForLocale(currentPath, langTarget);
 const langLabel = locale === 'zh' ? 'EN' : '中文';
 const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
 const links = [
@@ -146,6 +152,7 @@ const menus: Record<string, Group[]> = {
         class="icon-button lang-toggle"
         href={langHref}
         data-lang-link
+        data-lang-static={isNotFound ? '' : undefined}
         data-lang-toggle
         data-current-lang={locale}
         aria-label={locale === 'zh' ? '切换到英文' : 'Switch to Chinese'}

@@ -37,14 +37,14 @@ test('pathForLocale maps /blog/post/ to /en/blog/post/ and back', () => {
 test('pathForLocale preserves query strings and hashes', () => {
   assert.equal(pathForLocale('/about?foo=1#bar', 'en'), '/en/about?foo=1#bar');
   assert.equal(pathForLocale('/en/about?foo=1#bar', 'zh'), '/about?foo=1#bar');
-  assert.equal(pathForLocale('/?foo=1#bar', 'en'), '/en?foo=1#bar');
+  assert.equal(pathForLocale('/?foo=1#bar', 'en'), '/en/?foo=1#bar');
   assert.equal(pathForLocale('/en?foo=1#bar', 'zh'), '/?foo=1#bar');
 });
 
 test('pathForLocale avoids adding /en twice', () => {
   assert.equal(pathForLocale('/en/about/', 'en'), '/en/about/');
   assert.equal(pathForLocale('/en/', 'en'), '/en/');
-  assert.equal(pathForLocale('/en', 'en'), '/en');
+  assert.equal(pathForLocale('/en', 'en'), '/en/');
 });
 
 test('pathForLocale collapses /en to root for Chinese locale', () => {

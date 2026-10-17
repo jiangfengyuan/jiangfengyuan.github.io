@@ -14,6 +14,20 @@ const routes = [
   '/blog/20260926-ukkgj5/',
   '/404.html',
 ];
+const enRoutes = [
+  '/en/',
+  '/en/projects/',
+  '/en/flash/',
+  '/en/republica/',
+  '/en/dhgt/',
+  '/en/blog/',
+  '/en/updates/',
+  '/en/about/',
+  '/en/blog-admin/',
+  '/en/blog/20261004-b45psV/',
+  '/en/blog/20260926-ukkgj5/',
+  '/en/404/',
+];
 const sizes = [
   [320, 780],
   [360, 800],
@@ -39,31 +53,27 @@ const mockImages = async (page: import('@playwright/test').Page) =>
     }),
   );
 test('viewport families, both languages and final palette contrast', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   await mockImages(page);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  for (const route of routes) {
+  for (const route of [...routes, ...enRoutes]) {
     await page.goto(route);
-    for (const lang of ['zh-CN', 'en']) {
-      if ((await page.locator('html').getAttribute('lang')) !== lang) {
-        await page.locator('[data-lang-toggle]').click();
-        await page.waitForTimeout(300);
-      }
-      for (const [width, height] of sizes) {
-        await page.setViewportSize({ width, height });
-        expect(
-          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
-          route + ' ' + lang + ' ' + width,
-        ).toBe(true);
-        const button = page.locator('[data-theme-toggle]');
-        const b = await button.boundingBox();
-        expect(b && b.width >= 44 && b.x >= 0 && b.x + b.width <= width).toBeTruthy();
-      }
+    const lang = route.startsWith('/en') ? 'en' : 'zh-CN';
+    await expect(page.locator('html')).toHaveAttribute('lang', lang);
+    for (const [width, height] of sizes) {
+      await page.setViewportSize({ width, height });
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+        route + ' ' + lang + ' ' + width,
+      ).toBe(true);
+      const button = page.locator('[data-theme-toggle]');
+      const b = await button.boundingBox();
+      expect(b && b.width >= 44 && b.x >= 0 && b.x + b.width <= width).toBeTruthy();
     }
   }
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const route of ['/', '/projects/', '/blog/', '/blog/20260930-iGVsbC/']) {
+  for (const route of ['/', '/en/', '/projects/', '/en/projects/', '/blog/', '/en/blog/', '/blog/20260930-iGVsbC/', '/en/blog/20260930-iGVsbC/']) {
     await page.goto(route);
     for (let i = 0; i < 2; i++) {
       await page.locator('[data-theme-toggle]').click();
@@ -84,38 +94,32 @@ test('rapid switches and animation interrupted by navigation keep final preferen
 }) => {
   await page.goto('/');
   await page.evaluate(() => {
-    const l = document.querySelector<HTMLButtonElement>('[data-lang-toggle]')!,
-      t = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')!;
-    l.click();
+    const t = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')!;
     t.click();
-    l.click();
     t.click();
-    l.click();
     t.click();
   });
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.waitForTimeout(550);
-  expect(
-    await page.evaluate(() => [
-      localStorage.getItem('site-lang'),
-      localStorage.getItem('site-theme'),
-    ]),
-  ).toEqual(['en', 'dark']);
+  expect(await page.evaluate(() => localStorage.getItem('site-theme'))).toBe('dark');
+  await page.locator('[data-lang-toggle]').click();
+  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.evaluate(() => {
     document.querySelector<HTMLButtonElement>('[data-theme-toggle]')!.click();
-    document.querySelector<HTMLAnchorElement>('a[href="/projects/"]')!.click();
+    document.querySelector<HTMLAnchorElement>('a[href="/en/projects/"]')!.click();
   });
-  await expect(page).toHaveURL(/\/projects\/$/);
+  await expect(page).toHaveURL(/\/en\/projects\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await page.locator('[data-shared-link="republica"]').click();
-  await expect(page).toHaveURL(/\/republica\/$/);
+  await expect(page).toHaveURL(/\/en\/republica\/$/);
   await expect(page.locator('[data-shared-media="republica"]')).toBeVisible();
   await page.goBack();
-  await expect(page).toHaveURL(/\/projects\/$/);
+  await expect(page).toHaveURL(/\/en\/projects\/$/);
   await page.goForward();
-  await expect(page).toHaveURL(/\/republica\/$/);
+  await expect(page).toHaveURL(/\/en\/republica\/$/);
 });
 test('reduced motion mid-transition, unavailable API and solid surfaces remain usable', async ({
   page,
@@ -135,13 +139,13 @@ test('reduced motion mid-transition, unavailable API and solid surfaces remain u
     await page.locator('.nav-shell').evaluate((el) => getComputedStyle(el).backdropFilter),
   ).toBe('none');
   await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
-  await page.evaluate(() =>
-    Object.defineProperty(document, 'startViewTransition', {
-      value: undefined,
-      configurable: true,
-    }),
-  );
+  // Browsers without View Transitions have no such member at all; remove it before scripts load.
+  await page.addInitScript(() => {
+    delete (Document.prototype as any).startViewTransition;
+  });
+  await page.reload();
   await page.locator('[data-lang-toggle]').click();
+  await expect(page).toHaveURL(/\/en\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await page.locator('[data-theme-toggle]').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
@@ -299,22 +303,11 @@ test('large text, script-free content and keyboard viewport keep controls reacha
   await context.close();
 });
 
-test('language stays local and viewport events do not replay menu animation', async ({ page }) => {
+test('language switch changes route and viewport events do not replay menu animation', async ({
+  page,
+}) => {
   await page.goto('/');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => {
-    (window as any).snapshots = 0;
-    const start = document.startViewTransition?.bind(document);
-    if (start)
-      document.startViewTransition = ((...args: any[]) => {
-        (window as any).snapshots++;
-        return (start as any)(...args);
-      }) as any;
-  });
-  await page.locator('[data-lang-toggle]').click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await page.waitForTimeout(320);
-  expect(await page.evaluate(() => (window as any).snapshots)).toBe(0);
   await page.locator('[data-menu-toggle]').click();
   await page.evaluate(() => {
     for (let i = 0; i < 40; i++) window.visualViewport?.dispatchEvent(new Event('scroll'));
@@ -323,7 +316,11 @@ test('language stays local and viewport events do not replay menu animation', as
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-menu-toggle]')).toBeFocused();
   await page.locator('[data-lang-toggle]').click();
+  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await page.locator('[data-lang-toggle]').click();
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
   await page.waitForTimeout(100);
   expect(
@@ -348,15 +345,19 @@ test('contact copy feedback survives language changes and router cleanup', async
     });
   });
   await page.goto('/about/');
-  const contact = page.locator('#contact');
-  const button = contact.locator('[data-copy-email]');
+  let contact = page.locator('#contact');
+  let button = contact.locator('[data-copy-email]');
+  const email = await button.getAttribute('data-copy-email');
   await button.click();
   await expect(button).toHaveAttribute('data-copy-state', 'success');
   await expect(contact.getByRole('status')).toHaveText('已复制，可以粘贴了。');
-  expect(await page.evaluate(() => (window as any).copies)).toEqual([
-    await button.getAttribute('data-copy-email'),
-  ]);
+  expect(await page.evaluate(() => (window as any).copies)).toEqual([email]);
   await page.locator('[data-lang-toggle]').click();
+  await expect(page).toHaveURL(/\/en\/about\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  contact = page.locator('#contact');
+  button = contact.locator('[data-copy-email]');
+  await button.click();
   await expect(contact.getByRole('status')).toHaveText('Copied. Ready to paste.');
   await page.evaluate(() => {
     (window as any).copyFails = true;
@@ -368,12 +369,15 @@ test('contact copy feedback survives language changes and router cleanup', async
     (window as any).copyFails = false;
   });
   await page.locator('[data-nav-trigger="projects"]').click();
-  await page.locator('#nav-panel-projects a[href="/projects/"]').click();
-  await expect(page).toHaveURL(/\/projects\//);
+  await page.locator('#nav-panel-projects a[href="/en/projects/"]').click();
+  await expect(page).toHaveURL(/\/en\/projects\//);
   await page.locator('[data-nav-trigger="about"]').click();
-  await page.locator('#nav-panel-about a[href="/about/"]').click();
+  await page.locator('#nav-panel-about a[href="/en/about/"]').click();
+  await expect(page).toHaveURL(/\/en\/about\/$/);
+  contact = page.locator('#contact');
+  button = contact.locator('[data-copy-email]');
   await button.click();
-  expect(await page.evaluate(() => (window as any).copies.length)).toBe(3);
+  expect(await page.evaluate(() => (window as any).copies.at(-1))).toBe(email);
   await expect(contact.getByRole('status')).toHaveText('Copied. Ready to paste.');
 });
 
