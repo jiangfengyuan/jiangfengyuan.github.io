@@ -91,11 +91,14 @@ test('menu focus, reduced motion, search and history', async ({ page }) => {
   await expect(page.locator('[data-update]:visible')).toHaveCount(1);
 });
 test('old article links and content without scripts', async ({ page, browser }) => {
+  await page.goto('/blog.html?p=20260926-S5g3_V#test');
+  await expect(page).toHaveURL(/\/blog\/20260926-S5g3_V\/#test/);
+  await page.goto('/blog.html?p=20261011-SGGPQS');
+  await expect(page).toHaveURL(/\/blog\/20261011-SGGPQS\//);
+  await page.goto('/flash.html');
+  await expect(page).toHaveURL(/\/flash\/$/);
   await page.goto('/blog/?p=20260913-04kgrl');
   await expect(page).toHaveURL(/\/blog\/20260913-04kgrl\//);
-  const retired = await page.goto('/blog.html?p=20260926-S5g3_V#test');
-  expect(retired!.status()).toBe(404);
-  await expect(page.locator('h1')).toContainText('这条路，暂时没有内容。');
   const context = await browser.newContext({
     javaScriptEnabled: false,
     viewport: { width: 390, height: 900 },
@@ -108,9 +111,8 @@ test('old article links and content without scripts', async ({ page, browser }) 
   await expect(nojs.locator('.article-aside')).toHaveCount(0);
   await nojs.goto('/blog/20260926-ukkgj5/');
   await expect(nojs.locator('.toc a')).toHaveCount(8);
-  const retiredNojs = await nojs.goto('/blog.html?p=20260926-S5g3_V');
-  expect(retiredNojs!.status()).toBe(404);
-  await expect(nojs.locator('main a[href="/blog/"]').first()).toBeVisible();
+  await nojs.goto('/blog.html?p=20260926-S5g3_V');
+  await expect(nojs.locator('a[href="/blog/20260926-S5g3_V/"]')).toBeVisible();
   await nojs.goto('/en/about/');
   await expect(nojs.locator('html')).toHaveAttribute('lang', 'en');
   await expect(nojs.locator('#site-nav a[href="/en/blog/"]')).toBeVisible();
