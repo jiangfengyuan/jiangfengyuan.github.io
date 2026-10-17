@@ -22,11 +22,12 @@ npm run test:e2e
 - `/` 个人首页；`/projects/` 作品目录；`/about/` 个人资料与联系。
 - `/flash/`、`/republica/`、`/dhgt/`：独立产品和社团页面。
 - `/blog/` 写作列表；`/blog/<ID>/` 预渲染文章；`/updates/` 项目动态。
-- `/blog-admin/` 私用文章导入工具（noindex，未列入导航或 sitemap）。
+- `/blog-admin/` 文章导入工具：仅在本地 `npm run dev` 时可用；线上构建只输出说明页（noindex，不进入导航或 sitemap）。
+- 英文站位于 `/en/` 下，路由与中文一一对应（如 `/en/about/`、`/en/blog/<ID>/`），并有独立的 `/en/rss.xml` 与 `/en/search-index.json`。
 - `src/content/posts/*.md` 文章；`src/data/` 中的项目、动态和个人资料为 CMS 内容源。
 - `src/components/` 与 `src/layouts/` 共享 UI；`src/styles/` 包含设计变量、基础、组件及页面样式；`src/scripts/` 按交互划分。
 
-中文默认，同一 URL 切换英文界面。文章保留原文语言。`site-lang`、`site-theme` 沿用旧站偏好；主题首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。
+中文为默认语言（`/`），英文为独立静态页面（`/en/`）；语言由 URL 决定，语言切换按钮跳转到对应语言的同一页面，并保留 query 与 hash，禁用 JavaScript 时同样可用。页面输出 `hreflang` 与 canonical，sitemap 含语言互链。`site-theme` 保存主题偏好，首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。
 
 ## Pages CMS
 
@@ -36,11 +37,13 @@ npm run test:e2e
 4. 草稿勾选时，文章不生成公开地址，也不进入列表、搜索、RSS 或 sitemap。公开仓库中的源文件仍然公开。
 5. 取消草稿并保存，CMS 提交触发 GitHub Actions。只有构建成功后才部署；失败时线上保留上一版，在 Actions 查看诊断。
 
-文章 ID 发布后保持不变；仅使用字母、数字、`-` 与 `_`。字段包含标题、日期（YYYY-MM-DD）、标签、摘要、原文语言、草稿、可选封面和封面替代文字。首次 GitHub 登录授权需要仓库所有者完成；无需把密钥放进官网。
+文章 ID 发布后保持不变；仅使用字母、数字、`-` 与 `_`。字段包含标题、日期（YYYY-MM-DD）、标签、摘要、原文语言、草稿、可选封面和封面替代文字。
+
+英文译文是单独的文章文件：ID 为中文 ID 加 `-en`（如 `20260827-uzA9yg-en`），`language` 设为 `en`，`translationOf` 填中文原 ID。英文文章发布在 `/en/blog/<中文 ID>/`，与中文版互为语言切换目标。首次 GitHub 登录授权需要仓库所有者完成；无需把密钥放进官网。
 
 ## 公众号导入与 Markdown 写作
 
-打开 `/blog-admin/`，粘贴公众号正文或 HTML 源码，或者切换到 Markdown。工具移除脚本、隐藏节点、事件属性与危险链接，保留表格、题注、列表和代码。
+本地运行 `npm run dev` 后打开 `/blog-admin/`，粘贴公众号正文或 HTML 源码，或者切换到 Markdown。工具移除脚本、隐藏节点、事件属性与危险链接，保留表格、题注、列表和代码。
 
 - 预览后导出完整 Markdown 文件，上传到 `src/content/posts/`。
 - 或复制正文，粘贴到 Pages CMS 的 **Source** 模式，填写标题、日期、标签等元数据。
