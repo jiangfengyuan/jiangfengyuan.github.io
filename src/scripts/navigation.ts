@@ -408,7 +408,6 @@ export function initNavigation(signal: AbortSignal) {
     close(nav.contains(document.activeElement) || dropdown.contains(document.activeElement), true);
   small.addEventListener('change', reset, { signal });
   document.addEventListener('site:viewport', reset, { signal });
-  document.addEventListener('site:language', () => sync(), { signal });
   document.addEventListener(
     'site:motion',
     () => {

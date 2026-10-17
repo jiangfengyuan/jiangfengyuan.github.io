@@ -45,6 +45,7 @@ function init() {
   const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   function syncTheme() {
     const dark = document.documentElement.dataset.theme === 'dark';
+    themeButton?.setAttribute('aria-pressed', String(dark));
     themeButton?.setAttribute(
       'aria-label',
       dark

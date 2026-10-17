@@ -40,64 +40,10 @@ reduce.addEventListener('change', () => {
   if (reduce.matches) cancel();
   document.dispatchEvent(new Event('site:motion'));
 });
-function zones() {
-  return [
-    ...document.querySelectorAll<HTMLElement>(
-      '.nav-shell,.hero-copy,.page-hero,.section-heading,.project-info,.post-row-body,.article-header,.filter-bar,.about-mini',
-    ),
-  ]
-    .filter((el) => {
-      const r = el.getBoundingClientRect();
-      return r.bottom > 0 && r.top < innerHeight;
-    })
-    .slice(0, 8);
-}
-export function changeView(kind: 'theme' | 'language', update: () => void, origin?: HTMLElement) {
+export function changeView(kind: 'theme', update: () => void, origin?: HTMLElement) {
   cancel();
   const serial = revision;
   const root = document.documentElement;
-  // Language changes never snapshot the document or animate layout dimensions.
-  if (kind === 'language') {
-    const elements = zones();
-    const before = elements.map((el) => el.getBoundingClientRect());
-    const anchor =
-      scrollY > 80
-        ? elements.find((el, i) => !el.matches('.nav-shell') && before[i].top >= 0)
-        : undefined;
-    const anchorTop = anchor?.getBoundingClientRect().top;
-    if (!motionAllowed()) {
-      update();
-      return;
-    }
-    const commit = () => {
-      update();
-      if (!motionAllowed()) return;
-      const after = elements.map((el) => el.getBoundingClientRect());
-      if (anchor && anchorTop !== undefined) {
-        const shift = after[elements.indexOf(anchor)].top - anchorTop;
-        if (Math.abs(shift) > 1) scrollBy({ top: shift, behavior: 'instant' });
-      }
-      elements.forEach((el, i) => {
-        const offset = Math.max(-12, Math.min(12, before[i].top - after[i].top));
-        animate(
-          el,
-          [
-            { opacity: 0.2, transform: `translateY(${offset}px)` },
-            { opacity: 1, transform: 'none' },
-          ],
-          { duration: 170, delay: Math.min(i * 8, 32) },
-        );
-      });
-    };
-    pendingUpdate = commit;
-    elements.forEach((el) => animate(el, [{ opacity: 1 }, { opacity: 0.2 }], { duration: 70 }));
-    setTimeout(() => {
-      if (serial !== revision) return;
-      pendingUpdate = undefined;
-      commit();
-    }, 70);
-    return;
-  }
   const fallback = () => {
     root.classList.add('theme-fade');
     update();
@@ -197,6 +143,9 @@ document.addEventListener('astro:before-preparation', (e) => {
   navigating = true;
   shared = '';
   document.documentElement.dataset.direction = event.direction;
+  if (event.sourceElement?.closest<HTMLElement>('[data-lang-link]')) {
+    document.documentElement.dataset.motion = 'language';
+  }
   const link = event.sourceElement?.closest<HTMLElement>('[data-shared-link]');
   const key = link?.dataset.sharedLink;
   const image = link?.querySelector<HTMLElement>('img');
@@ -229,6 +178,7 @@ document.addEventListener('astro:before-swap', (e) => {
 });
 document.addEventListener('astro:page-load', () => {
   navigating = false;
+  delete document.documentElement.dataset.motion;
   document
     .querySelectorAll<HTMLElement>('[style*="project-visual"]')
     .forEach((el) => el.style.removeProperty('view-transition-name'));

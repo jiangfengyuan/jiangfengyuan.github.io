@@ -20,13 +20,8 @@ if (form) {
   let generatedBody = '';
   date.value = new Date().toLocaleDateString('en-CA');
   const say = (zh: string, en: string) => {
-    message.dataset.zh = zh;
-    message.dataset.en = en;
     message.textContent = localized(zh, en);
   };
-  document.addEventListener('site:language', () => {
-    message.textContent = localized(message.dataset.zh || '', message.dataset.en || '');
-  });
   async function guard(action: () => unknown | Promise<unknown>) {
     try {
       await action();

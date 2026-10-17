@@ -58,7 +58,6 @@ export function initDetails(signal: AbortSignal) {
       },
       { signal },
     );
-    document.addEventListener('site:language', render, { signal });
     signal.addEventListener('abort', () => clearTimeout(timer), { once: true });
   });
 

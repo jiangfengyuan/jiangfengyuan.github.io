@@ -79,7 +79,6 @@ function init() {
   }
   addEventListener('scroll', queue, { passive: true, signal });
   addEventListener('resize', invalidate, { passive: true, signal });
-  document.addEventListener('site:language', invalidate, { signal });
   const observer = new ResizeObserver(invalidate);
   observer.observe(article);
   signal.addEventListener('abort', () => {
@@ -125,7 +124,6 @@ function init() {
     const label = () =>
       img.setAttribute('aria-label', localized('放大图片：', 'Enlarge image: ') + img.alt);
     label();
-    document.addEventListener('site:language', label, { signal });
     function open(e: Event) {
       if (!dialog || !large || img.dataset.failed) return;
       e.preventDefault();
