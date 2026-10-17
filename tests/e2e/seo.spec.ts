@@ -30,26 +30,42 @@ test('canonical, hreflang, og:locale and RSS alternate are locale-aware', async 
   }
 });
 
-test('blog listings are scoped per language', async ({ page }) => {
+test('blog listings are scoped per language and match the search indexes', async ({
+  page,
+  request,
+}) => {
+  const zhIndex = (await (await request.get('/search-index.json')).json()) as Array<{
+    url: string;
+  }>;
+  const enIndex = (await (await request.get('/en/search-index.json')).json()) as Array<{
+    url: string;
+  }>;
+  expect(zhIndex.length).toBeGreaterThan(0);
+  expect(enIndex).toHaveLength(zhIndex.length);
+
   await page.goto('/blog/');
   const zhPosts = page.locator('[data-post]');
-  await expect(zhPosts).toHaveCount(10);
+  await expect(zhPosts).toHaveCount(zhIndex.length);
   const zhHrefs = await zhPosts.locator('h3 a').evaluateAll((els) =>
     els.map((el) => el.getAttribute('href') ?? ''),
   );
-  expect(zhHrefs.length).toBe(10);
+  expect(zhHrefs.length).toBe(zhIndex.length);
   for (const href of zhHrefs) expect(href).toMatch(/^\/blog\/[^/]+\/$/);
   await page.goto('/en/blog/');
   const enPosts = page.locator('[data-post]');
-  await expect(enPosts).toHaveCount(10);
+  await expect(enPosts).toHaveCount(enIndex.length);
   const enHrefs = await enPosts.locator('h3 a').evaluateAll((els) =>
     els.map((el) => el.getAttribute('href') ?? ''),
   );
-  expect(enHrefs.length).toBe(10);
+  expect(enHrefs.length).toBe(enIndex.length);
   for (const href of enHrefs) expect(href).toMatch(/^\/en\/blog\/[^/]+\/$/);
   const zhSlugs = zhHrefs.map((h) => h.replace(/^\/blog\/|\/$/g, '')).sort();
   const enSlugs = enHrefs.map((h) => h.replace(/^\/en\/blog\/|\/$/g, '')).sort();
   expect(enSlugs).toEqual(zhSlugs);
+  const zhIndexSlugs = zhIndex.map((e) => e.url.replace(/^\/blog\/|\/$/g, '')).sort();
+  const enIndexSlugs = enIndex.map((e) => e.url.replace(/^\/en\/blog\/|\/$/g, '')).sort();
+  expect(zhSlugs).toEqual(zhIndexSlugs);
+  expect(enSlugs).toEqual(enIndexSlugs);
 });
 
 test('previous and next links stay within the same language', async ({ page }) => {
@@ -74,18 +90,18 @@ test('previous and next links stay within the same language', async ({ page }) =
   }
 });
 
-test('English RSS and search index carry exactly the 10 English posts', async ({ request }) => {
-  const rss = await (await request.get('/en/rss.xml')).text();
-  expect(rss.match(/<item>/g)).toHaveLength(10);
-  expect(rss).toContain('<language>en');
-  const enIndex = (await (await request.get('/en/search-index.json')).json()) as Array<{
-    title: string;
-  }>;
-  expect(enIndex).toHaveLength(10);
-  const zhRss = await (await request.get('/rss.xml')).text();
-  expect(zhRss.match(/<item>/g)).toHaveLength(10);
+test('RSS feeds and search indexes cover every published post per language', async ({
+  request,
+}) => {
   const zhIndex = (await (await request.get('/search-index.json')).json()) as unknown[];
-  expect(zhIndex).toHaveLength(10);
+  const enIndex = (await (await request.get('/en/search-index.json')).json()) as unknown[];
+  expect(zhIndex.length).toBeGreaterThan(0);
+  expect(enIndex).toHaveLength(zhIndex.length);
+  const rss = await (await request.get('/en/rss.xml')).text();
+  expect(rss.match(/<item>/g)).toHaveLength(enIndex.length);
+  expect(rss).toContain('<language>en');
+  const zhRss = await (await request.get('/rss.xml')).text();
+  expect(zhRss.match(/<item>/g)).toHaveLength(zhIndex.length);
   expect(rss).toContain('Verstappen');
   expect(rss).not.toContain('维斯塔潘');
   expect(zhRss).toContain('维斯塔潘');
