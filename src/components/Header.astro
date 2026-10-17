@@ -64,7 +64,7 @@ const menus: Record<string, Group[]> = {
     group(
       '最近的文章',
       'Latest articles',
-      latest.map((post) => [`/blog/${postSlug(post)}/`, post.data.title, post.data.title]),
+      latest.map((post) => [hrefFor(`/blog/${postSlug(post)}/`, locale), post.data.title, post.data.title]),
     ),
     group('继续探索', 'Keep exploring', [
       ['/dhgt/#stories', 'DHGT 的故事', 'DHGT stories'],
