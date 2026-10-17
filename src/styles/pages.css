@@ -414,6 +414,7 @@ figure {
   min-width: 0;
 }
 .article-header {
+  overflow-wrap: anywhere;
   padding-bottom: 32px;
   border-bottom: 1px solid var(--line);
   margin-bottom: 32px;
