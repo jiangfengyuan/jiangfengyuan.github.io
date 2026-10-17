@@ -27,21 +27,19 @@ const BlogAdminImport = import.meta.env.DEV
         </a>
       </div>
     </header>
-    {
-      import.meta.env.DEV && BlogAdminImport ? (
-        <BlogAdminImport />
-      ) : (
-        <section class="section">
-          <p class="notice">
-            <Text
-              text={{
-                zh: '导入工具仅在本地开发环境可用。请使用 Pages CMS 或直接编辑 src/content/posts/ 下的 Markdown 文件。',
-                en: 'The import tool is only available in the local development environment. Please use Pages CMS or edit Markdown files under src/content/posts/.',
-              }}
-            />
-          </p>
-        </section>
-      )
-    }
+    {import.meta.env.DEV && BlogAdminImport ? (
+      <BlogAdminImport />
+    ) : (
+      <section class="section">
+        <p class="notice">
+          <Text
+            text={{
+              zh: '导入工具仅在本地开发环境可用。请使用 Pages CMS 或直接编辑 src/content/posts/ 下的 Markdown 文件。',
+              en: 'The import tool is only available in the local development environment. Please use Pages CMS or edit Markdown files under src/content/posts/.',
+            }}
+          />
+        </p>
+      </section>
+    )}
   </div>
 </Base>

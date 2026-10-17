@@ -9,6 +9,8 @@ import { hapticTap } from './haptics';
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme before paint.
 document.addEventListener('astro:after-swap', () => {
+  // The swap copies the new page's <html> attributes, which never include data-js.
+  document.documentElement.dataset.js = '';
   try {
     const t = localStorage.getItem('site-theme');
     document.documentElement.dataset.theme =
@@ -59,9 +61,32 @@ function init() {
   const langLink = document.querySelector<HTMLAnchorElement>('a[data-lang-link]');
   if (langLink && !langLink.hasAttribute('data-lang-static')) {
     const target = document.documentElement.dataset.lang === 'en' ? 'zh' : 'en';
-    langLink.href = pathForLocale(
-      location.pathname + location.search + location.hash,
-      target,
+    langLink.href = pathForLocale(location.pathname + location.search + location.hash, target);
+  }
+
+  // Suggest the English site to visitors whose browser prefers no Chinese, until they dismiss it.
+  const hint = document.querySelector<HTMLElement>('[data-lang-hint]');
+  if (hint) {
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem('site-lang-hint') === 'dismissed';
+    } catch {}
+    const prefersChinese = (navigator.languages || [navigator.language]).some((l) =>
+      /^zh\b/i.test(l),
+    );
+    hint.hidden = dismissed || prefersChinese;
+    const hintLink = hint.querySelector<HTMLAnchorElement>('[data-lang-hint-link]');
+    if (hintLink)
+      hintLink.href = pathForLocale(location.pathname + location.search + location.hash, 'en');
+    hint.querySelector('[data-lang-hint-close]')?.addEventListener(
+      'click',
+      () => {
+        hint.hidden = true;
+        try {
+          localStorage.setItem('site-lang-hint', 'dismissed');
+        } catch {}
+      },
+      { signal },
     );
   }
 

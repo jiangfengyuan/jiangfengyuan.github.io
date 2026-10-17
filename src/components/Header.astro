@@ -70,7 +70,11 @@ const menus: Record<string, Group[]> = {
     group(
       '最近的文章',
       'Latest articles',
-      latest.map((post) => [hrefFor(`/blog/${postSlug(post)}/`, locale), post.data.title, post.data.title]),
+      latest.map((post) => [
+        hrefFor(`/blog/${postSlug(post)}/`, locale),
+        post.data.title,
+        post.data.title,
+      ]),
     ),
     group('继续探索', 'Keep exploring', [
       ['/dhgt/#stories', 'DHGT 的故事', 'DHGT stories'],
@@ -166,8 +170,12 @@ const menus: Record<string, Group[]> = {
         aria-pressed="false"
         aria-label={locale === 'zh' ? '切换主题' : 'Change color theme'}
       >
-        <span class="theme-icon theme-icon-sun" aria-hidden="true"><Icon name="sun" /></span>
-        <span class="theme-icon theme-icon-moon" aria-hidden="true"><Icon name="moon" /></span>
+        <span class="theme-icon theme-icon-sun" aria-hidden="true">
+          <Icon name="sun" />
+        </span>
+        <span class="theme-icon theme-icon-moon" aria-hidden="true">
+          <Icon name="moon" />
+        </span>
       </button>
       <button
         class="icon-button menu-toggle"

@@ -1,12 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  locales,
-  localeFromPath,
-  pathForLocale,
-  hrefFor,
-  postSlug,
-} from '../src/i18n.ts';
+import { locales, localeFromPath, pathForLocale, hrefFor, postSlug } from '../src/i18n.ts';
 
 test('locales constant and Locale type cover zh and en', () => {
   assert.deepEqual(locales, ['zh', 'en']);

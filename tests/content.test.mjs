@@ -110,3 +110,16 @@ test('Markdown pipeline strips dangerous link protocols, obfuscated URLs and exe
     }),
   );
 });
+
+test('remote article images never send a referrer', async () => {
+  const { default: config } = await import('../astro.config.mjs');
+  const renderer = await config.markdown.processor.createRenderer(config.markdown);
+  const result = await renderer.render(
+    '![a](https://mmbiz.qpic.cn/x/640)\n\n<img src="https://example.org/b.jpg" alt="b">\n\n![c](/assets/c.png)',
+  );
+  const imgs = [...new JSDOM(result.code).window.document.querySelectorAll('img')];
+  assert.deepEqual(
+    imgs.map((i) => i.getAttribute('referrerpolicy')),
+    ['no-referrer', 'no-referrer', null],
+  );
+});

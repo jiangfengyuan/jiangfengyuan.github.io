@@ -144,9 +144,9 @@ test('lightbox keyboard and production admin page', async ({ page }) => {
   const html = await page.content();
   expect(html).not.toContain('data-import-preview');
   expect(html).not.toContain('data-import-output');
-  for (const src of await page.locator('script[src]').evaluateAll((els) =>
-    els.map((el) => el.getAttribute('src') ?? ''),
-  )) {
+  for (const src of await page
+    .locator('script[src]')
+    .evaluateAll((els) => els.map((el) => el.getAttribute('src') ?? ''))) {
     expect(src).not.toMatch(/import/i);
   }
 });

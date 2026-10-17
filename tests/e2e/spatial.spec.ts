@@ -73,7 +73,16 @@ test('viewport families, both languages and final palette contrast', async ({ pa
     }
   }
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const route of ['/', '/en/', '/projects/', '/en/projects/', '/blog/', '/en/blog/', '/blog/20260930-iGVsbC/', '/en/blog/20260930-iGVsbC/']) {
+  for (const route of [
+    '/',
+    '/en/',
+    '/projects/',
+    '/en/projects/',
+    '/blog/',
+    '/en/blog/',
+    '/blog/20260930-iGVsbC/',
+    '/en/blog/20260930-iGVsbC/',
+  ]) {
     await page.goto(route);
     for (let i = 0; i < 2; i++) {
       await page.locator('[data-theme-toggle]').click();

@@ -165,7 +165,9 @@ document.addEventListener('astro:before-swap', (e) => {
   const event = e as TransitionBeforeSwapEvent;
   event.newDocument.documentElement.dataset.direction = event.direction;
   const key =
-    shared || ['republica', 'dhgt', 'flash'].find((id) => event.from.pathname === '/' + id + '/') || '';
+    shared ||
+    ['republica', 'dhgt', 'flash'].find((id) => event.from.pathname === '/' + id + '/') ||
+    '';
   if (!key || reduce.matches) return;
   const oldImage = document.querySelector<HTMLImageElement>(`[data-shared-media="${key}"] img`);
   const nextImage = event.newDocument.querySelector<HTMLImageElement>(
