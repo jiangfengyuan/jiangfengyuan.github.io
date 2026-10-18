@@ -53,7 +53,7 @@
   --text-display: clamp(42px, 6vw, 76px);
   --text-hero: clamp(45px, 5.6vw, 72px);
   --text-page-hero: clamp(48px, 6vw, 86px);
-  --ease: cubic-bezier(0.22, 0.68, 0, 1.01);
+  --ease: cubic-bezier(0.22, 0.61, 0.21, 1);
   --duration: 180ms;
   --z-header: 50;
   --z-progress: 100;

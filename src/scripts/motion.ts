@@ -14,8 +14,8 @@ export const motionAllowed = () => !reduce.matches && !navigating;
 export function animate(el: Element, frames: Keyframe[], options: KeyframeAnimationOptions = {}) {
   if (!motionAllowed()) return undefined;
   const a = el.animate(frames, {
-    duration: 240,
-    easing: 'cubic-bezier(.22,.68,0,1.01)',
+    duration: 320,
+    easing: 'cubic-bezier(.22,.61,.21,1)',
     ...options,
   });
   running.add(a);
@@ -49,7 +49,7 @@ export function changeView(kind: 'theme', update: () => void, origin?: HTMLEleme
     update();
     setTimeout(() => {
       if (serial === revision) root.classList.remove('theme-fade');
-    }, 180);
+    }, 280);
   };
   if (!motionAllowed()) {
     update();
@@ -85,7 +85,7 @@ export function changeView(kind: 'theme', update: () => void, origin?: HTMLEleme
               { clipPath: `circle(0px at ${x}px ${y}px)` },
               { clipPath: `circle(${radius}px at ${x}px ${y}px)` },
             ],
-            { duration: 420, pseudoElement: '::view-transition-new(root)' },
+            { duration: 680, pseudoElement: '::view-transition-new(root)' },
           );
         }
       })
@@ -132,7 +132,7 @@ export function animateResults(rows: HTMLElement[]) {
           { opacity: 0.15, transform: 'translateY(8px)' },
           { opacity: 1, transform: 'none' },
         ],
-        { duration: 200, delay: i * 24 },
+        { duration: 320, delay: i * 32 },
       );
     });
 }

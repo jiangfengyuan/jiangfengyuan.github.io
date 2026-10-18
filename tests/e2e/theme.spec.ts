@@ -14,7 +14,7 @@ test('theme toggle updates icons, aria-pressed and meta theme-color', async ({ p
   expect(await moon.evaluate((el) => getComputedStyle(el).opacity)).toBe('0');
 
   await toggle.click();
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(400);
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   await expect(toggle).toHaveAttribute('aria-label', '切换为浅色主题');
   await expect(meta).toHaveAttribute('content', '#191c19');
@@ -22,7 +22,7 @@ test('theme toggle updates icons, aria-pressed and meta theme-color', async ({ p
   expect(await moon.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 
   await toggle.click();
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(400);
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
   await expect(meta).toHaveAttribute('content', '#f6f4ef');
 });

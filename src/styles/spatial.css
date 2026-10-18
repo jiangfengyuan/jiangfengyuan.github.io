@@ -7,10 +7,10 @@
   --glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(255, 255, 255, 0.18);
   --glass-depth: 0 12px 32px -20px rgba(42, 42, 34, 0.25);
   --motion-press: 160ms;
-  --motion-state: 220ms;
-  --motion-panel: 240ms;
-  --motion-page: 280ms;
-  --motion-enter: 400ms;
+  --motion-state: 280ms;
+  --motion-panel: 320ms;
+  --motion-page: 420ms;
+  --motion-enter: 520ms;
   --ambient: color-mix(in srgb, var(--sage) 75%, transparent);
 }
 :root[data-theme='dark'] {
@@ -259,10 +259,10 @@
 .theme-fade .btn,
 .theme-fade .tag {
   transition:
-    background-color 180ms,
-    color 180ms,
-    border-color 180ms,
-    box-shadow 180ms;
+    background-color 280ms,
+    color 280ms,
+    border-color 280ms,
+    box-shadow 280ms;
 }
 @container (max-width: 380px) {
   .project-meta {
@@ -456,10 +456,10 @@
   animation: none;
 }
 ::view-transition-old(page-content) {
-  animation: page-out 160ms ease both;
+  animation: page-out 240ms ease both;
 }
 ::view-transition-new(page-content) {
-  animation: page-in 280ms var(--ease) both;
+  animation: page-in 420ms var(--ease) both;
 }
 @keyframes page-in {
   from {
@@ -502,15 +502,15 @@
   z-index: 2;
 }
 :root[data-motion='language']::view-transition-group(*) {
-  animation-duration: 240ms;
+  animation-duration: 360ms;
 }
 :root[data-motion='language']::view-transition-old(page-content) {
   animation-name: language-out;
-  animation-duration: 180ms;
+  animation-duration: 260ms;
 }
 :root[data-motion='language']::view-transition-new(page-content) {
   animation-name: language-in;
-  animation-duration: 240ms;
+  animation-duration: 380ms;
 }
 @keyframes language-out {
   to {

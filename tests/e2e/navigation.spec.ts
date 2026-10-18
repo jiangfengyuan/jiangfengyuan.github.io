@@ -183,11 +183,19 @@ test('interrupted transitions keep only the last selection and close immediately
   expect(
     await page.locator('[data-nav-dropdown]').evaluate((el) => (el as HTMLElement).inert),
   ).toBe(true);
-  await page.waitForTimeout(650);
+  await expect.poll(async () =>
+    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
+      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+    )),
+  ).toBe(true);
   await expect(page.locator('[data-nav-dropdown]')).not.toBeVisible();
   await page.locator('[data-menu-toggle]').click();
   await page.locator('[data-nav-trigger="projects"]').click();
-  await page.waitForTimeout(650);
+  await expect.poll(async () =>
+    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
+      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+    )),
+  ).toBe(true);
   expect(
     await page
       .locator('[data-nav-dropdown]')
@@ -214,13 +222,17 @@ test('motion timing, capped main menu and script-free title links', async ({ pag
       }),
     };
   });
-  expect(motion.duration).toBe('0.44s, 0s');
+  expect(motion.duration).toBe('0.54s, 0s');
   expect(motion.columns).toEqual([
-    { duration: 360, delay: 0 },
-    { duration: 360, delay: 40 },
-    { duration: 360, delay: 80 },
+    { duration: 420, delay: 0 },
+    { duration: 420, delay: 40 },
+    { duration: 420, delay: 80 },
   ]);
-  await page.waitForTimeout(500);
+  await expect.poll(async () =>
+    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
+      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+    )),
+  ).toBe(true);
   const switching = await page.evaluate(() => {
     document.querySelector<HTMLButtonElement>('[data-nav-trigger="blog"]')!.click();
     return {
@@ -238,10 +250,14 @@ test('motion timing, capped main menu and script-free title links', async ({ pag
     await page
       .locator('[data-nav-dropdown]')
       .evaluate((el) => getComputedStyle(el).transitionDuration),
-  ).toBe('0.36s, 0s');
+  ).toBe('0.44s, 0s');
   await page.setViewportSize({ width: 320, height: 320 });
   await page.locator('[data-menu-toggle]').click();
-  await page.waitForTimeout(500);
+  await expect.poll(async () =>
+    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
+      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+    )),
+  ).toBe(true);
   expect(
     await page.locator('.nav-main-panel').evaluate((el) => el.scrollHeight > el.clientHeight),
   ).toBe(true);

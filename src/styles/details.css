@@ -86,7 +86,7 @@
   background: var(--accent);
   border-radius: 2px;
   transform: scaleX(0);
-  transition: transform 180ms var(--ease);
+  transition: transform 280ms var(--ease);
 }
 .site-nav > a:is([aria-current='page'], :focus-visible)::after {
   transform: scaleX(1);
@@ -107,8 +107,8 @@
   display: grid;
   place-items: center;
   transition:
-    opacity 180ms var(--ease),
-    transform 180ms var(--ease);
+    opacity 280ms var(--ease),
+    transform 280ms var(--ease);
 }
 .theme-icon-sun {
   opacity: 1;
@@ -139,7 +139,7 @@
   border-radius: 50%;
   background: var(--accent);
   transform: translateX(-50%) scale(0);
-  transition: transform 180ms var(--ease);
+  transition: transform 280ms var(--ease);
 }
 .lang-toggle[data-current-lang]::after {
   transform: translateX(-50%) scale(1);
