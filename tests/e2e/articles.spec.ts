@@ -7,7 +7,7 @@ const ids = fs
   .map((name) => name.replace(/\.md$/, ''))
   .filter((id) => !id.endsWith('-en'));
 const articleRoutes = ids.flatMap((id) => ['/blog/' + id + '/', '/en/blog/' + id + '/']);
-test('nine articles reflow, maintain image proportions and theme contrast', async ({ page }) => {
+test('articles reflow, maintain image proportions and theme contrast', async ({ page }) => {
   test.setTimeout(360_000);
   await page.route('https://mmbiz.qpic.cn/**', (route) =>
     route.fulfill({
