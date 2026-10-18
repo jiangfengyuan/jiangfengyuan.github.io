@@ -6,7 +6,7 @@ test('header gains a scrolled state with a more solid surface', async ({ page })
   const header = page.locator('.site-header');
   const shell = page.locator('.nav-shell');
   await expect(header).not.toHaveAttribute('data-scrolled', '');
-  expect(await shell.evaluate((el) => getComputedStyle(el).transitionDuration)).toContain('0.22s');
+  expect(await shell.evaluate((el) => getComputedStyle(el).transitionDuration)).toContain('0.28s');
   const before = await shell.evaluate((el) => getComputedStyle(el).backgroundColor);
   await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }));
   await expect(header).toHaveAttribute('data-scrolled', '');

@@ -26,8 +26,8 @@
   flex-wrap: wrap;
   transition:
     border-radius 380ms cubic-bezier(0.22, 0.8, 0.25, 1),
-    background-color 220ms ease,
-    box-shadow 220ms ease;
+    background-color 280ms ease,
+    box-shadow 280ms ease;
 }
 .site-header[data-scrolled]:not([data-navigation-open]) .nav-shell {
   background: var(--nav-bg-scrolled);
@@ -62,7 +62,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: color 220ms ease;
+  transition: color 280ms ease;
 }
 .nav-entry > :is(a, button)::after {
   content: '';
@@ -73,7 +73,7 @@
   border-radius: 2px;
   background: var(--accent);
   transform: scaleX(0);
-  transition: transform 200ms ease;
+  transition: transform 280ms ease;
 }
 .nav-entry > :is(a, button)[aria-current='page']::after {
   transform: scaleX(1);
@@ -130,13 +130,13 @@
   background: var(--surface);
   box-shadow: 0 24px 32px -24px rgb(0 0 0 / 20%);
   transition:
-    height 360ms cubic-bezier(0.22, 0.8, 0.25, 1),
-    visibility 0s 360ms;
+    height 440ms cubic-bezier(0.22, 0.8, 0.25, 1),
+    visibility 0s 440ms;
 }
 [data-sheet-open] .nav-dropdown {
   visibility: visible;
   transition-delay: 0s;
-  transition-duration: 440ms, 0s;
+  transition-duration: 540ms, 0s;
 }
 .nav-panel-inner {
   width: min(1200px, calc(100% - 48px));

@@ -172,7 +172,7 @@ export function initNavigation(signal: AbortSignal) {
             { opacity: 1, transform: 'none' },
           ],
           {
-            duration: 360,
+            duration: 420,
             delay: (outgoing.length ? 140 : 0) + stagger,
             easing: 'cubic-bezier(.22,.8,.25,1)',
             fill: 'both',

@@ -428,3 +428,30 @@ test('detail feedback keeps keyboard, reduced-motion and script-free fallbacks',
   await expect(plain.locator('[data-back-top]')).toHaveAttribute('href', '#main-content');
   await context.close();
 });
+
+test('scroll entrance duration matches --motion-enter token', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 600 });
+  await page.goto('/dhgt/');
+  const metric = page.locator('.qr-panel').first();
+  await metric.scrollIntoViewIfNeeded();
+  const waapiCount = () =>
+    metric.evaluate(
+      (el) =>
+        (el as HTMLElement).getAnimations().filter(
+          (a) => !(a as any).transitionProperty && !(a as any).animationName,
+        ).length,
+    );
+  await expect.poll(waapiCount).toBeGreaterThan(0);
+  const duration = await metric.evaluate((el) => {
+    const a = (el as HTMLElement).getAnimations().find(
+      (a) => !(a as any).transitionProperty && !(a as any).animationName,
+    );
+    return a?.effect?.getTiming().duration;
+  });
+  expect(duration).toBe(520);
+  const token = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--motion-enter').trim(),
+  );
+  const tokenMs = token.endsWith('ms') ? parseFloat(token) : parseFloat(token) * 1000;
+  expect(tokenMs).toBe(520);
+});

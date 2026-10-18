@@ -50,7 +50,7 @@ function init() {
               { opacity: 0, translate: '0 10px' },
               { opacity: 1, translate: '0 0' },
             ],
-            { duration: 220, delay: i * 60, fill: 'backwards' },
+            { duration: 320, delay: i * 80, fill: 'backwards' },
           );
         });
     }
@@ -135,7 +135,7 @@ function init() {
         document.documentElement.classList.add('theme-fade');
         document.documentElement.dataset.theme = desiredTheme;
         syncTheme();
-        setTimeout(() => document.documentElement.classList.remove('theme-fade'), 180);
+        setTimeout(() => document.documentElement.classList.remove('theme-fade'), 280);
       }
     },
     { signal },
