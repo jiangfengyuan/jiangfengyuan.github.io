@@ -137,14 +137,18 @@ export function animateResults(rows: HTMLElement[]) {
     });
 }
 let shared = '';
+let languageScrollRatio: number | undefined;
 document.addEventListener('astro:before-preparation', (e) => {
   const event = e as TransitionBeforePreparationEvent;
   cancel();
   navigating = true;
   shared = '';
+  languageScrollRatio = undefined;
   document.documentElement.dataset.direction = event.direction;
-  if (event.sourceElement?.closest<HTMLElement>('[data-lang-link]')) {
+  if (event.sourceElement?.closest<HTMLElement>('[data-lang-link], [data-lang-hint-link]')) {
     document.documentElement.dataset.motion = 'language';
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    languageScrollRatio = window.scrollY / maxScroll;
   }
   const link = event.sourceElement?.closest<HTMLElement>('[data-shared-link]');
   const key = link?.dataset.sharedLink;
@@ -164,6 +168,9 @@ document.addEventListener('astro:before-preparation', (e) => {
 document.addEventListener('astro:before-swap', (e) => {
   const event = e as TransitionBeforeSwapEvent;
   event.newDocument.documentElement.dataset.direction = event.direction;
+  // A preserved hash must not start a smooth scroll that overrides restoration.
+  if (languageScrollRatio !== undefined)
+    event.newDocument.documentElement.style.scrollBehavior = 'auto';
   const key =
     shared ||
     ['republica', 'dhgt', 'flash'].find((id) => event.from.pathname === '/' + id + '/') ||
@@ -178,8 +185,29 @@ document.addEventListener('astro:before-swap', (e) => {
     if (!shared && oldImage) oldImage.style.viewTransitionName = 'project-visual';
   }
 });
+function restoreLanguageScroll(ratio: number) {
+  // Restore after ClientRouter's scroll reset, before the new page is painted.
+  // Translations can have different heights, so keep the same reading progress.
+  const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const y = ratio * maxScroll;
+  window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+}
+document.addEventListener('astro:after-swap', () => {
+  // Let other swap handlers restore the JS-enabled responsive navigation first.
+  queueMicrotask(() => {
+    if (languageScrollRatio !== undefined) restoreLanguageScroll(languageScrollRatio);
+  });
+});
 document.addEventListener('astro:page-load', () => {
   navigating = false;
+  const ratio = languageScrollRatio;
+  languageScrollRatio = undefined;
+  // Page initialization can change layout (mobile navigation and language hint).
+  if (ratio !== undefined)
+    queueMicrotask(() => {
+      restoreLanguageScroll(ratio);
+      document.documentElement.style.removeProperty('scroll-behavior');
+    });
   delete document.documentElement.dataset.motion;
   document
     .querySelectorAll<HTMLElement>('[style*="project-visual"]')
