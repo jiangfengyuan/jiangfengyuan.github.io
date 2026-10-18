@@ -108,6 +108,12 @@ export function initSpatial(signal: AbortSignal) {
     });
   });
   document.addEventListener('site:motion', () => tilted.forEach(reset), { signal });
+  const rawMotionEnter = getComputedStyle(document.documentElement)
+    .getPropertyValue('--motion-enter')
+    .trim();
+  const motionEnter = rawMotionEnter.endsWith('ms')
+    ? parseFloat(rawMotionEnter)
+    : parseFloat(rawMotionEnter) * 1000;
   const observed = [
     ...document.querySelectorAll<HTMLElement>(
       '.section-heading,.project-card,.feature,.platform-card,.update-row,.club-visual,.metric,.qr-panel',
@@ -133,7 +139,7 @@ export function initSpatial(signal: AbortSignal) {
             { opacity: 0.1, transform: 'translateY(12px)' },
             { opacity: 1, transform: 'none' },
           ],
-          { duration: 400, delay: Math.min(200, (i % 6) * 40) },
+          { duration: motionEnter || 520, delay: Math.min(200, (i % 6) * 40) },
         );
         if (a) {
           entering.set(entry.target, a);
