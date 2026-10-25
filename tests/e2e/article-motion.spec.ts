@@ -100,3 +100,59 @@ test('reduced motion opens the article in its final state', async ({ page }) => 
   await expect(page.locator('.article-header h1')).toHaveText(title);
   await expect(page.locator('.article-content')).toHaveCSS('opacity', '1');
 });
+
+test('the article loads even if the cover animation never finishes', async ({ page }) => {
+  await page.goto('/blog/');
+  const link = page.locator(`.post-row h3 a[href*="${withCover}"]`);
+  const title = (await link.textContent())!.trim();
+  await link.click();
+  // Freeze the slide-in, as a hidden tab would.
+  await page.waitForFunction(
+    () => document.querySelector('.article-cover')?.getAnimations().length,
+  );
+  await page.evaluate(() => document.getAnimations().forEach((a) => a.pause()));
+  await expect(page).toHaveURL(new RegExp(`/blog/${withCover}/$`), { timeout: 3_000 });
+  await expectSettled(page, title);
+});
+
+test('hiding the tab mid-entrance shows the finished article', async ({ page }) => {
+  await page.goto('/blog/');
+  const link = page.locator(`.post-row h3 a[href*="${withCover}"]`);
+  const title = (await link.textContent())!.trim();
+  await link.click();
+  await expect.poll(() => entering(page)).toBe(true);
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  expect(await entering(page)).toBe(false);
+  await expect(page.locator('.article-cover, .article-shade')).toHaveCount(0);
+  await expect(page.locator('.article-header h1')).toHaveText(title);
+  await expect(page.locator('.article-content')).toHaveCSS('opacity', '1');
+});
+
+test('the article swaps in under the cover without a painted view transition', async ({ page }) => {
+  // A painted transition layers the old <main> above the cover, so the list flashes through.
+  await page.addInitScript(() => {
+    const start = document.startViewTransition?.bind(document);
+    if (!start) return;
+    const w = window as unknown as { painted: number };
+    w.painted = 0;
+    document.startViewTransition = ((update: ViewTransitionUpdateCallback) => {
+      const transition = start(update);
+      transition.ready.then(
+        () => w.painted++,
+        () => {},
+      );
+      return transition;
+    }) as typeof document.startViewTransition;
+  });
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/blog/');
+  const link = page.locator(`.post-row h3 a[href*="${withCover}"]`);
+  const title = (await link.textContent())!.trim();
+  await link.click();
+  await expect(page).toHaveURL(new RegExp(`/blog/${withCover}/$`));
+  await expectSettled(page, title);
+  expect(await page.evaluate(() => (window as unknown as { painted: number }).painted)).toBe(0);
+});

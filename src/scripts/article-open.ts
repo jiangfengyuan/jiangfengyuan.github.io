@@ -31,6 +31,8 @@ const T = {
 };
 // The reference timing, stretched so each stage reads clearly (about 3.5s in all).
 const PACE = 1.5;
+// How long past its duration the cover may take before the article is swapped in anyway.
+const LANDING_MARGIN = 200;
 
 interface Run {
   controller: AbortController;
@@ -313,10 +315,18 @@ document.addEventListener('astro:before-preparation', (e) => {
       easing: PUSH,
     });
 
-  // Swap only once the cover has landed, so the skeleton is always seen whole.
+  // Swap only once the cover has landed, so the skeleton is always seen whole,
+  // but never wait on the animation itself: it does not advance in a hidden tab.
+  let timer = 0;
+  const landed = Promise.race([
+    pushed.finished.catch(() => {}),
+    new Promise<void>((resolve) => {
+      timer = window.setTimeout(resolve, T.enter * PACE + LANDING_MARGIN);
+    }),
+  ]).finally(() => clearTimeout(timer));
   const load = event.loader;
   event.loader = async () => {
-    await Promise.all([load(), pushed.finished.catch(() => {})]);
+    await Promise.all([load(), landed]);
   };
   event.signal.addEventListener('abort', () => active?.run === run && clear(), { once: true });
 });
@@ -335,10 +345,15 @@ document.addEventListener('astro:before-swap', (e) => {
     clear();
     return;
   }
-  // The new page starts in its pre-entrance state under an identical cover, so the swap is invisible.
+  // The new page starts in its pre-entrance state under an identical cover, so the
+  // swap is invisible as long as nothing is painted in between. A view transition
+  // would paint the old <main> (named page-content) above the cover, flashing the
+  // list through it, so skip it: the DOM then changes in a single frame.
+  // Skipping rejects `ready`, which nothing else awaits.
+  event.viewTransition.ready.catch(() => {});
+  event.viewTransition.skipTransition();
   active.swapped = true;
   next.documentElement.dataset.articleEnter = '';
-  next.documentElement.dataset.motion = 'article';
   splitTitle(h1);
   const layer = cover(next, !next.querySelector('.article-shell-no-toc'));
   layer.classList.add('article-cover-settled');
@@ -346,5 +361,13 @@ document.addEventListener('astro:before-swap', (e) => {
 });
 
 document.addEventListener('astro:page-load', () => {
-  if (active?.swapped) enter(active.run);
+  if (!active?.swapped) return;
+  if (document.hidden) clear();
+  else enter(active.run);
+});
+
+// Animations stop advancing in a hidden tab; nobody is watching, so show the
+// article as it is instead of leaving it half-entered under the cover.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) clear();
 });

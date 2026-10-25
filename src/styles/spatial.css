@@ -525,13 +525,7 @@
     opacity: 1;
   }
 }
-/* Opening an article: the cover in src/scripts/article-open.ts has already
-   covered the page, so the swap underneath must not animate. */
-:root[data-motion='article']::view-transition-group(*),
-:root[data-motion='article']::view-transition-old(*),
-:root[data-motion='article']::view-transition-new(*) {
-  animation: none;
-}
+/* Leaving an article for a list (src/scripts/article-open.ts). */
 :root[data-motion='article-back']::view-transition-old(page-content) {
   animation: article-out 300ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
