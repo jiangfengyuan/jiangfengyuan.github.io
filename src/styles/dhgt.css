@@ -1,0 +1,388 @@
+/*
+ * DHGT brand layer — tokens and rules from the DHGT Design System
+ * (https://claude.ai/artifact/3hiNPSaKCc9oY9svzSH2hA). Token names match its tokens.json.
+ * The system has one theme (Night), so DHGT surfaces stay night in both site themes.
+ * Scope: any element with data-brand="dhgt" remaps the site tokens it contains;
+ * site chrome (header, footer) keeps the Hayden identity.
+ */
+:root {
+  --dhgt-dark-night-blue: #0b1026;
+  --dhgt-midnight-blue: #191970;
+  --dhgt-black: #000000;
+  --dhgt-white: #ffffff;
+  --dhgt-text-muted: rgba(255, 255, 255, 0.72);
+  --dhgt-neon-cyan: #00ffff;
+  --dhgt-neon-cyan-bi: #00d9ff;
+  --dhgt-all-nighter-red: #ff1a1a;
+  --dhgt-all-nighter-red-p: #e63946;
+  --dhgt-cream: #fff4d9;
+  --dhgt-font-display:
+    'Futura', 'Futura PT', 'Alibaba Health Font 2.0', 'Alibaba Health Font', '阿里健康体2.0',
+    '阿里健康体', sans-serif;
+  --dhgt-font-cn:
+    'Alibaba Health Font 2.0', 'Alibaba Health Font', '阿里健康体2.0', '阿里健康体', 'PingFang SC',
+    sans-serif;
+  --dhgt-font-sans:
+    'SF Pro Text', 'SF Pro', -apple-system, 'Helvetica Neue', Helvetica, 'Alibaba Health Font 2.0',
+    'Alibaba Health Font', '阿里健康体2.0', '阿里健康体', sans-serif;
+  --dhgt-space-1: 8px;
+  --dhgt-space-2: 16px;
+  --dhgt-space-3: 24px;
+  --dhgt-space-4: 48px;
+  --dhgt-radius-0: 0;
+  --dhgt-radius-sm: 2px;
+  --dhgt-radius-pill: 999px;
+  --dhgt-slant-mark: -19.4deg;
+}
+
+/* ==================== Scope ==================== */
+[data-brand='dhgt'] {
+  color-scheme: dark;
+  --paper: var(--dhgt-dark-night-blue);
+  --surface: var(--dhgt-midnight-blue);
+  --soft: var(--dhgt-midnight-blue);
+  --ink: var(--dhgt-white);
+  --muted: var(--dhgt-text-muted);
+  --line: var(--dhgt-midnight-blue);
+  --accent: var(--dhgt-neon-cyan-bi);
+  --on-accent: var(--dhgt-dark-night-blue);
+  --qr-bg: var(--dhgt-white);
+  --control-bg: var(--dhgt-midnight-blue);
+  --control-bg-hover: var(--dhgt-midnight-blue);
+  --control-border: var(--dhgt-midnight-blue);
+  --card-bg: var(--dhgt-dark-night-blue);
+  --card-border: var(--dhgt-midnight-blue);
+  --glass-light: var(--dhgt-midnight-blue);
+  --glass-standard: var(--dhgt-midnight-blue);
+  --glass-strong: var(--dhgt-midnight-blue);
+  --glass-edge: var(--dhgt-midnight-blue);
+  /* No drop shadows, no glossy bevels. */
+  --glass-inner: 0 0 #0000;
+  --glass-depth: 0 0 #0000;
+  --shadow: 0 0 #0000;
+  --shadow-elevated: 0 0 #0000;
+  --card-shadow: 0 0 #0000;
+  --focus-ring: 3px solid var(--dhgt-neon-cyan-bi);
+  --font: var(--dhgt-font-sans);
+  --radius-sm: var(--dhgt-radius-0);
+  --radius-md: var(--dhgt-radius-0);
+  --radius-lg: var(--dhgt-radius-0);
+  --radius-xl: var(--dhgt-radius-0);
+  --radius-pill: var(--dhgt-radius-0);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+}
+[data-brand='dhgt'] :is(h1, h2, h3) {
+  font-family: var(--dhgt-font-cn);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+[data-brand='dhgt']:lang(en) :is(h1, h2, h3),
+:lang(en) [data-brand='dhgt'] :is(h1, h2, h3) {
+  font-family: var(--dhgt-font-display);
+}
+/* kicker */
+[data-brand='dhgt'] .eyebrow {
+  font-family: var(--dhgt-font-display);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: var(--dhgt-neon-cyan-bi);
+}
+[data-brand='dhgt'] .text-link {
+  color: var(--dhgt-neon-cyan-bi);
+}
+[data-brand='dhgt'] .btn {
+  border: 0;
+  border-radius: var(--dhgt-radius-0);
+  background: var(--dhgt-neon-cyan);
+  color: var(--dhgt-dark-night-blue);
+  font-weight: 700;
+}
+[data-brand='dhgt'] .btn:not(.primary):hover {
+  background: var(--dhgt-neon-cyan-bi);
+}
+[data-brand='dhgt'] .btn:focus-visible {
+  outline-color: var(--dhgt-white);
+}
+[data-brand='dhgt'] [data-tilt]::after {
+  content: none;
+}
+
+/* ==================== DHGT page ==================== */
+/* Cover: text block on the dark left, photo bleeding off the right. */
+.dhgt-page .club-banner {
+  min-height: 560px;
+  align-items: center;
+  padding: var(--dhgt-space-4);
+  border-radius: var(--dhgt-radius-0);
+  background: var(--dhgt-dark-night-blue);
+  color: var(--dhgt-white);
+  isolation: isolate;
+}
+.dhgt-page .club-banner > picture {
+  inset: 0 0 0 30%;
+}
+.dhgt-page .club-banner::after,
+.dhgt-page .club-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 1;
+  transform: skewX(var(--dhgt-slant-mark));
+  transform-origin: bottom left;
+}
+.dhgt-page .club-banner::after {
+  width: 56%;
+  background: var(--dhgt-dark-night-blue);
+}
+/* Speed band, parallel to the GT mark. */
+.dhgt-page .club-banner::before {
+  left: calc(56% + var(--dhgt-space-2));
+  width: var(--dhgt-space-1);
+  background: var(--dhgt-all-nighter-red);
+}
+.dhgt-page .club-banner > div {
+  z-index: 2;
+  max-width: min(640px, 50%);
+}
+.dhgt-page .club-banner .eyebrow {
+  color: var(--dhgt-neon-cyan-bi);
+}
+.dhgt-page .club-banner h1 {
+  margin: var(--dhgt-space-1) 0 var(--dhgt-space-2);
+  text-wrap: balance;
+}
+.dhgt-page .club-logo {
+  width: 136px;
+  margin-bottom: var(--dhgt-space-3);
+}
+.dhgt-page .club-lead {
+  max-width: 660px;
+  color: var(--dhgt-text-muted);
+  margin-bottom: var(--dhgt-space-3);
+}
+.dhgt-page .club-banner .btn {
+  background: var(--dhgt-neon-cyan);
+  color: var(--dhgt-dark-night-blue);
+}
+.club-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-bottom: 32px;
+  padding-block: 20px;
+  border-block: 1px solid var(--line);
+  font-size: 14px;
+}
+.club-jumps a {
+  text-decoration: underline;
+  text-decoration-color: var(--dhgt-neon-cyan-bi);
+  text-underline-offset: 6px;
+}
+.club-jumps a:hover {
+  color: var(--dhgt-neon-cyan-bi);
+}
+.dhgt-page .feature {
+  border-top: 2px solid var(--dhgt-all-nighter-red);
+}
+.dhgt-page .feature-number {
+  font-family: var(--dhgt-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: var(--dhgt-neon-cyan-bi);
+}
+/* title-cn */
+.dhgt-page .feature h3 {
+  font-size: 26px;
+  line-height: 1.35;
+}
+.club-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px;
+}
+.club-visual {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--dhgt-midnight-blue);
+}
+.club-artwork {
+  display: flex;
+  align-items: center;
+  background: var(--dhgt-dark-night-blue);
+  aspect-ratio: 2.35 / 1;
+}
+.club-artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.club-visual figcaption {
+  padding: var(--dhgt-space-3);
+}
+.club-visual h3 {
+  margin-block: 12px;
+}
+/* caption */
+.club-visual figcaption > p:not(.eyebrow),
+.club-gallery-note {
+  color: var(--dhgt-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.club-visual .text-link {
+  margin-top: 18px;
+}
+.club-gallery-note {
+  margin-top: 20px;
+}
+.dhgt-page .post-row-index,
+.dhgt-page .post-meta time {
+  font-family: var(--dhgt-font-display);
+  font-style: italic;
+}
+.dhgt-page .post-row h3 {
+  letter-spacing: 0;
+}
+.dhgt-page .post-row h3 a:hover {
+  color: var(--dhgt-neon-cyan-bi);
+}
+.dhgt-page .qr-panel {
+  border: 0;
+  background: var(--dhgt-midnight-blue);
+}
+.dhgt-page .qr-panel h3 {
+  font-size: 26px;
+}
+
+/* ==================== Project card ==================== */
+.project-card[data-brand='dhgt'] {
+  border-radius: var(--dhgt-radius-0);
+}
+.project-card[data-brand='dhgt'] .project-media {
+  border: 0;
+  background: var(--dhgt-dark-night-blue);
+}
+.project-card[data-brand='dhgt'] .media-grid {
+  display: none;
+}
+.project-card[data-brand='dhgt'] .media-arrow {
+  background: var(--dhgt-neon-cyan);
+  color: var(--dhgt-dark-night-blue);
+  border: 0;
+  border-radius: var(--dhgt-radius-0);
+}
+.project-card[data-brand='dhgt'] .project-info h3 {
+  font-size: 26px;
+}
+.project-card[data-brand='dhgt'] .project-info h3 a:hover {
+  color: var(--dhgt-neon-cyan-bi);
+}
+.project-card[data-brand='dhgt'] .status-dot {
+  width: 12px;
+  height: 4px;
+  border-radius: var(--dhgt-radius-0);
+  background: var(--dhgt-all-nighter-red);
+  transform: skewX(var(--dhgt-slant-mark));
+}
+.project-card[data-brand='dhgt'] .tags span {
+  border: 0;
+  background: var(--dhgt-midnight-blue);
+  color: var(--dhgt-white);
+}
+
+/* ==================== About section ==================== */
+.section[data-brand='dhgt'] {
+  position: relative;
+  overflow: hidden;
+  padding-inline: var(--dhgt-space-4);
+  border-top: 0;
+}
+.section[data-brand='dhgt']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: var(--dhgt-space-4);
+  width: var(--dhgt-space-1);
+  background: var(--dhgt-all-nighter-red);
+  transform: skewX(var(--dhgt-slant-mark));
+}
+.section[data-brand='dhgt'] .split p {
+  color: var(--dhgt-text-muted);
+}
+
+/* ==================== Update tag ==================== */
+.update-row[data-project='dhgt'] .tag {
+  position: relative;
+  isolation: isolate;
+  /* Room for the slant so the band stays inside the column. */
+  margin-left: 4px;
+  border: 0;
+  border-radius: var(--dhgt-radius-0);
+  background: none;
+  box-shadow: none;
+  color: var(--dhgt-dark-night-blue);
+  font-family: var(--dhgt-font-display);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+}
+.update-row[data-project='dhgt'] .tag::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--dhgt-all-nighter-red);
+  transform: skewX(var(--dhgt-slant-mark));
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 760px) {
+  .dhgt-page .club-banner {
+    min-height: 480px;
+    align-items: flex-end;
+    padding: var(--dhgt-space-3);
+  }
+  .dhgt-page .club-banner > picture {
+    inset: 0;
+  }
+  .dhgt-page .club-banner::after {
+    width: 100%;
+    transform: none;
+    background: linear-gradient(
+      0deg,
+      var(--dhgt-dark-night-blue) 45%,
+      color-mix(in srgb, var(--dhgt-dark-night-blue) 20%, transparent)
+    );
+  }
+  .dhgt-page .club-banner::before {
+    display: none;
+  }
+  .dhgt-page .club-banner > div {
+    max-width: none;
+  }
+  .club-gallery {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .section[data-brand='dhgt'] {
+    padding-inline: var(--dhgt-space-3);
+  }
+  .section[data-brand='dhgt']::before {
+    right: var(--dhgt-space-2);
+  }
+}
+@media (max-width: 600px) {
+  .dhgt-page .club-banner {
+    padding: var(--dhgt-space-2);
+  }
+}
