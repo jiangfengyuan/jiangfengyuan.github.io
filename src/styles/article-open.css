@@ -1,0 +1,113 @@
+/*
+ * Article-opening motion (src/scripts/article-open.ts):
+ * a cover with a skeleton slides in over the list, the headline appears low
+ * and rises, the cover image is uncovered from its bottom edge, then meta and
+ * body fade in.
+ */
+:root {
+  --article-enter-offset: 84px;
+  --article-hero-offset: 40px;
+  --article-enter-radius: 36px;
+  --article-skeleton: color-mix(in srgb, var(--ink) 8%, var(--paper));
+}
+
+/* ---------- Cover over the list while the article loads ---------- */
+.article-cover,
+.article-shade {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) - 1);
+  pointer-events: none;
+}
+.article-shade {
+  background: #000;
+  opacity: 0;
+}
+/* Blocks clicks on the list it covers; the copy on the article page lets them through. */
+.article-cover {
+  pointer-events: auto;
+  overflow: hidden;
+  padding-top: 73px;
+  background: var(--paper);
+  box-shadow: -24px 0 60px -30px rgba(0, 0, 0, 0.35);
+}
+.article-cover.article-cover-settled {
+  pointer-events: none;
+}
+
+/* ---------- Skeleton (laid out with the article's own grid) ---------- */
+.article-cover .article-shell {
+  padding-top: 60px;
+}
+.article-skeleton-main {
+  min-width: 0;
+}
+.article-cover .sk {
+  display: block;
+  border-radius: 6px;
+  background: var(--article-skeleton);
+}
+.article-cover .sk-link {
+  width: 84px;
+  height: 18px;
+  margin-bottom: 30px;
+}
+.article-cover .sk-title {
+  height: clamp(36px, 4.4vw, 52px);
+  margin-bottom: 12px;
+}
+.article-cover .sk-title + .sk-title {
+  width: 58%;
+  margin-bottom: 30px;
+}
+.article-cover .sk-line {
+  height: 16px;
+  margin-bottom: 12px;
+}
+.article-cover .sk-short {
+  width: 72%;
+}
+.article-cover .sk-meta {
+  width: 42%;
+  height: 14px;
+  margin: 22px 0 64px;
+}
+.article-cover .sk-cover {
+  aspect-ratio: 3 / 2;
+  margin-bottom: 40px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Pre-entrance state (removed when the entrance finishes) ---------- */
+[data-article-enter] .article-header {
+  border-bottom-color: transparent;
+}
+[data-article-enter] .article-header h1 {
+  transform: translateY(var(--article-enter-offset));
+}
+[data-article-enter] .article-char {
+  opacity: 0;
+}
+[data-article-enter] .article-main > img {
+  clip-path: inset(100% 0 0 0);
+  transform: translateY(var(--article-hero-offset));
+}
+[data-article-enter]
+  :is(
+    .article-header .text-link,
+    .article-summary,
+    .article-header .post-meta,
+    .article-content,
+    .article-nav,
+    .article-aside,
+    .reading-progress
+  ) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-cover,
+  .article-shade {
+    display: none;
+  }
+}

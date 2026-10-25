@@ -9,6 +9,11 @@ interface Props {
 const { posts, searchable = false } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const postHref = (post: CollectionEntry<'posts'>) => hrefFor(`/blog/${postSlug(post)}/`, locale);
+// Same rule as ArticlePage's table of contents; the opening skeleton mirrors that layout.
+const hasToc = (post: CollectionEntry<'posts'>) =>
+  ((post.rendered?.metadata?.headings ?? []) as { depth: number }[]).some(
+    (h) => h.depth === 2 || h.depth === 3,
+  );
 ---
 
 <div class="post-list">
@@ -42,11 +47,23 @@ const postHref = (post: CollectionEntry<'posts'>) => hrefFor(`/blog/${postSlug(p
           </span>
         </div>
         <h3>
-          <a href={postHref(post)}>{post.data.title}</a>
+          <a
+            href={postHref(post)}
+            data-article-link
+            data-article-toc={hasToc(post) ? '' : undefined}
+          >
+            {post.data.title}
+          </a>
         </h3>
         <p>{post.data.summary}</p>
       </div>
-      <a class="post-row-arrow" href={postHref(post)} aria-label={post.data.title}>
+      <a
+        class="post-row-arrow"
+        href={postHref(post)}
+        aria-label={post.data.title}
+        data-article-link
+        data-article-toc={hasToc(post) ? '' : undefined}
+      >
         <span aria-hidden="true">↗</span>
       </a>
     </article>

@@ -5,6 +5,7 @@ import { initSpatial } from './spatial';
 import { initDetails } from './details';
 import { initNavigation } from './navigation';
 import { hapticTap } from './haptics';
+import './article-open';
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme before paint.

@@ -27,7 +27,7 @@ npm run test:e2e
 - `src/content/posts/*.md` 文章；`src/data/` 中的项目、动态和个人资料为 CMS 内容源。
 - `src/components/` 与 `src/layouts/` 共享 UI；`src/styles/` 包含设计变量、基础、组件及页面样式；`src/scripts/` 按交互划分。
 
-中文为默认语言（`/`），英文为独立静态页面（`/en/`）；语言由 URL 决定，语言切换按钮跳转到对应语言的同一页面，并保留 query 与 hash，禁用 JavaScript 时同样可用。页面输出 `hreflang` 与 canonical，sitemap 含语言互链。`site-theme` 保存主题偏好，首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。部分交互（如主题切换、复制邮箱成功）在支持 `navigator.vibrate` 的设备上提供短振动反馈，属于渐进增强；iOS 与鸿蒙等环境待真机验证，视觉与文本反馈始终保留。非中文浏览器首次访问时显示 English hint，可一键前往英文首页或关闭，不影响默认中文内容。
+中文为默认语言（`/`），英文为独立静态页面（`/en/`）；语言由 URL 决定，语言切换按钮跳转到对应语言的同一页面，并保留 query 与 hash，禁用 JavaScript 时同样可用。页面输出 `hreflang` 与 canonical，sitemap 含语言互链。`site-theme` 保存主题偏好，首次跟随系统。主要内容与导航在禁用 JavaScript 时也能访问。页面间导航使用 View Transitions 淡入淡出，滚动进场动画仅在启用 JavaScript 且未开启减弱动态效果时生效。从写作列表打开文章时，文章层带骨架从右侧推入，随后标题由低处逐字浮现并上移、封面图自下而上展开、正文淡入（`src/scripts/article-open.ts`）；开启减弱动态效果时直接显示完整文章。首页、作品页的大图经构建管线生成 AVIF/WebP 多尺寸。部分交互（如主题切换、复制邮箱成功）在支持 `navigator.vibrate` 的设备上提供短振动反馈，属于渐进增强；iOS 与鸿蒙等环境待真机验证，视觉与文本反馈始终保留。非中文浏览器首次访问时显示 English hint，可一键前往英文首页或关闭，不影响默认中文内容。
 
 ## Pages CMS
 
