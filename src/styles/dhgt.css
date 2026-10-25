@@ -33,6 +33,9 @@
   --dhgt-radius-sm: 2px;
   --dhgt-radius-pill: 999px;
   --dhgt-slant-mark: -19.4deg;
+  /* The site's radii, captured before the brand scope zeroes them. */
+  --dhgt-host-radius-lg: var(--radius-lg);
+  --dhgt-host-radius-xl: var(--radius-xl);
 }
 
 /* ==================== Scope ==================== */
@@ -114,48 +117,123 @@
 }
 
 /* ==================== DHGT page ==================== */
-/* Cover: text block on the dark left, photo bleeding off the right. */
+/*
+ * The page keeps the site's paper, gutters and rhythm; only the night cards
+ * (hero, features, visuals, QR) carry data-brand. Their outer corners follow
+ * the site, everything inside them stays square.
+ */
+.dhgt-page .eyebrow {
+  font-family: var(--dhgt-font-display);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.dhgt-page [data-brand='dhgt'] .eyebrow {
+  color: var(--dhgt-neon-cyan-bi);
+}
+.dhgt-page :is(h2, h3) {
+  font-family: var(--dhgt-font-cn);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+:lang(en) .dhgt-page :is(h2, h3) {
+  font-family: var(--dhgt-font-display);
+}
+
+/* Cover: text block bottom-left, speed bands bleeding off the right. */
 .dhgt-page .club-banner {
+  --club-slab: 288px;
+  --club-band-gap: var(--dhgt-space-2);
   min-height: 560px;
-  align-items: center;
+  align-items: flex-end;
   padding: var(--dhgt-space-4);
-  border-radius: var(--dhgt-radius-0);
+  border-radius: var(--dhgt-host-radius-xl);
   background: var(--dhgt-dark-night-blue);
   color: var(--dhgt-white);
   isolation: isolate;
 }
-.dhgt-page .club-banner > picture {
-  inset: 0 0 0 30%;
+.dhgt-page .club-banner::after {
+  content: none;
 }
-.dhgt-page .club-banner::after,
-.dhgt-page .club-banner::before {
-  content: '';
+.dhgt-page .club-speed {
   position: absolute;
-  inset: 0 auto 0 0;
-  z-index: 1;
+  inset: 0 calc(-1 * var(--dhgt-space-4)) 0 52%;
+  display: flex;
+  gap: var(--club-band-gap);
   transform: skewX(var(--dhgt-slant-mark));
   transform-origin: bottom left;
+  pointer-events: none;
 }
-.dhgt-page .club-banner::after {
-  width: 56%;
-  background: var(--dhgt-dark-night-blue);
+.club-slab {
+  position: relative;
+  flex: 0 0 var(--club-slab);
+  overflow: hidden;
+  background: var(--dhgt-midnight-blue);
 }
-/* Speed band, parallel to the GT mark. */
-.dhgt-page .club-banner::before {
-  left: calc(56% + var(--dhgt-space-2));
+/* Counter-skew the photo so it stays upright inside the slanted mask. */
+.dhgt-page .club-slab > picture {
+  position: absolute;
+  inset: 0 calc(-1 * var(--club-slab));
+  transform: skewX(calc(-1 * var(--dhgt-slant-mark)));
+}
+.club-slab img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Thin cyan speed lines across the slab. */
+.club-slab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent var(--dhgt-space-3),
+    var(--dhgt-neon-cyan-bi) var(--dhgt-space-3) calc(var(--dhgt-space-3) + 8px),
+    transparent 0 48px,
+    var(--dhgt-neon-cyan-bi) 48px 52px,
+    transparent 0 64px,
+    var(--dhgt-neon-cyan-bi) 64px 68px,
+    transparent 0 80px,
+    var(--dhgt-neon-cyan-bi) 80px 82px,
+    transparent 0
+  );
+}
+.club-band {
+  flex: none;
+}
+.club-band--cyan {
+  width: var(--dhgt-space-4);
+  background: var(--dhgt-neon-cyan);
+}
+.club-band--cyan-bi {
+  width: var(--dhgt-space-3);
+  background: var(--dhgt-neon-cyan-bi);
+}
+.club-band--red {
   width: var(--dhgt-space-1);
+  margin-left: calc(var(--dhgt-space-1) - var(--club-band-gap));
   background: var(--dhgt-all-nighter-red);
 }
-.dhgt-page .club-banner > div {
-  z-index: 2;
-  max-width: min(640px, 50%);
+.club-band--cream {
+  width: calc(var(--dhgt-space-4) + var(--dhgt-space-2));
+  background: var(--dhgt-cream);
 }
-.dhgt-page .club-banner .eyebrow {
-  color: var(--dhgt-neon-cyan-bi);
+.dhgt-page .club-copy {
+  position: relative;
+  z-index: 1;
+  max-width: min(560px, 46%);
 }
 .dhgt-page .club-banner h1 {
   margin: var(--dhgt-space-1) 0 var(--dhgt-space-2);
   text-wrap: balance;
+}
+.dhgt-page:lang(en) .club-banner h1,
+:lang(en) .dhgt-page .club-banner h1 {
+  font-style: italic;
 }
 .dhgt-page .club-logo {
   width: 136px;
@@ -181,14 +259,18 @@
 }
 .club-jumps a {
   text-decoration: underline;
-  text-decoration-color: var(--dhgt-neon-cyan-bi);
+  text-decoration-color: var(--dhgt-all-nighter-red);
+  text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }
 .club-jumps a:hover {
-  color: var(--dhgt-neon-cyan-bi);
+  color: var(--ink);
+  text-decoration-thickness: 4px;
 }
 .dhgt-page .feature {
+  padding: var(--dhgt-space-3);
   border-top: 2px solid var(--dhgt-all-nighter-red);
+  border-radius: 0 0 var(--dhgt-host-radius-lg) var(--dhgt-host-radius-lg);
 }
 .dhgt-page .feature-number {
   font-family: var(--dhgt-font-display);
@@ -206,12 +288,13 @@
 .club-gallery {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 36px;
+  gap: 28px;
 }
 .club-visual {
   margin: 0;
   min-width: 0;
   overflow: hidden;
+  border-radius: var(--dhgt-host-radius-lg);
   background: var(--dhgt-midnight-blue);
 }
 .club-artwork {
@@ -232,8 +315,7 @@
   margin-block: 12px;
 }
 /* caption */
-.club-visual figcaption > p:not(.eyebrow),
-.club-gallery-note {
+.club-visual figcaption > p:not(.eyebrow) {
   color: var(--dhgt-text-muted);
   font-size: 13px;
   line-height: 1.5;
@@ -243,6 +325,9 @@
 }
 .club-gallery-note {
   margin-top: 20px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 .dhgt-page .post-row-index,
 .dhgt-page .post-meta time {
@@ -252,11 +337,9 @@
 .dhgt-page .post-row h3 {
   letter-spacing: 0;
 }
-.dhgt-page .post-row h3 a:hover {
-  color: var(--dhgt-neon-cyan-bi);
-}
 .dhgt-page .qr-panel {
   border: 0;
+  border-radius: var(--dhgt-host-radius-lg);
   background: var(--dhgt-midnight-blue);
 }
 .dhgt-page .qr-panel h3 {
@@ -347,28 +430,23 @@
 
 /* ==================== Responsive ==================== */
 @media (max-width: 760px) {
+  /* Bands become a slanted strip across the top; the text sits below it. */
   .dhgt-page .club-banner {
-    min-height: 480px;
-    align-items: flex-end;
+    --club-slab: 144px;
+    --club-band-gap: var(--dhgt-space-1);
+    min-height: 0;
     padding: var(--dhgt-space-3);
   }
-  .dhgt-page .club-banner > picture {
-    inset: 0;
+  .dhgt-page .club-speed {
+    inset: 0 calc(-1 * var(--dhgt-space-4)) auto 24%;
+    height: 168px;
   }
-  .dhgt-page .club-banner::after {
-    width: 100%;
-    transform: none;
-    background: linear-gradient(
-      0deg,
-      var(--dhgt-dark-night-blue) 45%,
-      color-mix(in srgb, var(--dhgt-dark-night-blue) 20%, transparent)
-    );
+  .club-band--red {
+    margin-left: 0;
   }
-  .dhgt-page .club-banner::before {
-    display: none;
-  }
-  .dhgt-page .club-banner > div {
+  .dhgt-page .club-copy {
     max-width: none;
+    margin-top: 168px;
   }
   .club-gallery {
     grid-template-columns: 1fr;
@@ -384,5 +462,12 @@
 @media (max-width: 600px) {
   .dhgt-page .club-banner {
     padding: var(--dhgt-space-2);
+  }
+  .dhgt-page .club-speed {
+    left: 16%;
+    height: 136px;
+  }
+  .dhgt-page .club-copy {
+    margin-top: 136px;
   }
 }
