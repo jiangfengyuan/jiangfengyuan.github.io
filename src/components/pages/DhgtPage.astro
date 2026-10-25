@@ -29,271 +29,204 @@ const { activities, gallery } = club;
   image="/assets/social/dhgt.png"
   active="projects"
 >
-  <div class="container">
-    <section class="club-hero">
-      <div class="club-banner" data-shared-media="dhgt">
-        <Picture
-          fallbackFormat="webp"
-          src={banner}
-          alt={locale === 'en' ? p.imageAlt.en : p.imageAlt.zh}
-          widths={[640, 960, 1280, 1440]}
-          sizes="(max-width: 1000px) calc(100vw - 48px), 1136px"
-          formats={['avif', 'webp']}
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-        />
-        <div>
-          <img
-            class="club-logo"
-            src="/assets/dhgt/logo-wht.png"
-            alt={locale === 'zh' ? 'DHGT 汽车运动社标志' : 'DHGT Motorsport Club logo'}
-            width="600"
-            height="425"
+  <div class="dhgt-page" data-brand="dhgt">
+    <div class="container">
+      <section class="club-hero">
+        <div class="club-banner" data-shared-media="dhgt">
+          <Picture
+            fallbackFormat="webp"
+            src={banner}
+            alt={locale === 'en' ? p.imageAlt.en : p.imageAlt.zh}
+            widths={[640, 960, 1280, 1440]}
+            sizes="(max-width: 1000px) calc(100vw - 48px), 1136px"
+            formats={['avif', 'webp']}
+            loading="eager"
+            fetchpriority="high"
             decoding="async"
           />
-          <p class="eyebrow">DONGHUA · DONGCHENG / WE RACE AS ONE.</p>
-          <h1>
-            <Text text={{ zh: '东华 DHGT 汽车运动社', en: 'DHGT Motorsport Club' }} />
-          </h1>
-          <p class="club-lead">
+          <div>
+            <img
+              class="club-logo"
+              src="/assets/dhgt/logo-wht.png"
+              alt={locale === 'zh' ? 'DHGT 汽车运动社标志' : 'DHGT Motorsport Club logo'}
+              width="600"
+              height="425"
+              decoding="async"
+            />
+            <p class="eyebrow">DONGHUA · DONGCHENG / WE RACE AS ONE.</p>
+            <h1>
+              <Text text={{ zh: '东华 DHGT 汽车运动社', en: 'DHGT Motorsport Club' }} />
+            </h1>
+            <p class="club-lead">
+              <Text
+                text={{
+                  zh: '从生态园，到东城。赛道不同，热爱未变。',
+                  en: 'From Ecology Park to Dongcheng. A new track, the same passion.',
+                }}
+              />
+            </p>
+            <a class="btn" href="#wechat">
+              <Text text={{ zh: '关注社团', en: 'Follow the club' }} /> ↗
+            </a>
+          </div>
+        </div>
+      </section>
+      <nav class="club-jumps" aria-label={locale === 'zh' ? '社团页面章节' : 'Club page sections'}>
+        <a href="#about">
+          <Text text={{ zh: '认识 DHGT', en: 'Meet DHGT' }} />
+        </a>
+        <a href="#activities">
+          <Text text={{ zh: '一起做什么', en: 'What we share' }} />
+        </a>
+        <a href="#visuals">
+          <Text text={{ zh: '社团视觉', en: 'Club visuals' }} />
+        </a>
+        <a href="#stories">
+          <Text text={{ zh: '赛事与记录', en: 'Stories' }} />
+        </a>
+        <a href="#wechat">
+          <Text text={{ zh: '关注公众号', en: 'WeChat' }} />
+        </a>
+      </nav>
+      <section id="about" class="section section-bordered split">
+        <div>
+          <p class="eyebrow">A SHARED PASSION</p>
+          <h2 class="mt-md">
             <Text
               text={{
-                zh: '从生态园，到东城。赛道不同，热爱未变。',
-                en: 'From Ecology Park to Dongcheng. A new track, the same passion.',
+                zh: '赛车精神，\n属于每个热爱它的人。',
+                en: 'The spirit of racing,\nfor everyone who loves it.',
               }}
+              class="pre-line"
             />
-          </p>
-          <a class="btn" href="#wechat">
-            <Text text={{ zh: '关注社团', en: 'Follow the club' }} /> ↗
-          </a>
+          </h2>
         </div>
-      </div>
-    </section>
-    <nav class="club-jumps" aria-label={locale === 'zh' ? '社团页面章节' : 'Club page sections'}>
-      <a href="#about">
-        <Text text={{ zh: '认识 DHGT', en: 'Meet DHGT' }} />
-      </a>
-      <a href="#activities">
-        <Text text={{ zh: '一起做什么', en: 'What we share' }} />
-      </a>
-      <a href="#visuals">
-        <Text text={{ zh: '社团视觉', en: 'Club visuals' }} />
-      </a>
-      <a href="#stories">
-        <Text text={{ zh: '赛事与记录', en: 'Stories' }} />
-      </a>
-      <a href="#wechat">
-        <Text text={{ zh: '关注公众号', en: 'WeChat' }} />
-      </a>
-    </nav>
-    <section id="about" class="section section-bordered split">
-      <div>
-        <p class="eyebrow">A SHARED PASSION</p>
-        <h2 class="mt-md">
-          <Text
-            text={{
-              zh: '赛车精神，\n属于每个热爱它的人。',
-              en: 'The spirit of racing,\nfor everyone who loves it.',
-            }}
-            class="pre-line"
-          />
-        </h2>
-      </div>
-      <div>
-        <p>
-          <Text text={p.description} />
-        </p>
-        <p>
-          <Text
-            text={{
-              zh: '社团于 2025 年在东城成立，接续生态园的汽车运动文化。从车手与赛道，到轮胎、策略和工程，我们把好奇带进每一次交流，让观赛多一份理解，让热爱多一种表达。',
-              en: 'Founded in Dongcheng in 2025, the club carries forward Ecology Park’s motorsport culture. From drivers and circuits to tyres, strategy and engineering, curiosity shapes our conversations and gives us new ways to understand racing and express our passion.',
-            }}
-          />
-        </p>
-      </div>
-    </section>
-    <section id="activities" class="section">
-      <SectionHeading
-        eyebrow={{ zh: '学习 / 交流 / 探索', en: 'LEARN / SHARE / EXPLORE' }}
-        title={{ zh: '因为热爱，一起出发。', en: 'A shared passion. A place to start.' }}
-      />
-      <div class="feature-grid">
-        {activities.map((a, i) => (
-          <article class="feature">
-            <span class="feature-number">0{i + 1} /</span>
-            <h3>
-              <Text text={a.title} />
-            </h3>
-            <p>
-              <Text text={a.body} />
-            </p>
-          </article>
-        ))}
-      </div>
-    </section>
-    <section id="visuals" class="section section-bordered">
-      <SectionHeading
-        eyebrow={{ zh: '海报与公众号封面', en: 'POSTERS & EDITORIAL COVERS' }}
-        title={{ zh: '热爱，也有自己的样子。', en: 'Passion has a visual language.' }}
-      />
-      <div class="club-gallery">
-        {gallery.map((item) => (
-          <figure class="club-visual">
-            <a
-              class="club-artwork"
-              href={'/assets/dhgt/gallery/' + item.image + '.webp'}
-              aria-label={
-                locale === 'zh' ? '查看完整图片：' + item.alt.zh : 'View full image: ' + item.alt.en
-              }
-            >
-              <img
-                src={'/assets/dhgt/gallery/' + item.image + '.webp'}
-                alt={locale === 'en' ? item.alt.en : item.alt.zh}
-                loading="lazy"
-                decoding="async"
-                width={item.width}
-                height={item.height}
-              />
-            </a>
-            <figcaption>
-              <p class="eyebrow">
-                <Text text={item.category} />
-              </p>
-              <h3>
-                <Text text={item.title} />
-              </h3>
-              <p>
-                <Text text={item.body} />
-              </p>
-              {item.href && (
-                <a class="text-link" href={hrefFor(item.href, locale)}>
-                  <Text text={{ zh: '阅读相关文章', en: 'Read the story' }} /> ↗
-                </a>
-              )}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-      <p class="club-gallery-note">
-        <Text
-          text={{ zh: '点击图片查看完整设计。', en: 'Select an image to view the full design.' }}
-        />
-      </p>
-    </section>
-    <section id="stories" class="section">
-      <SectionHeading
-        eyebrow={{ zh: '赛事与社团记录', en: 'RACING & COMMUNITY NOTES' }}
-        title={{ zh: '把热爱写下来。', en: 'Stories from the grid.' }}
-        href="/blog/"
-        label={{ zh: '更多文章', en: 'More writing' }}
-      />
-      <PostList posts={posts} />
-    </section>
-    <section id="wechat" class="section">
-      <div class="qr-panel">
-        <img
-          src="/assets/wechat-qr.webp"
-          alt={
-            locale === 'zh'
-              ? '东华汽车运动社微信公众号二维码'
-              : 'WeChat QR code for DHGT Motorsport Club'
-          }
-          loading="lazy"
-          decoding="async"
-          width="1200"
-          height="1164"
-        />
         <div>
-          <p class="eyebrow">LET’S JOIN THE GRID</p>
-          <h3>
-            <Text text={{ zh: '东华汽车运动社', en: 'DHGT Motorsport Club' }} />
-          </h3>
+          <p>
+            <Text text={p.description} />
+          </p>
           <p>
             <Text
               text={{
-                zh: '微信扫码关注公众号，阅读赛事前瞻、赛后回顾与汽车文化内容，了解社团活动消息。无论是 F1 老车迷，还是刚刚喜欢上汽车的小白，我们都欢迎你。',
-                en: 'Scan with WeChat for race previews, recaps, car culture and club announcements. Whether you have followed F1 for years or are just discovering cars, you are welcome here.',
+                zh: '社团于 2025 年在东城成立，接续生态园的汽车运动文化。从车手与赛道，到轮胎、策略和工程，我们把好奇带进每一次交流，让观赛多一份理解，让热爱多一种表达。',
+                en: 'Founded in Dongcheng in 2025, the club carries forward Ecology Park’s motorsport culture. From drivers and circuits to tyres, strategy and engineering, curiosity shapes our conversations and gives us new ways to understand racing and express our passion.',
               }}
             />
           </p>
-          <a class="text-link mt-md" href={hrefFor('/updates/#dhgt-baseline', locale)}>
-            <Text text={{ zh: '社团动态', en: 'Club updates' }} /> ↗
-          </a>
         </div>
-      </div>
-    </section>
+      </section>
+      <section id="activities" class="section">
+        <SectionHeading
+          eyebrow={{ zh: '学习 / 交流 / 探索', en: 'LEARN / SHARE / EXPLORE' }}
+          title={{ zh: '因为热爱，一起出发。', en: 'A shared passion. A place to start.' }}
+        />
+        <div class="feature-grid">
+          {activities.map((a, i) => (
+            <article class="feature">
+              <span class="feature-number">0{i + 1} /</span>
+              <h3>
+                <Text text={a.title} />
+              </h3>
+              <p>
+                <Text text={a.body} />
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section id="visuals" class="section section-bordered">
+        <SectionHeading
+          eyebrow={{ zh: '海报与公众号封面', en: 'POSTERS & EDITORIAL COVERS' }}
+          title={{ zh: '热爱，也有自己的样子。', en: 'Passion has a visual language.' }}
+        />
+        <div class="club-gallery">
+          {gallery.map((item) => (
+            <figure class="club-visual">
+              <a
+                class="club-artwork"
+                href={'/assets/dhgt/gallery/' + item.image + '.webp'}
+                aria-label={
+                  locale === 'zh'
+                    ? '查看完整图片：' + item.alt.zh
+                    : 'View full image: ' + item.alt.en
+                }
+              >
+                <img
+                  src={'/assets/dhgt/gallery/' + item.image + '.webp'}
+                  alt={locale === 'en' ? item.alt.en : item.alt.zh}
+                  loading="lazy"
+                  decoding="async"
+                  width={item.width}
+                  height={item.height}
+                />
+              </a>
+              <figcaption>
+                <p class="eyebrow">
+                  <Text text={item.category} />
+                </p>
+                <h3>
+                  <Text text={item.title} />
+                </h3>
+                <p>
+                  <Text text={item.body} />
+                </p>
+                {item.href && (
+                  <a class="text-link" href={hrefFor(item.href, locale)}>
+                    <Text text={{ zh: '阅读相关文章', en: 'Read the story' }} /> ↗
+                  </a>
+                )}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="club-gallery-note">
+          <Text
+            text={{ zh: '点击图片查看完整设计。', en: 'Select an image to view the full design.' }}
+          />
+        </p>
+      </section>
+      <section id="stories" class="section">
+        <SectionHeading
+          eyebrow={{ zh: '赛事与社团记录', en: 'RACING & COMMUNITY NOTES' }}
+          title={{ zh: '把热爱写下来。', en: 'Stories from the grid.' }}
+          href="/blog/"
+          label={{ zh: '更多文章', en: 'More writing' }}
+        />
+        <PostList posts={posts} />
+      </section>
+      <section id="wechat" class="section">
+        <div class="qr-panel">
+          <img
+            src="/assets/wechat-qr.webp"
+            alt={
+              locale === 'zh'
+                ? '东华汽车运动社微信公众号二维码'
+                : 'WeChat QR code for DHGT Motorsport Club'
+            }
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            height="1164"
+          />
+          <div>
+            <p class="eyebrow">LET’S JOIN THE GRID</p>
+            <h3>
+              <Text text={{ zh: '东华汽车运动社', en: 'DHGT Motorsport Club' }} />
+            </h3>
+            <p>
+              <Text
+                text={{
+                  zh: '微信扫码关注公众号，阅读赛事前瞻、赛后回顾与汽车文化内容，了解社团活动消息。无论是 F1 老车迷，还是刚刚喜欢上汽车的小白，我们都欢迎你。',
+                  en: 'Scan with WeChat for race previews, recaps, car culture and club announcements. Whether you have followed F1 for years or are just discovering cars, you are welcome here.',
+                }}
+              />
+            </p>
+            <a class="text-link mt-md" href={hrefFor('/updates/#dhgt-baseline', locale)}>
+              <Text text={{ zh: '社团动态', en: 'Club updates' }} /> ↗
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </Base>
-
-<style>
-  .club-lead {
-    max-width: 660px;
-    color: #fff;
-    margin-bottom: 24px;
-  }
-  .club-jumps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 28px;
-    margin-bottom: 32px;
-    padding-block: 20px;
-    border-block: 1px solid var(--line);
-    font-size: 14px;
-  }
-  .club-jumps a {
-    text-decoration: underline;
-    text-underline-offset: 6px;
-  }
-  .club-gallery {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 36px;
-  }
-  .club-visual {
-    margin: 0;
-    min-width: 0;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: var(--surface);
-  }
-  .club-artwork {
-    display: flex;
-    align-items: center;
-    background: #0b1026;
-    aspect-ratio: 2.35 / 1;
-  }
-  .club-artwork img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  .club-visual figcaption {
-    padding: 28px;
-  }
-  .club-visual h3 {
-    margin-block: 12px;
-  }
-  .club-visual figcaption > p:not(.eyebrow),
-  .club-gallery-note {
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .club-visual .text-link {
-    margin-top: 18px;
-  }
-  .club-gallery-note {
-    margin-top: 20px;
-  }
-  @media (max-width: 760px) {
-    .club-gallery {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .club-visual figcaption {
-      padding: 24px;
-    }
-  }
-</style>

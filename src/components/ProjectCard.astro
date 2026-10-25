@@ -20,7 +20,7 @@ const covers: Record<string, ImageMetadata> = {
 const cover = covers[p.id];
 ---
 
-<article class:list={['project-card', p.accent]}>
+<article class:list={['project-card', p.accent]} data-brand={p.id === 'dhgt' ? 'dhgt' : undefined}>
   <a
     href={hrefFor(p.href, locale)}
     class:list={['project-media', p.id]}
