@@ -338,3 +338,6 @@
   inset: 0 0 auto;
   pointer-events: none;
 }
+[dir='rtl'] .nav-back > [aria-hidden='true'] {
+  transform: scaleX(-1);
+}

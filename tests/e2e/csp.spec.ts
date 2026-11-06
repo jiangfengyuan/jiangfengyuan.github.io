@@ -38,7 +38,9 @@ test('pages, theme switch and language switch raise no CSP violations', async ({
     );
   for (const route of routes) {
     await page.goto(route);
-    await page.locator('[data-theme-toggle]').click();
+    // The DHGT page has one theme, so no toggle.
+    const toggle = page.locator('[data-theme-toggle]');
+    if (await toggle.count()) await toggle.click();
     await page.waitForTimeout(500);
     await collect();
   }

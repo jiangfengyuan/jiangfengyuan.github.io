@@ -1,16 +1,17 @@
 ---
+import { t } from '../locales';
 import Text from './Text.astro';
 import CopyEmail from './CopyEmail.astro';
 import { profile } from '../data/content';
 import { hrefFor, type Locale } from '../i18n';
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const newTab = (name: string) =>
-  locale === 'zh' ? `${name}（在新标签页打开）` : `${name} (opens in a new tab)`;
+  t({ zh: `${name}（在新标签页打开）`, en: `${name} (opens in a new tab)` }, locale);
 ---
 
 <footer class="site-footer container">
   <div class="footer-top">
-    <a class="wordmark" href={hrefFor('/', locale)}>
+    <a class="wordmark" dir="ltr" href={hrefFor('/', locale)}>
       hayden
       <span class="wordmark-dot" aria-hidden="true">
         .
@@ -20,14 +21,14 @@ const newTab = (name: string) =>
       <Text text={{ zh: '保持好奇，慢慢创造。', en: 'Stay curious. Make something thoughtful.' }} />
     </p>
     <div class="footer-contact">
-      <a class="text-link" href={'mailto:' + profile.email}>
+      <a class="text-link" dir="ltr" href={'mailto:' + profile.email}>
         {profile.email} ↗
       </a>
       <CopyEmail />
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} Hayden</span>
+    <span dir="ltr">© {new Date().getFullYear()} Hayden</span>
     <div>
       <a
         href={profile.github}
@@ -46,7 +47,7 @@ const newTab = (name: string) =>
         Bilibili ↗
       </a>
       <a href={hrefFor('/dhgt/', locale)}>DHGT</a>
-      <a href={locale === 'en' ? '/en/rss.xml' : '/rss.xml'}>RSS</a>
+      <a href={locale === 'zh' ? '/rss.xml' : '/en/rss.xml'}>RSS</a>
       <a class="back-top" href="#main-content" data-back-top>
         <Text text={{ zh: '返回页首', en: 'Back to top' }} />
         <span aria-hidden="true">↑</span>

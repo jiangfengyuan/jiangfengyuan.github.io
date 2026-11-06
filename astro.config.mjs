@@ -38,13 +38,25 @@ export default defineConfig({
   },
   i18n: {
     defaultLocale: 'zh',
-    locales: ['zh', 'en'],
+    locales: ['zh', 'en', 'fr', 'ko', 'de', 'ru', 'ar', 'ja'],
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
     sitemap({
       filter: (url) => !url.includes('/blog-admin') && !url.includes('/404'),
-      i18n: { defaultLocale: 'zh', locales: { zh: 'zh-CN', en: 'en-US' } },
+      i18n: {
+        defaultLocale: 'zh',
+        locales: {
+          zh: 'zh-CN',
+          en: 'en-US',
+          fr: 'fr',
+          ko: 'ko',
+          de: 'de',
+          ru: 'ru',
+          ar: 'ar',
+          ja: 'ja',
+        },
+      },
     }),
   ],
   markdown: {

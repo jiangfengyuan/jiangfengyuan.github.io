@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { locales, localeFromPath, pathForLocale, hrefFor, postSlug } from '../src/i18n.ts';
 
-test('locales constant and Locale type cover zh and en', () => {
-  assert.deepEqual(locales, ['zh', 'en']);
+test('locales constant lists every supported language', () => {
+  assert.deepEqual(locales, ['zh', 'en', 'fr', 'ko', 'de', 'ru', 'ar', 'ja']);
 });
 
 test('localeFromPath identifies /en and /en/... as English, everything else as Chinese', () => {
@@ -102,4 +102,28 @@ test('postSlug ignores translationOf on Chinese articles', () => {
     postSlug({ data: { id: 'own-id', language: 'zh', translationOf: 'other-id' } }),
     'own-id',
   );
+});
+
+test('DHGT-only locales keep the DHGT page and send every other page to English', () => {
+  assert.equal(localeFromPath('/ar/dhgt/'), 'ar');
+  assert.equal(pathForLocale('/dhgt/', 'ja'), '/ja/dhgt/');
+  assert.equal(pathForLocale('/fr/dhgt/?a=1#about', 'ko'), '/ko/dhgt/?a=1#about');
+  assert.equal(pathForLocale('/ru/dhgt/', 'zh'), '/dhgt/');
+  assert.equal(hrefFor('/dhgt/', 'de'), '/de/dhgt/');
+  assert.equal(hrefFor('/about/', 'de'), '/en/about/');
+  assert.equal(hrefFor('/blog/post/', 'ar'), '/en/blog/post/');
+  assert.equal(hrefFor('/', 'fr'), '/en/');
+  assert.equal(hrefFor('/assets/a.png', 'fr'), '/assets/a.png');
+});
+
+test('every translation catalog has the same keys', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const read = async (name) =>
+    JSON.parse(await readFile(new URL(`../src/locales/${name}.json`, import.meta.url), 'utf8'));
+  const client = await read('client');
+  const expected = Object.keys(await read('fr')).sort();
+  for (const lang of ['de', 'ko', 'ja', 'ru', 'ar']) {
+    assert.deepEqual(Object.keys(await read(lang)).sort(), expected, lang);
+    assert.deepEqual(Object.keys(client[lang]).sort(), Object.keys(client.fr).sort(), lang);
+  }
 });

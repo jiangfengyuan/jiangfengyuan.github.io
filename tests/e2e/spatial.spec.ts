@@ -67,7 +67,7 @@ test('viewport families, both languages and final palette contrast', async ({ pa
         await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
         route + ' ' + lang + ' ' + width,
       ).toBe(true);
-      const button = page.locator('[data-theme-toggle]');
+      const button = page.locator('[data-theme-toggle], [data-lang-menu] summary');
       const b = await button.boundingBox();
       expect(b && b.width >= 44 && b.x >= 0 && b.x + b.width <= width).toBeTruthy();
     }

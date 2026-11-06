@@ -1,0 +1,44 @@
+{
+  "fr": {
+    "Copied. Ready to paste.": "Copié. Prêt à coller.",
+    "Could not copy. Select the email to copy manually.": "Copie impossible. Sélectionnez l’e-mail pour le copier à la main.",
+    "Open navigation": "Ouvrir le menu",
+    "Close navigation": "Fermer le menu",
+    "Image unavailable": "Image indisponible"
+  },
+  "de": {
+    "Copied. Ready to paste.": "Kopiert. Bereit zum Einfügen.",
+    "Could not copy. Select the email to copy manually.": "Kopieren fehlgeschlagen. Markiere die E-Mail und kopiere sie manuell.",
+    "Open navigation": "Menü öffnen",
+    "Close navigation": "Menü schließen",
+    "Image unavailable": "Bild nicht verfügbar"
+  },
+  "ko": {
+    "Copied. Ready to paste.": "복사했습니다. 붙여 넣을 수 있습니다.",
+    "Could not copy. Select the email to copy manually.": "복사하지 못했습니다. 이메일을 선택해 직접 복사하세요.",
+    "Open navigation": "메뉴 열기",
+    "Close navigation": "메뉴 닫기",
+    "Image unavailable": "이미지를 불러올 수 없습니다"
+  },
+  "ja": {
+    "Copied. Ready to paste.": "コピーしました。貼り付けできます。",
+    "Could not copy. Select the email to copy manually.": "コピーできませんでした。メールアドレスを選択して手動でコピーしてください。",
+    "Open navigation": "メニューを開く",
+    "Close navigation": "メニューを閉じる",
+    "Image unavailable": "画像を表示できません"
+  },
+  "ru": {
+    "Copied. Ready to paste.": "Скопировано. Можно вставлять.",
+    "Could not copy. Select the email to copy manually.": "Не удалось скопировать. Выделите e-mail и скопируйте вручную.",
+    "Open navigation": "Открыть меню",
+    "Close navigation": "Закрыть меню",
+    "Image unavailable": "Изображение недоступно"
+  },
+  "ar": {
+    "Copied. Ready to paste.": "تم النسخ. جاهز للصق.",
+    "Could not copy. Select the email to copy manually.": "تعذّر النسخ. حدد البريد الإلكتروني وانسخه يدويًا.",
+    "Open navigation": "فتح القائمة",
+    "Close navigation": "إغلاق القائمة",
+    "Image unavailable": "الصورة غير متاحة"
+  }
+}

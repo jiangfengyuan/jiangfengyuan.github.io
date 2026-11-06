@@ -4,7 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Text from '../components/Text.astro';
 import { profile, site } from '../data/content';
-import { pathForLocale } from '../i18n';
+import { t } from '../locales';
+import { isDhgtPath, localeMeta, locales, pathForLocale, siteLocales } from '../i18n';
 import type { Locale } from '../i18n';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -14,6 +15,7 @@ import '../styles/spatial.css';
 import '../styles/details.css';
 import '../styles/navigation.css';
 import '../styles/article-open.css';
+import '../styles/dhgt.css';
 interface Props {
   title: string;
   titleEn?: string;
@@ -22,6 +24,8 @@ interface Props {
   active?: string;
   noindex?: boolean;
   type?: string;
+  /** Puts the whole page, header and footer included, under a brand's design system. */
+  brand?: 'dhgt';
 }
 const {
   title,
@@ -31,20 +35,21 @@ const {
   active = '',
   noindex = false,
   type = 'website',
+  brand,
 } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
-const pageTitle = locale === 'en' ? titleEn : title;
-const pageDescription = locale === 'en' ? description.en : description.zh;
+const pageTitle = t({ zh: title, en: titleEn }, locale);
+const pageDescription = t(description, locale);
 const canonical = new URL(Astro.url.pathname, site).href;
 const zhPath = pathForLocale(Astro.url.pathname, 'zh');
 const enPath = pathForLocale(Astro.url.pathname, 'en');
 const zhHref = new URL(zhPath, site).href;
-const enHref = new URL(enPath, site).href;
-const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
+const alternates = isDhgtPath(Astro.url.pathname) ? locales : siteLocales;
+const rssHref = locale === 'zh' ? '/rss.xml' : '/en/rss.xml';
 ---
 
 <!doctype html>
-<html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-lang={locale}>
+<html lang={localeMeta[locale].tag} dir={localeMeta[locale].dir} data-lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -54,17 +59,26 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
     <meta name="author" content="Hayden" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
-    <link rel="alternate" hreflang="en-US" href={enHref} />
+    {alternates.map((target) => (
+      <link
+        rel="alternate"
+        hreflang={localeMeta[target].hreflang}
+        href={new URL(pathForLocale(Astro.url.pathname, target), site).href}
+      />
+    ))}
     <link rel="alternate" hreflang="x-default" href={zhHref} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/assets/favicon.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="Hayden — Writing" href={rssHref} />
-    <meta name="theme-color" content="#f6f4ef" />
+    {brand === 'dhgt' ? (
+      <meta name="theme-color" content="#0b1026" data-fixed />
+    ) : (
+      <meta name="theme-color" content="#f6f4ef" />
+    )}
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="Hayden" />
-    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:locale" content={localeMeta[locale].og} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
@@ -92,7 +106,7 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
           : 'light';
       }
       document.documentElement.dataset.js = '';
-      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]:not([data-fixed])');
       if (themeColorMeta) {
         themeColorMeta.content =
           document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
@@ -100,7 +114,7 @@ const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
     </script>
     <slot name="head" />
   </head>
-  <body>
+  <body data-brand={brand}>
     <a class="skip-link" href="#main-content">
       <Text text={{ zh: '跳至正文', en: 'Skip to content' }} />
     </a>

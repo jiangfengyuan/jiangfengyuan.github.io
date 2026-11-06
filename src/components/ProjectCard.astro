@@ -77,7 +77,8 @@ const cover = covers[p.id];
   </a>
   <div class="project-info">
     <p class="eyebrow">
-      <Text text={p.category} />
+      {/* DHGT kickers are always English. */}
+      {p.id === 'dhgt' ? p.category.en : <Text text={p.category} />}
     </p>
     <h3>
       <a href={hrefFor(p.href, locale)}>
