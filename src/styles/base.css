@@ -94,7 +94,6 @@ ol {
 .container {
   width: min(var(--container-max), calc(100% - 2 * var(--gutter)));
   margin-inline: auto;
-  container-type: inline-size;
 }
 .section {
   padding-block: var(--section-space);
