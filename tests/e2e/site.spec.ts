@@ -6,7 +6,6 @@ const routes: Array<[string, string, string?]> = [
   ['/projects/', '/en/projects/'],
   ['/flash/', '/en/flash/'],
   ['/republica/', '/en/republica/'],
-  ['/dhgt/', '/en/dhgt/'],
   ['/blog/', '/en/blog/'],
   ['/updates/', '/en/updates/'],
   ['/about/', '/en/about/'],

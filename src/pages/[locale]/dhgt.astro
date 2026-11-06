@@ -1,0 +1,9 @@
+---
+import DhgtPage from '../../components/pages/DhgtPage.astro';
+import { dhgtOnlyLocales } from '../../i18n';
+export function getStaticPaths() {
+  return dhgtOnlyLocales.map((locale) => ({ params: { locale } }));
+}
+---
+
+<DhgtPage />

@@ -78,7 +78,7 @@ p + p {
 }
 ul,
 ol {
-  padding-left: 1.5em;
+  padding-inline-start: 1.5em;
 }
 [hidden] {
   display: none !important;
@@ -94,7 +94,6 @@ ol {
 .container {
   width: min(var(--container-max), calc(100% - 2 * var(--gutter)));
   margin-inline: auto;
-  container-type: inline-size;
 }
 .section {
   padding-block: var(--section-space);
@@ -195,7 +194,7 @@ ol {
 .skip-link {
   position: fixed;
   top: 8px;
-  left: 16px;
+  inset-inline-start: 16px;
   padding: 12px 20px;
   border-radius: var(--radius-sm);
   background: var(--ink);

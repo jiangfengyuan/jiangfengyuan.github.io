@@ -1,5 +1,5 @@
 import { language, localized } from './i18n';
-import { pathForLocale } from '../i18n';
+import { pathForLocale, type Locale } from '../i18n';
 import { changeView, panel, animate, motionAllowed } from './motion';
 import { initSpatial } from './spatial';
 import { initDetails } from './details';
@@ -13,7 +13,9 @@ document.addEventListener('astro:page-load', () => {
 });
 
 function syncThemeColorMeta() {
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const meta = document.querySelector<HTMLMetaElement>(
+    'meta[name="theme-color"]:not([data-fixed])',
+  );
   if (meta)
     meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
 }
@@ -64,10 +66,32 @@ function init(signal: AbortSignal) {
 
   // The server-rendered language link only knows the pathname (query/hash are
   // empty during static builds); rewrite it client-side so they are preserved.
-  const langLink = document.querySelector<HTMLAnchorElement>('a[data-lang-link]');
-  if (langLink && !langLink.hasAttribute('data-lang-static')) {
-    const target = document.documentElement.dataset.lang === 'en' ? 'zh' : 'en';
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lang-link]').forEach((langLink) => {
+    if (langLink.hasAttribute('data-lang-static')) return;
+    const target = (langLink.dataset.langTarget ??
+      (document.documentElement.dataset.lang === 'en' ? 'zh' : 'en')) as Locale;
     langLink.href = pathForLocale(location.pathname + location.search + location.hash, target);
+  });
+
+  // The language menu is a plain <details>; add the dismissals a menu is expected to have.
+  const langMenu = document.querySelector<HTMLDetailsElement>('[data-lang-menu]');
+  if (langMenu) {
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (langMenu.open && !langMenu.contains(event.target as Node)) langMenu.open = false;
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key !== 'Escape' || !langMenu.open) return;
+        langMenu.open = false;
+        langMenu.querySelector('summary')?.focus();
+      },
+      { signal },
+    );
   }
 
   // Suggest the English site to visitors whose browser prefers no Chinese, until they dismiss it.
@@ -157,9 +181,8 @@ function init(signal: AbortSignal) {
       const note = document.createElement('p');
       note.className = 'image-error';
       note.textContent =
-        language() === 'zh'
-          ? '图片暂时无法加载' + (img.alt ? '：' + img.alt : '')
-          : 'Image unavailable' + (img.alt ? ': ' + img.alt : '');
+        localized('图片暂时无法加载', 'Image unavailable') +
+        (img.alt ? (language() === 'zh' ? '：' : ': ') + img.alt : '');
       img.insertAdjacentElement('afterend', note);
       img.hidden = true;
       panel(note, true);

@@ -1,4 +1,5 @@
 ---
+import { t } from '../../locales';
 import Base from '../../layouts/Base.astro';
 import Text from '../Text.astro';
 import SectionHeading from '../SectionHeading.astro';
@@ -29,6 +30,7 @@ const { activities, gallery } = club;
   description={p.description}
   image="/assets/social/dhgt.png"
   active="projects"
+  brand="dhgt"
 >
   <div class="dhgt-page">
     <div class="container">
@@ -40,7 +42,7 @@ const { activities, gallery } = club;
               <Picture
                 fallbackFormat="webp"
                 src={banner}
-                alt={locale === 'en' ? p.imageAlt.en : p.imageAlt.zh}
+                alt={t(p.imageAlt, locale)}
                 widths={[480, 720, 960]}
                 sizes="(max-width: 760px) 70vw, 560px"
                 formats={['avif', 'webp']}
@@ -58,7 +60,7 @@ const { activities, gallery } = club;
             <img
               class="club-logo"
               src="/assets/dhgt/logo-wht.png"
-              alt={locale === 'zh' ? 'DHGT 汽车运动社标志' : 'DHGT Motorsport Club logo'}
+              alt={t({ zh: 'DHGT 汽车运动社标志', en: 'DHGT Motorsport Club logo' }, locale)}
               width="600"
               height="425"
               decoding="async"
@@ -81,7 +83,10 @@ const { activities, gallery } = club;
           </div>
         </div>
       </section>
-      <nav class="club-jumps" aria-label={locale === 'zh' ? '社团页面章节' : 'Club page sections'}>
+      <nav
+        class="club-jumps"
+        aria-label={t({ zh: '社团页面章节', en: 'Club page sections' }, locale)}
+      >
         <a href="#about">
           <Text text={{ zh: '认识 DHGT', en: 'Meet DHGT' }} />
         </a>
@@ -127,7 +132,7 @@ const { activities, gallery } = club;
       </section>
       <section id="activities" class="section">
         <SectionHeading
-          eyebrow={{ zh: '学习 / 交流 / 探索', en: 'LEARN / SHARE / EXPLORE' }}
+          eyebrow={{ zh: 'LEARN / SHARE / EXPLORE', en: 'LEARN / SHARE / EXPLORE' }}
           title={{ zh: '因为热爱，一起出发。', en: 'A shared passion. A place to start.' }}
         />
         <div class="feature-grid">
@@ -146,7 +151,7 @@ const { activities, gallery } = club;
       </section>
       <section id="visuals" class="section section-bordered">
         <SectionHeading
-          eyebrow={{ zh: '海报与公众号封面', en: 'POSTERS & EDITORIAL COVERS' }}
+          eyebrow={{ zh: 'POSTERS & EDITORIAL COVERS', en: 'POSTERS & EDITORIAL COVERS' }}
           title={{ zh: '热爱，也有自己的样子。', en: 'Passion has a visual language.' }}
         />
         <div class="club-gallery">
@@ -156,14 +161,12 @@ const { activities, gallery } = club;
                 class="club-artwork"
                 href={'/assets/dhgt/gallery/' + item.image + '.webp'}
                 aria-label={
-                  locale === 'zh'
-                    ? '查看完整图片：' + item.alt.zh
-                    : 'View full image: ' + item.alt.en
+                  t({ zh: '查看完整图片：', en: 'View full image: ' }, locale) + t(item.alt, locale)
                 }
               >
                 <img
                   src={'/assets/dhgt/gallery/' + item.image + '.webp'}
-                  alt={locale === 'en' ? item.alt.en : item.alt.zh}
+                  alt={t(item.alt, locale)}
                   loading="lazy"
                   decoding="async"
                   width={item.width}
@@ -171,9 +174,7 @@ const { activities, gallery } = club;
                 />
               </a>
               <figcaption>
-                <p class="eyebrow">
-                  <Text text={item.category} />
-                </p>
+                <p class="eyebrow">{item.category.en}</p>
                 <h3>
                   <Text text={item.title} />
                 </h3>
@@ -197,7 +198,7 @@ const { activities, gallery } = club;
       </section>
       <section id="stories" class="section">
         <SectionHeading
-          eyebrow={{ zh: '赛事与社团记录', en: 'RACING & COMMUNITY NOTES' }}
+          eyebrow={{ zh: 'RACING & COMMUNITY NOTES', en: 'RACING & COMMUNITY NOTES' }}
           title={{ zh: '把热爱写下来。', en: 'Stories from the grid.' }}
           href="/blog/"
           label={{ zh: '更多文章', en: 'More writing' }}
@@ -208,11 +209,13 @@ const { activities, gallery } = club;
         <div class="qr-panel" data-brand="dhgt">
           <img
             src="/assets/wechat-qr.webp"
-            alt={
-              locale === 'zh'
-                ? '东华汽车运动社微信公众号二维码'
-                : 'WeChat QR code for DHGT Motorsport Club'
-            }
+            alt={t(
+              {
+                zh: '东华汽车运动社微信公众号二维码',
+                en: 'WeChat QR code for DHGT Motorsport Club',
+              },
+              locale,
+            )}
             loading="lazy"
             decoding="async"
             width="1200"

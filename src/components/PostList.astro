@@ -8,6 +8,9 @@ interface Props {
 }
 const { posts, searchable = false } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
+// DHGT-only locales list English articles inside a translated page.
+const foreign = (post: CollectionEntry<'posts'>) =>
+  post.data.language === locale ? undefined : post.data.language;
 const postHref = (post: CollectionEntry<'posts'>) => hrefFor(`/blog/${postSlug(post)}/`, locale);
 // Same rule as ArticlePage's table of contents; the opening skeleton mirrors that layout.
 const hasToc = (post: CollectionEntry<'posts'>) =>
@@ -36,7 +39,7 @@ const hasToc = (post: CollectionEntry<'posts'>) =>
       <div class="post-row-body">
         <div class="post-meta">
           <time datetime={post.data.date}>{post.data.date.replaceAll('-', '.')}</time>
-          <span>{post.data.tags.join(' / ')}</span>
+          <span lang={foreign(post)}>{post.data.tags.join(' / ')}</span>
           <span class="language-note">
             <Text
               text={{
@@ -46,7 +49,7 @@ const hasToc = (post: CollectionEntry<'posts'>) =>
             />
           </span>
         </div>
-        <h3>
+        <h3 lang={foreign(post)} dir={foreign(post) && 'ltr'}>
           <a
             href={postHref(post)}
             data-article-link
@@ -55,7 +58,9 @@ const hasToc = (post: CollectionEntry<'posts'>) =>
             {post.data.title}
           </a>
         </h3>
-        <p>{post.data.summary}</p>
+        <p lang={foreign(post)} dir={foreign(post) && 'ltr'}>
+          {post.data.summary}
+        </p>
       </div>
       <a
         class="post-row-arrow"

@@ -1,5 +1,27 @@
-export const locales = ['zh', 'en'] as const;
-export type Locale = 'zh' | 'en';
+export const locales = ['zh', 'en', 'fr', 'ko', 'de', 'ru', 'ar', 'ja'] as const;
+export type Locale = (typeof locales)[number];
+export const defaultLocale: Locale = 'zh';
+/** Locales served under a /<locale>/ prefix; the default locale lives at the root. */
+export const prefixedLocales = locales.filter((locale) => locale !== defaultLocale);
+/** The whole site exists in these; every other locale only has the DHGT page. */
+export const siteLocales: readonly Locale[] = ['zh', 'en'];
+export const dhgtOnlyLocales = locales.filter((locale) => !siteLocales.includes(locale));
+
+export const localeMeta: Record<
+  Locale,
+  { label: string; tag: string; hreflang: string; og: string; dir: 'ltr' | 'rtl' }
+> = {
+  zh: { label: '中文', tag: 'zh-CN', hreflang: 'zh-CN', og: 'zh_CN', dir: 'ltr' },
+  en: { label: 'English', tag: 'en', hreflang: 'en-US', og: 'en_US', dir: 'ltr' },
+  fr: { label: 'Français', tag: 'fr', hreflang: 'fr', og: 'fr_FR', dir: 'ltr' },
+  ko: { label: '한국어', tag: 'ko', hreflang: 'ko', og: 'ko_KR', dir: 'ltr' },
+  de: { label: 'Deutsch', tag: 'de', hreflang: 'de', og: 'de_DE', dir: 'ltr' },
+  ru: { label: 'Русский', tag: 'ru', hreflang: 'ru', og: 'ru_RU', dir: 'ltr' },
+  ar: { label: 'العربية', tag: 'ar', hreflang: 'ar', og: 'ar_AR', dir: 'rtl' },
+  ja: { label: '日本語', tag: 'ja', hreflang: 'ja', og: 'ja_JP', dir: 'ltr' },
+};
+
+const prefixPattern = new RegExp(`^/(${prefixedLocales.join('|')})(?=/|$)`);
 
 type PathParts = {
   pathname: string;
@@ -18,23 +40,18 @@ function splitPath(path: string): PathParts {
 
 export function localeFromPath(pathname: string): Locale {
   const { pathname: base } = splitPath(pathname);
-  return base === '/en' || base.startsWith('/en/') ? 'en' : 'zh';
+  return (base.match(prefixPattern)?.[1] as Locale | undefined) ?? defaultLocale;
 }
 
 export function pathForLocale(path: string, locale: Locale): string {
   const { pathname, search, hash } = splitPath(path);
+  const bare = pathname.replace(prefixPattern, '') || '/';
+  const target = locale === defaultLocale ? bare : `/${locale}${bare}`;
+  return `${target}${search}${hash}`;
+}
 
-  if (locale === 'en') {
-    if (pathname === '' || pathname === '/' || pathname === '/en') return `/en/${search}${hash}`;
-    if (pathname.startsWith('/en/')) return path;
-    return `/en${pathname}${search}${hash}`;
-  }
-
-  if (pathname === '/en') return `/${search}${hash}`;
-  if (pathname.startsWith('/en/')) {
-    return `/${pathname.slice('/en/'.length)}${search}${hash}`;
-  }
-  return path;
+export function isDhgtPath(path: string): boolean {
+  return /^\/dhgt(\/|\.html)?$/.test(splitPath(pathForLocale(path, defaultLocale)).pathname);
 }
 
 function isNonPagePath(href: string): boolean {
@@ -78,14 +95,12 @@ export function hrefFor(href: string, locale: Locale): string {
   // Only rewrite site-internal absolute paths.
   if (!href.startsWith('/')) return href;
 
-  // If a path is already prefixed with /en, evaluate its resource status without the prefix
-  // so that /en/assets/... is treated the same as /assets/... and not forced through locale rewriting.
-  let withoutPrefix = href;
-  if (href === '/en' || href.startsWith('/en/')) {
-    withoutPrefix = pathForLocale(href, 'zh');
-  }
-  if (isNonPagePath(withoutPrefix)) return href;
+  // Evaluate resource status without any locale prefix, so that /en/assets/... is treated
+  // the same as /assets/... and not forced through locale rewriting.
+  if (isNonPagePath(pathForLocale(href, defaultLocale))) return href;
 
+  // Pages that do not exist in a DHGT-only locale open in English.
+  if (!siteLocales.includes(locale) && !isDhgtPath(href)) return pathForLocale(href, 'en');
   return pathForLocale(href, locale);
 }
 

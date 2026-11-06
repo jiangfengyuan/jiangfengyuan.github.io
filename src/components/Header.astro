@@ -1,8 +1,17 @@
 ---
+import { t } from '../locales';
 import Text from './Text.astro';
 import Icon from './Icon.astro';
 import { publishedPosts } from '../data/content';
-import { hrefFor, pathForLocale, postSlug, type Locale } from '../i18n';
+import {
+  hrefFor,
+  isDhgtPath,
+  localeMeta,
+  locales,
+  pathForLocale,
+  postSlug,
+  type Locale,
+} from '../i18n';
 const { active = '' } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 // Static builds never see query or hash, so only the pathname is meaningful here.
@@ -16,7 +25,9 @@ const langHref = isNotFound
     : '/404.html'
   : pathForLocale(currentPath, langTarget);
 const langLabel = locale === 'zh' ? 'EN' : '中文';
-const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
+const rssHref = locale === 'zh' ? '/rss.xml' : '/en/rss.xml';
+// The DHGT page has every language and only the Night theme.
+const dhgtPage = isDhgtPath(currentPath);
 const links = [
   ['home', '/', { zh: '首页', en: 'Home' }],
   ['projects', '/projects/', { zh: '作品', en: 'Projects' }],
@@ -121,15 +132,20 @@ const menus: Record<string, Group[]> = {
   <div class="nav-shell">
     <a
       class="wordmark"
+      dir="ltr"
       href={hrefFor('/', locale)}
-      aria-label={locale === 'zh' ? 'Hayden — 首页' : 'Hayden — Home'}
+      aria-label={t({ zh: 'Hayden — 首页', en: 'Hayden — Home' }, locale)}
     >
       hayden
       <span class="wordmark-dot" aria-hidden="true">
         .
       </span>
     </a>
-    <nav id="site-nav" class="site-nav" aria-label={locale === 'zh' ? '主导航' : 'Main navigation'}>
+    <nav
+      id="site-nav"
+      class="site-nav"
+      aria-label={t({ zh: '主导航', en: 'Main navigation' }, locale)}
+    >
       {links.map(([id, href, label]) => (
         <div class="nav-entry" data-nav-entry={id}>
           <a
@@ -153,37 +169,66 @@ const menus: Record<string, Group[]> = {
       ))}
     </nav>
     <div class="nav-tools">
-      <a
-        class="icon-button lang-toggle"
-        href={langHref}
-        data-lang-link
-        data-lang-toggle
-        data-lang-static={isNotFound ? '' : undefined}
-        data-current-lang={locale}
-        aria-label={locale === 'zh' ? '切换到英文' : 'Switch to Chinese'}
-      >
-        {langLabel}
-      </a>
-      <button
-        class="icon-button"
-        type="button"
-        data-theme-toggle
-        aria-label={locale === 'zh' ? '切换主题' : 'Change color theme'}
-      >
-        <span class="theme-icon theme-icon-sun" aria-hidden="true">
-          <Icon name="sun" />
-        </span>
-        <span class="theme-icon theme-icon-moon" aria-hidden="true">
-          <Icon name="moon" />
-        </span>
-      </button>
+      {dhgtPage ? (
+        <details class="lang-menu" data-lang-menu>
+          <summary
+            class="icon-button"
+            aria-label={t({ zh: '选择语言', en: 'Choose language' }, locale)}
+          >
+            {locale.toUpperCase()}
+          </summary>
+          <ul>
+            {locales.map((target) => (
+              <li>
+                <a
+                  href={pathForLocale(currentPath, target)}
+                  hreflang={localeMeta[target].tag}
+                  lang={localeMeta[target].tag}
+                  data-lang-link
+                  data-lang-target={target}
+                  aria-current={target === locale ? 'true' : undefined}
+                >
+                  {localeMeta[target].label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : (
+        <>
+          <a
+            class="icon-button lang-toggle"
+            href={langHref}
+            data-lang-link
+            data-lang-toggle
+            data-lang-static={isNotFound ? '' : undefined}
+            data-current-lang={locale}
+            aria-label={t({ zh: '切换到英文', en: 'Switch to Chinese' }, locale)}
+          >
+            {langLabel}
+          </a>
+          <button
+            class="icon-button"
+            type="button"
+            data-theme-toggle
+            aria-label={t({ zh: '切换主题', en: 'Change color theme' }, locale)}
+          >
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">
+              <Icon name="sun" />
+            </span>
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">
+              <Icon name="moon" />
+            </span>
+          </button>
+        </>
+      )}
       <button
         class="icon-button menu-toggle"
         type="button"
         data-menu-toggle
         aria-controls="site-nav nav-guides"
         aria-expanded="false"
-        aria-label={locale === 'zh' ? '打开菜单' : 'Open navigation'}
+        aria-label={t({ zh: '打开菜单', en: 'Open navigation' }, locale)}
       >
         <span class="menu-lines" aria-hidden="true">
           <span></span>
@@ -199,7 +244,7 @@ const menus: Record<string, Group[]> = {
         id={`nav-panel-${id}`}
         data-nav-panel={id}
         hidden
-        aria-label={locale === 'zh' ? `${label.zh}导览` : `${label.en} navigation`}
+        aria-label={t({ zh: `${label.zh}导览`, en: `${label.en} navigation` }, locale)}
       >
         <div class="nav-panel-inner">
           <button class="nav-back" type="button" data-nav-back>
