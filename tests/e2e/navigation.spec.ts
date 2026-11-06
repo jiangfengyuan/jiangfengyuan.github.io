@@ -196,26 +196,20 @@ test('interrupted transitions keep only the last selection and close immediately
   await expect(page.locator('[data-nav-dropdown]')).not.toBeVisible();
   await page.locator('[data-menu-toggle]').click();
   await page.locator('[data-nav-trigger="projects"]').click();
+  // The height transition may not have started yet when the click returns, so "no animation
+  // running" alone can pass too early; wait for the height itself to settle.
   await expect
-    .poll(
-      async () =>
-        !(await page
-          .locator('[data-nav-dropdown]')
-          .evaluate((el) =>
-            (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
-          )),
+    .poll(() =>
+      page
+        .locator('[data-nav-dropdown]')
+        .evaluate(
+          (el) =>
+            Math.abs(
+              el.getBoundingClientRect().height - parseFloat((el as HTMLElement).style.height),
+            ) < 1,
+        ),
     )
     .toBe(true);
-  expect(
-    await page
-      .locator('[data-nav-dropdown]')
-      .evaluate(
-        (el) =>
-          Math.abs(
-            el.getBoundingClientRect().height - parseFloat((el as HTMLElement).style.height),
-          ) < 1,
-      ),
-  ).toBe(true);
 });
 
 test('motion timing, capped main menu and script-free title links', async ({ page, browser }) => {
