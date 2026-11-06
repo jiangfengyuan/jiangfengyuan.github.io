@@ -1,8 +1,11 @@
 import { sanitizeHTML } from './import-sanitize';
 const converters = () => import('./import-content');
 import { localized } from './i18n';
-const form = document.querySelector<HTMLFormElement>('[data-import-form]');
-if (form) {
+import { onPageLoad } from './page-lifecycle';
+
+function init(signal: AbortSignal) {
+  const form = document.querySelector<HTMLFormElement>('[data-import-form]');
+  if (!form) return;
   const title = form.querySelector<HTMLInputElement>('[name="title"]')!;
   const date = form.querySelector<HTMLInputElement>('[name="date"]')!;
   const tag = form.querySelector<HTMLInputElement>('[name="tags"]')!;
@@ -37,37 +40,41 @@ if (form) {
     editor.innerHTML = sanitizeHTML(editor.innerHTML);
     if (!title.value) title.value = editor.querySelector('h2')?.textContent?.trim() || '';
   }
-  editor.addEventListener('paste', (e) => {
-    e.preventDefault();
-    const html = e.clipboardData?.getData('text/html');
-    const text = e.clipboardData?.getData('text/plain') || '';
-    const content = html
-      ? sanitizeHTML(html)
-      : text
-          .split('\n')
-          .map((t) => {
-            const p = document.createElement('p');
-            p.textContent = t;
-            return p.outerHTML;
-          })
-          .join('');
-    editor.focus();
-    const selection = getSelection();
-    const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
-    const fragment = document.createRange().createContextualFragment(content);
-    if (range && editor.contains(range.commonAncestorContainer)) {
-      range.deleteContents();
-      const last = fragment.lastChild;
-      range.insertNode(fragment);
-      if (last) {
-        range.setStartAfter(last);
-        range.collapse(true);
-        selection?.removeAllRanges();
-        selection?.addRange(range);
-      }
-    } else editor.append(fragment);
-    cleanAndTitle();
-  });
+  editor.addEventListener(
+    'paste',
+    (e) => {
+      e.preventDefault();
+      const html = e.clipboardData?.getData('text/html');
+      const text = e.clipboardData?.getData('text/plain') || '';
+      const content = html
+        ? sanitizeHTML(html)
+        : text
+            .split('\n')
+            .map((t) => {
+              const p = document.createElement('p');
+              p.textContent = t;
+              return p.outerHTML;
+            })
+            .join('');
+      editor.focus();
+      const selection = getSelection();
+      const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+      const fragment = document.createRange().createContextualFragment(content);
+      if (range && editor.contains(range.commonAncestorContainer)) {
+        range.deleteContents();
+        const last = fragment.lastChild;
+        range.insertNode(fragment);
+        if (last) {
+          range.setStartAfter(last);
+          range.collapse(true);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+      } else editor.append(fragment);
+      cleanAndTitle();
+    },
+    { signal },
+  );
   mode.addEventListener(
     'change',
     () =>
@@ -77,15 +84,20 @@ if (form) {
         editor.hidden = !rich();
         markdown.hidden = rich();
       }),
+    { signal },
   );
-  document.querySelector('[data-load-html]')?.addEventListener('click', () => {
-    editor.innerHTML = sanitizeHTML(source.value);
-    mode.value = 'rich';
-    editor.hidden = false;
-    markdown.hidden = true;
-    cleanAndTitle();
-    source.value = '';
-  });
+  document.querySelector('[data-load-html]')?.addEventListener(
+    'click',
+    () => {
+      editor.innerHTML = sanitizeHTML(source.value);
+      mode.value = 'rich';
+      editor.hidden = false;
+      markdown.hidden = true;
+      cleanAndTitle();
+      source.value = '';
+    },
+    { signal },
+  );
   async function body() {
     if (rich()) cleanAndTitle();
     return rich() ? (await converters()).htmlToMarkdown(editor.innerHTML) : markdown.value.trim();
@@ -99,46 +111,51 @@ if (form) {
   }
   document
     .querySelector('[data-preview-button]')
-    ?.addEventListener('click', () => void guard(renderPreview));
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    void guard(async () => {
-      const b = await renderPreview();
-      if (!title.value.trim() || !b) {
-        say('请填写标题和正文。', 'A title and body are required.');
-        (!title.value ? title : rich() ? editor : markdown).focus();
-        return;
-      }
-      if (!id) id = date.value.replaceAll('-', '') + '-' + crypto.randomUUID().slice(0, 8);
-      generatedBody = b;
-      const meta = {
-        id,
-        title: title.value.trim(),
-        date: date.value,
-        tags: tag.value
-          .split(/[,，]/)
-          .map((s) => s.trim())
-          .filter(Boolean),
-        summary: summary.value.trim() || preview.textContent?.trim().slice(0, 90) || '',
-        language: form.querySelector<HTMLSelectElement>('[name="language"]')!.value as 'zh' | 'en',
-        draft: draft.checked,
-      };
-      output.value = (await converters()).postFile(meta, b);
-      outputWrap.hidden = false;
-      const url = URL.createObjectURL(
-        new Blob([output.value], { type: 'text/markdown;charset=utf-8' }),
-      );
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = id + '.md';
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      say(
-        '已导出文章。上传到 src/content/posts/，或复制正文到 CMS。',
-        'Article exported. Upload to src/content/posts/, or copy the body to the CMS.',
-      );
-    });
-  });
+    ?.addEventListener('click', () => void guard(renderPreview), { signal });
+  form.addEventListener(
+    'submit',
+    (e) => {
+      e.preventDefault();
+      void guard(async () => {
+        const b = await renderPreview();
+        if (!title.value.trim() || !b) {
+          say('请填写标题和正文。', 'A title and body are required.');
+          (!title.value ? title : rich() ? editor : markdown).focus();
+          return;
+        }
+        if (!id) id = date.value.replaceAll('-', '') + '-' + crypto.randomUUID().slice(0, 8);
+        generatedBody = b;
+        const meta = {
+          id,
+          title: title.value.trim(),
+          date: date.value,
+          tags: tag.value
+            .split(/[,，]/)
+            .map((s) => s.trim())
+            .filter(Boolean),
+          summary: summary.value.trim() || preview.textContent?.trim().slice(0, 90) || '',
+          language: form.querySelector<HTMLSelectElement>('[name="language"]')!.value as
+            'zh' | 'en',
+          draft: draft.checked,
+        };
+        output.value = (await converters()).postFile(meta, b);
+        outputWrap.hidden = false;
+        const url = URL.createObjectURL(
+          new Blob([output.value], { type: 'text/markdown;charset=utf-8' }),
+        );
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = id + '.md';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        say(
+          '已导出文章。上传到 src/content/posts/，或复制正文到 CMS。',
+          'Article exported. Upload to src/content/posts/, or copy the body to the CMS.',
+        );
+      });
+    },
+    { signal },
+  );
   document.querySelector('[data-copy-body]')?.addEventListener(
     'click',
     () =>
@@ -157,17 +174,24 @@ if (form) {
           say('请复制下方选中的正文。', 'Copy the selected body below.');
         }
       }),
+    { signal },
   );
-  document.querySelector('[data-reset-import]')?.addEventListener('click', () => {
-    form.reset();
-    date.value = new Date().toLocaleDateString('en-CA');
-    editor.replaceChildren();
-    preview.replaceChildren();
-    markdown.hidden = true;
-    editor.hidden = false;
-    outputWrap.hidden = true;
-    id = '';
-    generatedBody = '';
-    say('已开始新文章。', 'Ready for a new article.');
-  });
+  document.querySelector('[data-reset-import]')?.addEventListener(
+    'click',
+    () => {
+      form.reset();
+      date.value = new Date().toLocaleDateString('en-CA');
+      editor.replaceChildren();
+      preview.replaceChildren();
+      markdown.hidden = true;
+      editor.hidden = false;
+      outputWrap.hidden = true;
+      id = '';
+      generatedBody = '';
+      say('已开始新文章。', 'Ready for a new article.');
+    },
+    { signal },
+  );
 }
+
+onPageLoad(init);

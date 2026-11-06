@@ -147,7 +147,7 @@ export function initNavigation(signal: AbortSignal) {
       run(
         layer,
         [{ opacity }, { opacity: 0 }],
-        { duration: 140, easing: 'ease-out', fill: 'forwards' },
+        { duration: 120, easing: 'ease-out', fill: 'forwards' },
         () => {
           layer.hidden = true;
           clearStyles(layer);
@@ -164,7 +164,7 @@ export function initNavigation(signal: AbortSignal) {
         const opacity = snapshots.has(target) ? parentOpacity * (snapshot?.opacity ?? 1) : 0;
         const transform = snapshot?.transform ?? 'translateY(-6px)';
         const stagger =
-          target === main ? index * 20 : el.classList.contains('nav-column') ? column++ * 40 : 0;
+          target === main ? index * 14 : el.classList.contains('nav-column') ? column++ * 28 : 0;
         run(
           el,
           [
@@ -172,8 +172,8 @@ export function initNavigation(signal: AbortSignal) {
             { opacity: 1, transform: 'none' },
           ],
           {
-            duration: 420,
-            delay: (outgoing.length ? 140 : 0) + stagger,
+            duration: 300,
+            delay: (outgoing.length ? 120 : 0) + stagger,
             easing: 'cubic-bezier(.22,.8,.25,1)',
             fill: 'both',
           },

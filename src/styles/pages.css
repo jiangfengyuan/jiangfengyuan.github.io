@@ -44,18 +44,8 @@
 .hero-board {
   grid-column: span 5;
   position: relative;
-  min-height: 430px;
   align-self: center;
   border-radius: var(--radius-xl);
-}
-.hero-board::after {
-  content: '+';
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  font-family: var(--mono);
-  font-size: 25px;
-  color: var(--muted);
 }
 .board-note {
   position: absolute;
@@ -115,7 +105,7 @@
   right: 18px;
   bottom: 10px;
   padding: 8px 16px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   font-size: 11px;
   transform: rotate(5deg);
 }
@@ -297,55 +287,19 @@ figure {
 }
 .club-banner {
   position: relative;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  min-height: 480px;
-  background: #292929;
-  color: #fff;
   display: flex;
-  align-items: flex-end;
-  padding: 46px;
-}
-.club-banner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.08) 100%);
-}
-.club-banner > picture {
-  position: absolute;
-  inset: 0;
-}
-.club-banner > picture img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.club-banner > div {
-  position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 .club-banner h1 {
   font-size: clamp(38px, 5vw, 64px);
-  margin: 20px 0;
-}
-.club-banner .eyebrow {
-  color: #fff;
-}
-.club-logo {
-  width: 160px;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 18px;
-}
-.club-banner .btn {
-  color: #282a27;
-  background: #fff;
 }
 .split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 60px;
+}
+.split > * {
+  min-width: 0;
 }
 .split--tight {
   gap: 20px;
@@ -387,6 +341,7 @@ figure {
   border-radius: var(--radius-lg);
 }
 .about-symbol {
+  overflow: hidden;
   font-size: 120px;
   line-height: 1;
   color: var(--accent);
@@ -396,6 +351,7 @@ figure {
   margin-bottom: 20px;
 }
 .about-content p {
+  max-width: 640px;
   font-size: 18px;
   line-height: var(--leading-relaxed);
 }
@@ -442,22 +398,24 @@ figure {
 }
 .article-content p {
   margin: 0 0 1.2em;
+  text-wrap: pretty;
 }
 .article-content h2 {
   font-size: 26px;
   line-height: 1.45;
   margin: 1.8em 0 0.75em;
-  scroll-margin-top: 120px;
+  scroll-margin-top: var(--header-offset);
 }
 .article-content h3 {
   font-size: 22px;
   line-height: 1.5;
   margin: 1.6em 0 0.7em;
-  scroll-margin-top: 120px;
+  scroll-margin-top: var(--header-offset);
 }
 .article-content h4 {
   font-size: 19px;
   margin: 1.5em 0 0.7em;
+  text-wrap: balance;
 }
 .article-content a {
   color: var(--accent);
@@ -538,7 +496,7 @@ figure {
 .article-content :not(pre) > code {
   background: var(--soft);
   padding: 2px 5px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.85em;
 }
 .article-content hr {
@@ -629,23 +587,18 @@ figure {
 }
 .lightbox {
   width: min(1100px, calc(100% - 40px));
-  max-height: 90vh;
-  border: 1px solid var(--line);
   padding: 20px;
   border-radius: var(--radius-md);
-  background: var(--surface);
   color: var(--ink);
 }
 .lightbox::backdrop {
   background: rgba(12, 18, 12, 0.82);
 }
 .lightbox img {
-  max-height: 72vh;
   margin: auto;
   object-fit: contain;
 }
 .lightbox .icon-button {
-  margin-left: auto;
   margin-bottom: 10px;
 }
 .image-error {
@@ -687,9 +640,6 @@ figure {
 .editor:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 5px;
-}
-::placeholder {
-  color: var(--muted);
 }
 .editor {
   min-height: 300px;
@@ -763,14 +713,7 @@ figure {
     grid-template-columns: minmax(0, 720px) 170px;
   }
   .home-hero {
-    gap: 20px;
     padding-top: 52px;
-  }
-  .hero-copy h1 {
-    font-size: 48px;
-  }
-  .hero-board {
-    min-height: 350px;
   }
   .board-phone {
     right: 0;
@@ -825,16 +768,7 @@ figure {
   }
 }
 @media (max-width: 600px) {
-  .home-hero {
-    grid-template-columns: 1fr;
-    padding-block: 35px 42px;
-    gap: 25px;
-  }
-  .hero-copy {
-    grid-column: auto;
-  }
   .hero-copy h1 {
-    font-size: 44px;
     margin-block: 18px;
   }
   .hero-copy > p:not(.eyebrow) {
@@ -844,8 +778,6 @@ figure {
     margin-top: 25px;
   }
   .hero-board {
-    grid-column: auto;
-    min-height: 310px;
     margin-inline: 4px;
   }
   .board-note {
@@ -902,16 +834,8 @@ figure {
     font-size: 15px;
   }
   .product-hero {
-    grid-template-columns: 1fr;
     padding-block: 38px 48px;
     gap: 36px;
-  }
-  .product-copy,
-  .product-visual {
-    grid-column: auto;
-  }
-  .product-copy h1 {
-    font-size: 56px;
   }
   .product-copy h2 {
     font-size: 27px;
@@ -925,9 +849,6 @@ figure {
   .product-visual .phone {
     width: 160px;
   }
-  .game-cover {
-    padding: 16px;
-  }
   .metrics {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
@@ -937,13 +858,6 @@ figure {
   }
   .club-hero {
     padding: 30px 0 48px;
-  }
-  .club-banner {
-    min-height: 400px;
-    padding: 28px;
-  }
-  .club-banner h1 {
-    font-size: 36px;
   }
   .qr-panel {
     grid-template-columns: 1fr;
@@ -957,7 +871,6 @@ figure {
     font-size: 16px;
   }
   .article-shell {
-    width: calc(100% - 40px);
     padding-top: 38px;
   }
   .article-header h1 {
@@ -987,9 +900,6 @@ figure {
   }
   .section-heading {
     flex-wrap: wrap;
-  }
-  .page-hero h1 {
-    overflow-wrap: anywhere;
   }
 }
 

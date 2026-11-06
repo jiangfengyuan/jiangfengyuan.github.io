@@ -5,9 +5,9 @@
  * body fade in.
  */
 :root {
-  --article-enter-offset: 84px;
-  --article-hero-offset: 40px;
-  --article-enter-radius: 36px;
+  --article-enter-offset: 48px;
+  --article-hero-offset: 24px;
+  --article-enter-radius: var(--radius-lg);
   --article-skeleton: color-mix(in srgb, var(--ink) 8%, var(--paper));
 }
 

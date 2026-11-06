@@ -12,25 +12,19 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 
 const PUSH = 'cubic-bezier(.32,.72,0,1)';
 const OUT = 'cubic-bezier(.22,1,.36,1)';
-// Milliseconds, estimated frame by frame from the reference recording.
+// Milliseconds; the whole sequence lands in about a second.
 const T = {
-  enter: 380,
-  radius: 380,
-  skeleton: 200,
-  typeDelay: 60,
-  charStagger: 13,
-  typeBudget: 560,
-  charFade: 180,
-  hold: 320,
-  headline: 520,
-  heroDelay: 70,
-  hero: 640,
-  metaDelay: 400,
-  meta: 320,
-  metaStagger: 60,
+  enter: 300,
+  radius: 300,
+  skeleton: 160,
+  charFade: 200,
+  headline: 360,
+  heroDelay: 60,
+  hero: 400,
+  metaDelay: 160,
+  meta: 280,
+  metaStagger: 40,
 };
-// The reference timing, stretched so each stage reads clearly (about 3.5s in all).
-const PACE = 1.5;
 // How long past its duration the cover may take before the article is swapped in anyway.
 const LANDING_MARGIN = 200;
 
@@ -52,8 +46,8 @@ function play(
   { duration, delay = 0, easing = OUT }: { duration: number; delay?: number; easing?: string },
 ) {
   const a = el.animate(frames, {
-    duration: duration * PACE,
-    delay: delay * PACE,
+    duration,
+    delay,
     easing,
     fill: 'both',
   });
@@ -75,7 +69,7 @@ function wait(run: Run, duration: number) {
   return abortable(
     run,
     new Promise<void>((resolve) => {
-      id = window.setTimeout(resolve, duration * PACE);
+      id = window.setTimeout(resolve, duration);
     }),
   ).finally(() => clearTimeout(id));
 }
@@ -191,26 +185,20 @@ async function enter(run: Run) {
         )
       : Promise.resolve(false);
     const [, hasImage] = await Promise.all([
-      wait(run, T.typeDelay),
+      wait(run, T.skeleton * 0.5),
       abortable(
         run,
         Promise.all([document.fonts.ready, decoded]).then(([, ok]) => ok),
       ),
     ]);
 
-    const chars = [...h1.querySelectorAll<HTMLElement>('.article-char')].filter((c) =>
-      c.textContent?.trim(),
-    );
-    const stagger = Math.min(T.charStagger, T.typeBudget / Math.max(1, chars.length));
-    const typed = chars.map((char, i) =>
+    // The split title only exists for the pre-entrance state; all characters fade back together.
+    h1.querySelectorAll<HTMLElement>('.article-char').forEach((char) =>
       play(run, char, [{ opacity: 0 }, { opacity: 1 }], {
         duration: T.charFade,
-        delay: i * stagger,
-        easing: 'linear',
+        easing: 'ease-out',
       }),
     );
-    if (typed.length) await abortable(run, typed[typed.length - 1].finished);
-    await wait(run, T.hold);
 
     const entering = [
       play(
@@ -259,7 +247,7 @@ async function enter(run: Run) {
           run,
           el,
           [
-            { opacity: 0, translate: '0 10px' },
+            { opacity: 0, translate: '0 8px' },
             { opacity: 1, translate: '0 0' },
           ],
           { duration: T.meta, delay: metaStart + i * T.metaStagger },
@@ -321,7 +309,7 @@ document.addEventListener('astro:before-preparation', (e) => {
   const landed = Promise.race([
     pushed.finished.catch(() => {}),
     new Promise<void>((resolve) => {
-      timer = window.setTimeout(resolve, T.enter * PACE + LANDING_MARGIN);
+      timer = window.setTimeout(resolve, T.enter + LANDING_MARGIN);
     }),
   ]).finally(() => clearTimeout(timer));
   const load = event.loader;

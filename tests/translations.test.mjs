@@ -8,7 +8,7 @@ const posts = fs
   .filter((name) => name.endsWith('.md'))
   .map((name) => {
     const source = fs.readFileSync('src/content/posts/' + name, 'utf8');
-    const frontmatter = source.match(/^---\n([\s\S]*?)\n---/);
+    const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
     assert.ok(frontmatter, `${name} has no frontmatter`);
     return { name, data: parse(frontmatter[1]) };
   });
@@ -39,7 +39,11 @@ test('English translations reference existing Chinese originals and never chain'
     );
   }
   for (const post of zh)
-    assert.equal(post.data.translationOf, undefined, `${post.name} is Chinese but sets translationOf`);
+    assert.equal(
+      post.data.translationOf,
+      undefined,
+      `${post.name} is Chinese but sets translationOf`,
+    );
 });
 
 test('Chinese and English published slugs cover the same articles', () => {

@@ -8,6 +8,7 @@ import { Picture } from 'astro:assets';
 import banner from '../../assets/dhgt/track.jpg';
 import { projects, publishedPosts } from '../../data/content';
 import { hrefFor, postSlug, type Locale } from '../../i18n';
+import '../../styles/dhgt.css';
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
 const p = projects.find((p) => p.id === 'dhgt')!;
 // Chinese originals carry the canonical tags; match related posts in any locale

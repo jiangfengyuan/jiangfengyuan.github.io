@@ -62,6 +62,7 @@ export default defineConfig({
               img: [
                 ...(defaultSchema.attributes?.img || []),
                 'loading',
+                'decoding',
                 'referrerPolicy',
                 'width',
                 'height',

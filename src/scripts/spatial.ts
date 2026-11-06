@@ -86,10 +86,10 @@ export function initSpatial(signal: AbortSignal) {
           const b = bounds || (bounds = el.getBoundingClientRect());
           const x = Math.max(0, Math.min(1, (e.clientX - b.left) / b.width));
           const y = Math.max(0, Math.min(1, (e.clientY - b.top) / b.height));
-          el.style.setProperty('--tilt-x', 1.5 - y * 3 + 'deg');
-          el.style.setProperty('--tilt-y', x * 3 - 1.5 + 'deg');
-          el.style.setProperty('--glow-x', (x - 0.5) * 16 + 'px');
-          el.style.setProperty('--glow-y', (y - 0.5) * 16 + 'px');
+          el.style.setProperty('--tilt-x', 1 - y * 2 + 'deg');
+          el.style.setProperty('--tilt-y', x * 2 - 1 + 'deg');
+          el.style.setProperty('--glow-x', (x - 0.5) * 10 + 'px');
+          el.style.setProperty('--glow-y', (y - 0.5) * 10 + 'px');
         });
       },
       { signal },
@@ -136,10 +136,10 @@ export function initSpatial(signal: AbortSignal) {
         const a = animate(
           entry.target,
           [
-            { opacity: 0.1, transform: 'translateY(12px)' },
+            { opacity: 0.1, transform: 'translateY(8px)' },
             { opacity: 1, transform: 'none' },
           ],
-          { duration: motionEnter || 520, delay: Math.min(200, (i % 6) * 40) },
+          { duration: Math.min(motionEnter || 400, 400), delay: Math.min(160, (i % 6) * 30) },
         );
         if (a) {
           entering.set(entry.target, a);
@@ -161,32 +161,4 @@ export function initSpatial(signal: AbortSignal) {
     entering.forEach((a) => a.cancel());
     entering.clear();
   });
-  document.addEventListener(
-    'click',
-    (e) => {
-      const el = (e.target as Element)?.closest<HTMLElement>(
-        '.btn,.icon-button,.filter-chips button,.text-link',
-      );
-      if (!el) return;
-      el.getAnimations().forEach((a) => a.cancel());
-      animate(el, [{ scale: '.97' }, { scale: '1' }], { duration: 160 });
-      if (el.matches('.btn,.icon-button,.filter-chips button')) {
-        const ripple = document.createElement('span');
-        ripple.className = 'control-glow';
-        ripple.setAttribute('aria-hidden', 'true');
-        el.append(ripple);
-        const a = animate(
-          ripple,
-          [
-            { opacity: 0.5, transform: 'scale(.4)' },
-            { opacity: 0, transform: 'scale(1.5)' },
-          ],
-          { duration: 300 },
-        );
-        if (a) a.finished.catch(() => {}).then(() => ripple.remove());
-        else ripple.remove();
-      }
-    },
-    { signal },
-  );
 }

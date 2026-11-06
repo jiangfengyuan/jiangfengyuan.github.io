@@ -12,29 +12,30 @@
 .site-header .nav-shell {
   position: relative;
   z-index: 3;
-  width: min(1200px, 100%);
-  max-width: 1200px;
+  width: min(var(--container-max), 100%);
+  max-width: var(--container-max);
   min-height: 60px;
+  gap: clamp(8px, 2vw, 24px);
   padding: 6px 22px;
   border: 1px solid var(--glass-edge);
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--glass-inner), var(--glass-depth);
   background: var(--glass-standard);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   pointer-events: auto;
   flex-wrap: wrap;
   transition:
-    border-radius 380ms cubic-bezier(0.22, 0.8, 0.25, 1),
-    background-color 280ms ease,
-    box-shadow 280ms ease;
+    border-radius var(--motion-page) cubic-bezier(0.22, 0.8, 0.25, 1),
+    background-color var(--motion-state) ease,
+    box-shadow var(--motion-state) ease;
 }
 .site-header[data-scrolled]:not([data-navigation-open]) .nav-shell {
   background: var(--nav-bg-scrolled);
   box-shadow: var(--glass-inner), var(--nav-shadow-scrolled);
 }
 .site-header[data-navigation-open] .nav-shell {
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   background: var(--surface);
   border-bottom-color: transparent;
 }
@@ -62,7 +63,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: color 280ms ease;
+  transition: color var(--motion-state) ease;
 }
 .nav-entry > :is(a, button)::after {
   content: '';
@@ -73,7 +74,7 @@
   border-radius: 2px;
   background: var(--accent);
   transform: scaleX(0);
-  transition: transform 280ms ease;
+  transition: transform var(--motion-state) ease;
 }
 .nav-entry > :is(a, button)[aria-current='page']::after {
   transform: scaleX(1);
@@ -100,14 +101,14 @@
   bottom: 0;
   z-index: calc(var(--z-header) - 1);
   background: rgb(0 0 0 / 18%);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
-    opacity 320ms ease,
-    visibility 0s 320ms;
+    opacity var(--motion-panel) ease,
+    visibility 0s var(--motion-panel);
 }
 .nav-backdrop[data-open] {
   transition-delay: 0s;
@@ -118,11 +119,11 @@
 .nav-dropdown {
   position: absolute;
   top: calc(100% - 1px);
-  inset-inline: max(16px, calc((100% - 1200px) / 2));
+  inset-inline: max(16px, calc((100% - var(--container-max)) / 2));
   z-index: 2;
   border: 1px solid var(--glass-edge);
   border-top: 0;
-  border-radius: 0 0 24px 24px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   pointer-events: auto;
   height: 0;
   overflow: hidden;
@@ -130,16 +131,16 @@
   background: var(--surface);
   box-shadow: 0 24px 32px -24px rgb(0 0 0 / 20%);
   transition:
-    height 440ms cubic-bezier(0.22, 0.8, 0.25, 1),
-    visibility 0s 440ms;
+    height var(--motion-page) cubic-bezier(0.22, 0.8, 0.25, 1),
+    visibility 0s var(--motion-page);
 }
 [data-sheet-open] .nav-dropdown {
   visibility: visible;
   transition-delay: 0s;
-  transition-duration: 540ms, 0s;
+  transition-duration: 380ms, 0s;
 }
 .nav-panel-inner {
-  width: min(1200px, calc(100% - 48px));
+  width: min(var(--container-max), calc(100% - 48px));
   margin: auto;
   padding-block: 36px 44px;
   display: grid;
@@ -192,7 +193,7 @@
 .menu-lines > span {
   height: 1.5px;
   background: currentColor;
-  transition: transform 240ms ease;
+  transition: transform var(--motion-state) ease;
 }
 [aria-expanded='true'] .menu-lines > span:first-child {
   transform: translateY(3.75px) rotate(45deg);
@@ -329,12 +330,6 @@
   }
   .nav-dropdown {
     border-bottom: 1px solid CanvasText;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-header .nav-shell {
-    transition: none;
   }
 }
 

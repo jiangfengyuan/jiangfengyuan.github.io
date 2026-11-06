@@ -49,7 +49,7 @@ export function changeView(kind: 'theme', update: () => void, origin?: HTMLEleme
     update();
     setTimeout(() => {
       if (serial === revision) root.classList.remove('theme-fade');
-    }, 280);
+    }, 200);
   };
   if (!motionAllowed()) {
     update();
@@ -85,7 +85,7 @@ export function changeView(kind: 'theme', update: () => void, origin?: HTMLEleme
               { clipPath: `circle(0px at ${x}px ${y}px)` },
               { clipPath: `circle(${radius}px at ${x}px ${y}px)` },
             ],
-            { duration: 680, pseudoElement: '::view-transition-new(root)' },
+            { duration: 480, pseudoElement: '::view-transition-new(root)' },
           );
         }
       })
@@ -115,6 +115,7 @@ export function panel(el: HTMLElement, open: boolean, complete: () => void = () 
           { opacity: 1, transform: 'none' },
           { opacity: 0, transform: 'translateY(-6px) scale(.98)' },
         ],
+    { duration: 240 },
   );
   if (a) a.finished.catch(() => {}).then(complete);
   else complete();
@@ -132,7 +133,7 @@ export function animateResults(rows: HTMLElement[]) {
           { opacity: 0.15, transform: 'translateY(8px)' },
           { opacity: 1, transform: 'none' },
         ],
-        { duration: 320, delay: i * 32 },
+        { duration: 280, delay: i * 24 },
       );
     });
 }

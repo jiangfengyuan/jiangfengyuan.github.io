@@ -1,11 +1,8 @@
 import { localized } from './i18n';
 import { animate, animateResults } from './motion';
+import { onPageLoad } from './page-lifecycle';
 
-let active: AbortController | undefined;
-
-function init() {
-  active?.abort();
-  const { signal } = (active = new AbortController());
+function init(signal: AbortSignal) {
   const blog = document.querySelector<HTMLElement>('[data-blog-filter]');
   const update = document.querySelector<HTMLElement>('[data-update-filter]');
   if (blog) setup(blog, 'blog', signal);
@@ -135,4 +132,4 @@ function setup(root: HTMLElement, kind: 'blog' | 'update', signal: AbortSignal) 
   window.addEventListener('popstate', read, { signal });
   read();
 }
-document.addEventListener('astro:page-load', init);
+onPageLoad(init);

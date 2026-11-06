@@ -12,7 +12,7 @@ test('desktop discovery, rapid switching, dismissal and keyboard navigation', as
   await expect(page.locator('#nav-panel-projects')).toBeVisible();
   expect(
     await page.locator('.nav-backdrop').evaluate((el) => getComputedStyle(el).backdropFilter),
-  ).toBe('blur(6px)');
+  ).toBe('blur(4px)');
   await page.locator('#nav-panel-projects a[href="/flash/"]').hover();
   await expect(page.locator('#nav-panel-projects')).toBeVisible();
   for (const id of ['blog', 'about', 'updates', 'projects']) {
@@ -183,19 +183,29 @@ test('interrupted transitions keep only the last selection and close immediately
   expect(
     await page.locator('[data-nav-dropdown]').evaluate((el) => (el as HTMLElement).inert),
   ).toBe(true);
-  await expect.poll(async () =>
-    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
-      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
-    )),
-  ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        !(await page
+          .locator('[data-nav-dropdown]')
+          .evaluate((el) =>
+            (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+          )),
+    )
+    .toBe(true);
   await expect(page.locator('[data-nav-dropdown]')).not.toBeVisible();
   await page.locator('[data-menu-toggle]').click();
   await page.locator('[data-nav-trigger="projects"]').click();
-  await expect.poll(async () =>
-    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
-      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
-    )),
-  ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        !(await page
+          .locator('[data-nav-dropdown]')
+          .evaluate((el) =>
+            (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+          )),
+    )
+    .toBe(true);
   expect(
     await page
       .locator('[data-nav-dropdown]')
@@ -222,17 +232,22 @@ test('motion timing, capped main menu and script-free title links', async ({ pag
       }),
     };
   });
-  expect(motion.duration).toBe('0.54s, 0s');
+  expect(motion.duration).toBe('0.38s, 0s');
   expect(motion.columns).toEqual([
-    { duration: 420, delay: 0 },
-    { duration: 420, delay: 40 },
-    { duration: 420, delay: 80 },
+    { duration: 300, delay: 0 },
+    { duration: 300, delay: 28 },
+    { duration: 300, delay: 56 },
   ]);
-  await expect.poll(async () =>
-    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
-      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
-    )),
-  ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        !(await page
+          .locator('[data-nav-dropdown]')
+          .evaluate((el) =>
+            (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+          )),
+    )
+    .toBe(true);
   const switching = await page.evaluate(() => {
     document.querySelector<HTMLButtonElement>('[data-nav-trigger="blog"]')!.click();
     return {
@@ -244,20 +259,25 @@ test('motion timing, capped main menu and script-free title links', async ({ pag
     };
   });
   expect(switching.retired).toBe(true);
-  expect(switching.timing.delay).toBe(140);
+  expect(switching.timing.delay).toBe(120);
   await page.keyboard.press('Escape');
   expect(
     await page
       .locator('[data-nav-dropdown]')
       .evaluate((el) => getComputedStyle(el).transitionDuration),
-  ).toBe('0.44s, 0s');
+  ).toBe('0.32s, 0s');
   await page.setViewportSize({ width: 320, height: 320 });
   await page.locator('[data-menu-toggle]').click();
-  await expect.poll(async () =>
-    !(await page.locator('[data-nav-dropdown]').evaluate((el) =>
-      (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
-    )),
-  ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        !(await page
+          .locator('[data-nav-dropdown]')
+          .evaluate((el) =>
+            (el as HTMLElement).getAnimations().some((a) => a.playState === 'running'),
+          )),
+    )
+    .toBe(true);
   expect(
     await page.locator('.nav-main-panel').evaluate((el) => el.scrollHeight > el.clientHeight),
   ).toBe(true);

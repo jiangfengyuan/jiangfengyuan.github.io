@@ -17,6 +17,18 @@ test('pasted article drops executable and hidden content, including obfuscated U
   assert.ok(!d.body.textContent.includes('hidden'));
   assert.equal(safeURL('javascript:alert(1)'), null);
 });
+test('safeURL accepts site-relative paths but rejects protocol-relative and obfuscated inputs', () => {
+  assert.equal(safeURL('/assets/a.png'), '/assets/a.png');
+  assert.equal(safeURL('/blog/post/'), '/blog/post/');
+  assert.equal(safeURL('./a.png'), './a.png');
+  assert.equal(safeURL('../a.png'), '../a.png');
+  assert.equal(safeURL('#section'), '#section');
+  assert.equal(safeURL('//example.com/path'), null);
+  assert.equal(safeURL(' //example.com/path '), null);
+  assert.equal(safeURL('\\\\example.com\\path'), null);
+  assert.equal(safeURL('//evil.com/javascript:alert(1)'), null);
+  assert.equal(safeURL('https://example.com/a.png'), 'https://example.com/a.png');
+});
 test('import keeps a table, caption, list and code semantics', () => {
   const md = htmlToMarkdown(
     '<h2>Notes</h2><table><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table><figure><img src="/a.png" alt="A"><figcaption>Caption</figcaption></figure><ul><li>Item</li></ul><pre><code>const a = 1;</code></pre>',
@@ -111,7 +123,7 @@ test('Markdown pipeline strips dangerous link protocols, obfuscated URLs and exe
   );
 });
 
-test('remote article images never send a referrer', async () => {
+test('remote article images are lazy-loaded without a referrer', async () => {
   const { default: config } = await import('../astro.config.mjs');
   const renderer = await config.markdown.processor.createRenderer(config.markdown);
   const result = await renderer.render(
@@ -121,5 +133,13 @@ test('remote article images never send a referrer', async () => {
   assert.deepEqual(
     imgs.map((i) => i.getAttribute('referrerpolicy')),
     ['no-referrer', 'no-referrer', null],
+  );
+  assert.deepEqual(
+    imgs.map((i) => [i.getAttribute('loading'), i.getAttribute('decoding')]),
+    [
+      ['lazy', 'async'],
+      ['lazy', 'async'],
+      [null, null],
+    ],
   );
 });

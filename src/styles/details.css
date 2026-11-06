@@ -74,26 +74,9 @@
 .back-top:is(:hover, :focus-visible) > span:last-child {
   transform: translateY(-3px);
 }
-.site-nav > a {
-  position: relative;
-}
-.site-nav > a::after {
-  content: '';
-  position: absolute;
-  inset-inline: 14px;
-  bottom: 3px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
-  transform: scaleX(0);
-  transition: transform 280ms var(--ease);
-}
-.site-nav > a:is([aria-current='page'], :focus-visible)::after {
-  transform: scaleX(1);
-}
 .wordmark-dot {
   display: inline-block;
-  transition: transform 200ms var(--ease);
+  transition: transform var(--motion-state) var(--ease);
 }
 .wordmark:is(:hover, :focus-visible) .wordmark-dot {
   transform: translateY(-3px);
@@ -107,8 +90,8 @@
   display: grid;
   place-items: center;
   transition:
-    opacity 280ms var(--ease),
-    transform 280ms var(--ease);
+    opacity var(--motion-state) var(--ease),
+    transform var(--motion-state) var(--ease);
 }
 .theme-icon-sun {
   opacity: 1;
@@ -139,7 +122,7 @@
   border-radius: 50%;
   background: var(--accent);
   transform: translateX(-50%) scale(0);
-  transition: transform 280ms var(--ease);
+  transition: transform var(--motion-state) var(--ease);
 }
 .lang-toggle[data-current-lang]::after {
   transform: translateX(-50%) scale(1);
@@ -195,7 +178,7 @@
   margin-top: 12px;
   padding: 6px 6px 6px 20px;
   border: 1px solid var(--control-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: var(--control-bg);
   color: var(--muted);
   font-size: 14px;
@@ -231,8 +214,7 @@
     transform: none !important;
   }
   .copy-check,
-  .copy-outline,
-  .site-nav > a::after {
+  .copy-outline {
     transition: none;
   }
 }

@@ -10,6 +10,8 @@ const dangerous = new Set(
 );
 export function safeURL(value: string, image = false): string | null {
   const compact = value.replace(/[\s\u0000-\u001f\u007f]/g, '');
+  // Protocol-relative URLs inherit the page scheme and can point anywhere.
+  if (/^[/\\]{2}/.test(compact)) return null;
   if (/^(https?:|mailto:|tel:|#|\/|\.\/|\.\.\/)/i.test(compact)) return value;
   if (image && /^data:image\/(png|jpe?g|gif|webp);base64,[a-z0-9+/=]+$/i.test(compact))
     return value;

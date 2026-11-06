@@ -5,7 +5,18 @@ import { initSpatial } from './spatial';
 import { initDetails } from './details';
 import { initNavigation } from './navigation';
 import { hapticTap } from './haptics';
-import './article-open';
+import { onPageLoad } from './page-lifecycle';
+
+// Load article transitions after arriving on Writing, including ClientRouter navigation.
+document.addEventListener('astro:page-load', () => {
+  if (/^\/(en\/)?blog\//.test(location.pathname)) void import('./article-open');
+});
+
+function syncThemeColorMeta() {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (meta)
+    meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
+}
 
 // ClientRouter swaps <html> attributes with the server-rendered defaults on
 // navigation; restore the user's stored theme before paint.
@@ -21,18 +32,12 @@ document.addEventListener('astro:after-swap', () => {
           ? 'dark'
           : 'light';
   } catch {}
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-  if (meta)
-    meta.content = document.documentElement.dataset.theme === 'dark' ? '#191c19' : '#f6f4ef';
+  syncThemeColorMeta();
 });
 
-let active: AbortController | undefined;
 let heroBoardPlayed = false;
 
-function init() {
-  active?.abort();
-  const { signal } = (active = new AbortController());
-
+function init(signal: AbortSignal) {
   initSpatial(signal);
   initDetails(signal);
 
@@ -101,8 +106,7 @@ function init() {
         ? localized('切换为浅色主题', 'Switch to light theme')
         : localized('切换为深色主题', 'Switch to dark theme'),
     );
-    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (meta) meta.content = dark ? '#191c19' : '#f6f4ef';
+    syncThemeColorMeta();
   }
   let desiredTheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   themeButton?.addEventListener(
@@ -172,4 +176,4 @@ function init() {
   });
 }
 
-document.addEventListener('astro:page-load', init);
+onPageLoad(init);

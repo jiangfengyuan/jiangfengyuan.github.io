@@ -1,25 +1,6 @@
-/* Spatial surfaces, interaction tokens and viewport-aware layout. */
+/* Spatial surfaces and viewport-aware layout. */
 :root {
-  --glass-light: color-mix(in srgb, var(--surface) 90%, transparent);
-  --glass-standard: color-mix(in srgb, var(--surface) 84%, transparent);
-  --glass-strong: color-mix(in srgb, var(--surface) 78%, transparent);
-  --glass-edge: rgba(255, 255, 255, 0.78);
-  --glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(255, 255, 255, 0.18);
-  --glass-depth: 0 12px 32px -20px rgba(42, 42, 34, 0.25);
-  --motion-press: 160ms;
-  --motion-state: 280ms;
-  --motion-panel: 320ms;
-  --motion-page: 420ms;
-  --motion-enter: 520ms;
   --ambient: color-mix(in srgb, var(--sage) 75%, transparent);
-}
-:root[data-theme='dark'] {
-  --glass-light: color-mix(in srgb, var(--surface) 94%, transparent);
-  --glass-standard: color-mix(in srgb, var(--surface) 90%, transparent);
-  --glass-strong: color-mix(in srgb, var(--surface) 86%, transparent);
-  --glass-edge: rgba(230, 239, 222, 0.2);
-  --glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(255, 255, 255, 0.025);
-  --glass-depth: 0 18px 40px -20px rgba(0, 0, 0, 0.65);
 }
 .glass,
 .search-field,
@@ -33,35 +14,19 @@
   .glass,
   .lightbox {
     background: var(--glass-standard);
-    backdrop-filter: blur(10px) saturate(140%);
-    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
     border-color: var(--glass-edge);
   }
   .glass-strong {
     background: var(--glass-strong);
-    backdrop-filter: blur(12px) saturate(145%);
-    -webkit-backdrop-filter: blur(12px) saturate(145%);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
   }
   .search-field,
   .filter-chips {
     background: var(--glass-light);
   }
-}
-.container {
-  width: min(1440px, calc(100% - clamp(32px, 6vw, 128px)));
-  container-type: inline-size;
-}
-.section {
-  padding-block: clamp(48px, 6vw, 96px);
-}
-.site-header {
-  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
-  top: max(12px, env(safe-area-inset-top));
-}
-.nav-shell {
-  max-width: 1440px;
-  gap: clamp(8px, 2vw, 24px);
-  padding-inline: clamp(12px, 2vw, 24px);
 }
 .nav-shell,
 .btn,
@@ -73,13 +38,6 @@
 .icon-button,
 .filter-chips button {
   isolation: isolate;
-}
-.control-glow {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(ellipse, var(--glass-edge), transparent 65%);
-  pointer-events: none;
 }
 .btn,
 .icon-button,
@@ -119,7 +77,7 @@
       color-mix(in srgb, var(--rose) 65%, transparent),
       transparent 65%
     );
-  border-radius: 48px;
+  border-radius: var(--radius-xl);
 }
 .hero-board {
   padding: 16px;
@@ -131,7 +89,7 @@
 }
 .project-card {
   padding: 14px;
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
@@ -189,7 +147,7 @@
 .filter-chips {
   position: relative;
   padding: 6px;
-  border-radius: 28px;
+  border-radius: var(--radius-lg);
   max-width: 100%;
   gap: 6px;
 }
@@ -200,7 +158,7 @@
 .filter-indicator {
   position: absolute;
   background: var(--accent);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   pointer-events: none;
   box-shadow: 0 3px 10px -5px var(--accent);
 }
@@ -217,16 +175,14 @@
   background: transparent;
 }
 .lightbox {
+  top: calc(var(--visual-top, 0px) + 16px);
+  bottom: max(16px, calc(100dvh - var(--visual-top, 0px) - var(--usable-height, 100dvh) + 16px));
   max-height: calc(
     var(--usable-height, 100svh) - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
   );
   max-width: calc(100vw - 32px);
   overflow: auto;
   overscroll-behavior: contain;
-}
-.lightbox {
-  top: calc(var(--visual-top, 0px) + 16px);
-  bottom: max(16px, calc(100dvh - var(--visual-top, 0px) - var(--usable-height, 100dvh) + 16px));
 }
 .lightbox img {
   max-height: calc(
@@ -259,10 +215,10 @@
 .theme-fade .btn,
 .theme-fade .tag {
   transition:
-    background-color 280ms,
-    color 280ms,
-    border-color 280ms,
-    box-shadow 280ms;
+    background-color var(--motion-state),
+    color var(--motion-state),
+    border-color var(--motion-state),
+    box-shadow var(--motion-state);
 }
 @container (max-width: 380px) {
   .project-meta {
@@ -303,10 +259,6 @@
     width: min(100%, 500px);
     justify-self: center;
   }
-  .site-header {
-    height: 68px;
-    margin-top: 12px;
-  }
   .site-nav {
     background: var(--surface);
     box-shadow: var(--glass-inner), var(--glass-depth);
@@ -314,8 +266,8 @@
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .site-nav {
       background: var(--glass-standard);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
   }
   .article-shell {
@@ -338,21 +290,14 @@
 @media (max-width: 600px) {
   .project-card {
     padding: 10px;
-    border-radius: 26px;
   }
   .project-media {
     height: 320px;
   }
-  .home-hero h1 {
-    font-size: clamp(36px, 10vw, 48px);
-  }
+  .home-hero h1,
   .page-hero h1,
   .product-copy h1 {
     font-size: clamp(36px, 10vw, 48px);
-  }
-  .hero-board.glass-strong {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
   .club-banner {
     padding: 24px;
@@ -385,7 +330,7 @@
 :root[data-segmented] .article-shell,
 :root[data-segmented] .nav-shell {
   width: calc(var(--segment-width) - 32px);
-  max-width: 1440px;
+  max-width: var(--container-max);
   margin-inline: calc(var(--segment-left) + 16px) 0;
 }
 :root[data-segmented] .site-header {
@@ -416,7 +361,7 @@
   position: absolute;
   top: calc(100% + 10px);
   inset-inline: 0;
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   padding: 16px;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -426,10 +371,6 @@
 }
 :root[data-compact-nav='true'] .site-nav.is-open {
   display: flex;
-}
-:root[data-compact-nav='true'] .site-nav > a {
-  padding: 12px 16px;
-  font-size: 16px;
 }
 :root[data-segmented][data-compact-nav='true'] .home-hero,
 :root[data-segmented][data-compact-nav='true'] .product-hero {
@@ -456,10 +397,10 @@
   animation: none;
 }
 ::view-transition-old(page-content) {
-  animation: page-out 240ms ease both;
+  animation: page-out 200ms ease both;
 }
 ::view-transition-new(page-content) {
-  animation: page-in 420ms var(--ease) both;
+  animation: page-in var(--motion-page) var(--ease) both;
 }
 @keyframes page-in {
   from {
@@ -502,15 +443,15 @@
   z-index: 2;
 }
 :root[data-motion='language']::view-transition-group(*) {
-  animation-duration: 360ms;
+  animation-duration: var(--motion-page);
 }
 :root[data-motion='language']::view-transition-old(page-content) {
   animation-name: language-out;
-  animation-duration: 260ms;
+  animation-duration: 200ms;
 }
 :root[data-motion='language']::view-transition-new(page-content) {
   animation-name: language-in;
-  animation-duration: 380ms;
+  animation-duration: var(--motion-page);
 }
 @keyframes language-out {
   to {
@@ -527,10 +468,10 @@
 }
 /* Leaving an article for a list (src/scripts/article-open.ts). */
 :root[data-motion='article-back']::view-transition-old(page-content) {
-  animation: article-out 300ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  animation: article-out var(--motion-panel) var(--ease) both;
 }
 :root[data-motion='article-back']::view-transition-new(page-content) {
-  animation: language-in 360ms var(--ease) both;
+  animation: language-in var(--motion-page) var(--ease) both;
 }
 @keyframes article-out {
   to {
@@ -569,7 +510,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-tilt] {
+  [data-tilt],
+  [data-tilt]::after {
     transform: none !important;
   }
   ::view-transition-group(*),
@@ -594,14 +536,6 @@
   font-size: 20px;
 }
 
-/* Text enlargement can wrap the brand and controls without clipping navigation. */
-.nav-shell {
-  flex-wrap: wrap;
-}
-.site-header {
-  height: auto;
-  min-height: 68px;
-}
 .hero-copy,
 .product-copy,
 .hero-footnote span {
@@ -617,8 +551,8 @@
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root[data-compact-nav='true'] .site-nav {
     background: var(--glass-standard);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -663,11 +597,6 @@
 .text-link:hover::after,
 .text-link:focus-visible::after {
   transform: scaleX(1);
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-tilt]::after {
-    transform: none !important;
-  }
 }
 
 /* CSS-only foldable fallback: browsers exposing viewport segment media queries

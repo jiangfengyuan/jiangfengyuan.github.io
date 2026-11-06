@@ -83,6 +83,8 @@ const schema = {
           alt={post.data.coverAlt || post.data.title}
           width="1200"
           height="630"
+          loading="eager"
+          fetchpriority="high"
           decoding="async"
         />
       )}

@@ -1,11 +1,8 @@
 import { localized } from './i18n';
 import { panel } from './motion';
+import { onPageLoad } from './page-lifecycle';
 
-let active: AbortController | undefined;
-
-function init() {
-  active?.abort();
-  const { signal } = (active = new AbortController());
+function init(signal: AbortSignal) {
   const content = document.querySelector<HTMLElement>('[data-article-content]');
   const progress = document.querySelector<HTMLElement>('[data-reading-progress]');
   const article = document.querySelector<HTMLElement>('.article-main');
@@ -162,4 +159,4 @@ function init() {
   dialog?.addEventListener('close', () => opener?.focus(), { signal });
 }
 
-document.addEventListener('astro:page-load', init);
+onPageLoad(init);

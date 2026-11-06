@@ -5,7 +5,8 @@ import { publishedPosts } from '../data/content';
 import { hrefFor, pathForLocale, postSlug, type Locale } from '../i18n';
 const { active = '' } = Astro.props;
 const locale = (Astro.currentLocale ?? 'zh') as Locale;
-const currentPath = Astro.url.pathname + Astro.url.search + Astro.url.hash;
+// Static builds never see query or hash, so only the pathname is meaningful here.
+const currentPath = Astro.url.pathname;
 const langTarget: Locale = locale === 'zh' ? 'en' : 'zh';
 // A 404 can be served for any missing URL, so link to the other locale's 404 page instead.
 const isNotFound = /^\/(en\/)?404(\.html|\/)?$/.test(Astro.url.pathname);
@@ -156,8 +157,8 @@ const menus: Record<string, Group[]> = {
         class="icon-button lang-toggle"
         href={langHref}
         data-lang-link
-        data-lang-static={isNotFound ? '' : undefined}
         data-lang-toggle
+        data-lang-static={isNotFound ? '' : undefined}
         data-current-lang={locale}
         aria-label={locale === 'zh' ? '切换到英文' : 'Switch to Chinese'}
       >

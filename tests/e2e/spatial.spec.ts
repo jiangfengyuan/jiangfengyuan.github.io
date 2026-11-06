@@ -437,21 +437,21 @@ test('scroll entrance duration matches --motion-enter token', async ({ page }) =
   const waapiCount = () =>
     metric.evaluate(
       (el) =>
-        (el as HTMLElement).getAnimations().filter(
-          (a) => !(a as any).transitionProperty && !(a as any).animationName,
-        ).length,
+        (el as HTMLElement)
+          .getAnimations()
+          .filter((a) => !(a as any).transitionProperty && !(a as any).animationName).length,
     );
   await expect.poll(waapiCount).toBeGreaterThan(0);
   const duration = await metric.evaluate((el) => {
-    const a = (el as HTMLElement).getAnimations().find(
-      (a) => !(a as any).transitionProperty && !(a as any).animationName,
-    );
+    const a = (el as HTMLElement)
+      .getAnimations()
+      .find((a) => !(a as any).transitionProperty && !(a as any).animationName);
     return a?.effect?.getTiming().duration;
   });
-  expect(duration).toBe(520);
+  expect(duration).toBe(380);
   const token = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--motion-enter').trim(),
   );
   const tokenMs = token.endsWith('ms') ? parseFloat(token) : parseFloat(token) * 1000;
-  expect(tokenMs).toBe(520);
+  expect(tokenMs).toBe(380);
 });
